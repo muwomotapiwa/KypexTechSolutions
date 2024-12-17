@@ -161,6 +161,7 @@ nav ul li a {
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
 }
 
 .service-box h3 {
@@ -171,10 +172,16 @@ nav ul li a {
 
 .service-box p {
     font-size: 1rem;
+    color: #fff; /* Default text color */
+    transition: color 0.3s ease; /* Smooth hover effect */
 }
 
 .service-box:hover {
     transform: translateY(-10px);
+}
+
+.service-box:hover p {
+    color: #ff015b; /* Text turns red on hover */
 }
 
 /* Footer */
@@ -203,5 +210,15 @@ footer {
 
     .service-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 3rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
     }
 }
