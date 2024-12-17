@@ -1,0 +1,207 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #1a2132;
+    color: #fff;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: #ff015b;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #d10048;
+}
+
+/* Header */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgba(26, 33, 50, 0.95);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff015b;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 1.5rem;
+}
+
+nav ul li a {
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Mobile Menu */
+.menu-icon {
+    display: none;
+    font-size: 2rem;
+    color: #ff015b;
+    cursor: pointer;
+}
+
+.menu-icon::before {
+    content: '\2630';
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.menu-icon.active::before {
+    transform: rotate(90deg);
+}
+
+.mobile-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #181d2a;
+    width: 100%;
+    text-align: center;
+}
+
+.mobile-nav.active {
+    display: block;
+}
+
+.mobile-nav a {
+    display: block;
+    margin: 1rem 0;
+    color: #ff015b;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(26, 33, 50, 0.7), rgba(0, 0, 0, 0.9)), url('../assets/Kypex_enhanced.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #ff015b;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    max-width: 700px;
+}
+
+.hero a {
+    display: inline-block;
+    background: #ff015b;
+    color: #fff;
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(255, 1, 91, 0.5);
+    transition: transform 0.3s ease, background 0.3s;
+}
+
+.hero a:hover {
+    background: #d10048;
+    transform: scale(1.05);
+}
+
+/* Services Section */
+.services {
+    padding: 6rem 2rem;
+    background: #181d2a;
+    text-align: center;
+}
+
+.services h2 {
+    font-size: 3rem;
+    margin-bottom: 3rem;
+    color: #ff015b;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.service-box {
+    background: #1e2536;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.service-box h3 {
+    color: #ff015b;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.service-box p {
+    font-size: 1rem;
+}
+
+.service-box:hover {
+    transform: translateY(-10px);
+}
+
+/* Footer */
+footer {
+    background: #1a2132;
+    color: #fff;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.footer-links a {
+    margin: 0 1rem;
+    color: #ff015b;
+    font-size: 1.2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav ul {
+        display: none;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+}
