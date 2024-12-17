@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Development | KypexTech</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Page-specific Hero Section */
+        .hero {
+            background: linear-gradient(rgba(26, 33, 50, 0.7), rgba(0, 0, 0, 0.9)), url('../assets/Website_Development.jpeg');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: #ff015b;
+            text-shadow: 2px 2px 10px #000;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+        }
+
+        /* Overview Section */
+        .overview {
+            padding: 4rem 2rem;
+            background: #181d2a;
+            text-align: center;
+        }
+
+        .overview h2 {
+            color: #ff015b;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .overview p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 4rem 2rem;
+            background: #1e2536;
+            text-align: center;
+        }
+
+        .feature-box {
+            background: #181d2a;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-box h3 {
+            font-size: 1.5rem;
+            color: #ff015b;
+            margin-bottom: 1rem;
+        }
+
+        .feature-box p {
+            font-size: 1rem;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-10px);
+        }
+
+        /* CTA Section */
+        .cta {
+            background: #ff015b;
+            color: #fff;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta a {
+            display: inline-block;
+            background: #fff;
+            color: #ff015b;
+            padding: 0.75rem 2rem;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .cta a:hover {
+            background: #d10048;
+            color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">KypexTech</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="menu-icon" id="menuIcon"></div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="index.html">Home</a>
+            <a href="#">Services</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Website Development</h1>
+        <p>Building responsive, modern, and engaging websites tailored to your business needs.</p>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="overview">
+        <h2>About Our Website Development Service</h2>
+        <p>At KypexTech, we specialize in creating professional and fully responsive websites that help businesses establish a strong online presence and achieve their goals.</p>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-box">
+            <h3>Responsive Design</h3>
+            <p>Our websites are optimized for all devices to provide a seamless user experience.</p>
+        </div>
+        <div class="feature-box">
+            <h3>Custom Solutions</h3>
+            <p>Tailored to your business requirements for a unique and effective online presence.</p>
+        </div>
+        <div class="feature-box">
+            <h3>SEO Optimization</h3>
+            <p>We build websites with SEO best practices to help you rank higher on search engines.</p>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <h2>Ready to Transform Your Website?</h2>
+        <a href="index.html#contact">Get in Touch</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 KypexTech <br>A Subsidiary of Muwomo.Holding</p>
+        <div class="footer-links">
+            <a href="#">Facebook</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Twitter</a>
+        </div>
+    </footer>
+
+    <script src="js/website-development.js"></script>
+</body>
+</html>
