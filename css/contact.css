@@ -1,0 +1,119 @@
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(26, 33, 50, 0.6), rgba(0, 0, 0, 0.9)), url('../assets/contact_background.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    color: #ff015b;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+/* Contact Form */
+.contact-form {
+    padding: 4rem 2rem;
+    background: #1e2536;
+    text-align: center;
+}
+
+.contact-form h2 {
+    color: #ff015b;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.contact-form form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 5px;
+    border: none;
+    background: #181d2a;
+    color: #fff;
+}
+
+/* FAQs Section */
+.faqs {
+    padding: 4rem 2rem;
+    background: #181d2a;
+    text-align: center;
+}
+
+.faqs h2 {
+    color: #ff015b;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.faq-item h3 {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.faq-item p {
+    color: #aaa;
+}
+
+/* Working Hours */
+.working-hours {
+    padding: 4rem 2rem;
+    background: #1e2536;
+    text-align: center;
+}
+
+.working-hours ul {
+    list-style: none;
+    padding: 0;
+}
+
+.working-hours ul li {
+    margin-bottom: 0.5rem;
+}
+
+/* CTA Section */
+.cta {
+    background: #ff015b;
+    color: #fff;
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.cta-button {
+    background: #fff;
+    color: #ff015b;
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    text-decoration: none;
+}

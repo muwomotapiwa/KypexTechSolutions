@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | KypexTech</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Shared CSS -->
+    <link rel="stylesheet" href="css/contact.css"> <!-- Page-Specific CSS -->
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">KypexTech</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="menu-icon" id="menuIcon"></div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Contact Us</h1>
+        <p>Have questions? Need assistance? Get in touch with us today!</p>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-form">
+        <h2>Send Us a Message</h2>
+        <form action="#" method="POST">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Your Full Name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Your Email Address" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone (Optional):</label>
+                <input type="tel" id="phone" name="phone" placeholder="Your Phone Number">
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <select id="subject" name="subject" required>
+                    <option value="">-- Select a Subject --</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="website">Website Development Request</option>
+                    <option value="app">Mobile App Development Inquiry</option>
+                    <option value="cybersecurity">Cybersecurity Consultation</option>
+                    <option value="cloud">Cloud Services Inquiry</option>
+                    <option value="consulting">IT Consulting Request</option>
+                    <option value="analytics">Data Analytics Inquiry</option>
+                    <option value="feedback">Feedback or Suggestions</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" placeholder="Write your message here..." rows="5" required></textarea>
+            </div>
+            <button type="submit" class="cta-button">Submit</button>
+        </form>
+    </section>
+
+    <!-- FAQs Section -->
+    <section class="faqs">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <h3>How soon will I receive a response?</h3>
+            <p>We aim to respond to all inquiries within 24 hours on business days.</p>
+        </div>
+        <div class="faq-item">
+            <h3>What services do you offer?</h3>
+            <p>We provide website development, mobile app development, cybersecurity, cloud services, IT consulting, and data analytics solutions.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Can I schedule a meeting?</h3>
+            <p>Yes, you can schedule a meeting by contacting us directly or through the form above.</p>
+        </div>
+    </section>
+
+    <!-- Working Hours Section -->
+    <section class="working-hours">
+        <h2>Working Hours</h2>
+        <p>Our team is available during the following hours:</p>
+        <ul>
+            <li><strong>Monday to Friday:</strong> 9:00 AM - 6:00 PM</li>
+            <li><strong>Saturday:</strong> 10:00 AM - 2:00 PM</li>
+            <li><strong>Sunday:</strong> Closed</li>
+        </ul>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="cta">
+        <h2>Have More Questions? Contact Our Team Today!</h2>
+        <a href="#contact" class="cta-button">Schedule a Meeting</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 KypexTech <br>A Subsidiary of Muwomo.Holding</p>
+        <div class="footer-links">
+            <a href="#">Facebook</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Twitter</a>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
