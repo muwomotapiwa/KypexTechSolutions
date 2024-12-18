@@ -1,0 +1,181 @@
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(26, 33, 50, 0.6), rgba(0, 0, 0, 0.8)),
+                url('../assets/hacker.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    color: #ff015b;
+    text-shadow: 2px 2px 10px #000;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background: #ff015b;
+    color: #fff;
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.cta-button:hover {
+    background: #d10048;
+    transform: scale(1.05);
+}
+
+/* Overview Section */
+.overview {
+    padding: 4rem 2rem;
+    background: #181d2a;
+    text-align: center;
+}
+
+.overview h2 {
+    color: #ff015b;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.overview p {
+    font-size: 1.2rem;
+    color: #ddd;
+}
+
+/* Key Services Section */
+.key-services {
+    padding: 4rem 2rem;
+    background: #1e2536;
+    text-align: center;
+}
+
+.key-services h2 {
+    color: #ff015b;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.service-box {
+    background: #181d2a;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.service-box h3 {
+    color: #ff015b;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.service-box p {
+    color: #fff; /* Default text color */
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.service-box:hover p {
+    color: #ff015b; /* Text turns red on hover */
+}
+
+.service-box:hover {
+    transform: translateY(-10px);
+}
+
+/* Development Process Section */
+.process {
+    background: #181d2a;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #fff;
+}
+
+.process h2 {
+    color: #ff015b;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.process ul {
+    list-style: none;
+    font-size: 1.2rem;
+    line-height: 2;
+    color: #ddd;
+}
+
+.process ul li {
+    margin: 0.5rem 0;
+}
+
+/* Call-to-Action Section */
+.cta {
+    background: #ff015b;
+    color: #fff;
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background: #fff;
+    color: #ff015b;
+    padding: 0.75rem 2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s, transform 0.3s;
+}
+
+.cta-button:hover {
+    background: #d10048;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .overview h2, .key-services h2, .process h2 {
+        font-size: 2rem;
+    }
+
+    .process ul {
+        font-size: 1rem;
+    }
+}
