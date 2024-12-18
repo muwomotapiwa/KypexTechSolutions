@@ -21,6 +21,112 @@
     margin-top: 0.5rem;
 }
 
+/* Mission Section */
+.mission {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: #181d2a;
+}
+
+.mission h2 {
+    color: #ff015b;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.mission .content {
+    display: flex;
+    justify-content: space-around;
+    gap: 2rem;
+    flex-wrap: wrap; /* Ensure proper alignment on smaller screens */
+}
+
+.mission .box {
+    background: #1e2536;
+    padding: 2rem;
+    border-radius: 10px;
+    flex: 1;
+    max-width: 300px; /* Ensure consistent box size */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.mission .box h3 {
+    color: #ff015b;
+    margin-bottom: 1rem;
+}
+
+.mission .box p, .mission .box ul {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Why Choose Us Section */
+.why-us {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: #181d2a;
+}
+
+.why-us h2 {
+    color: #ff015b;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.why-us p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.why-us ul {
+    list-style: none;
+    padding: 0;
+}
+
+.why-us ul li {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+    position: relative;
+    padding-left: 20px;
+}
+
+.why-us ul li::before {
+    content: '✔'; /* Add a checkmark */
+    color: #ff015b;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* CTA Section */
+.cta {
+    background: #ff015b;
+    color: #fff;
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.cta-button {
+    background: #fff;
+    color: #ff015b;
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+}
+
+.cta-button:hover {
+    background: #d10048;
+    color: #fff;
+}
+
 /* Team Section */
 .team {
     padding: 4rem 2rem;
@@ -59,6 +165,11 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .mission .content {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .team-grid {
         flex-direction: column;
         align-items: center;
