@@ -1,0 +1,109 @@
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(26, 33, 50, 0.5), rgba(0, 0, 0, 0.9)), 
+                url('../assets/Website_Development.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    color: #ff015b;
+    text-shadow: 2px 2px 10px #000;
+}
+
+.hero p {
+    font-size: 1.5rem;
+}
+
+/* Overview Section */
+.overview {
+    padding: 4rem 2rem;
+    background: #181d2a;
+    text-align: center;
+}
+
+.overview h2 {
+    color: #ff015b;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.overview p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Features Section */
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 4rem 2rem;
+    background: #1e2536;
+    text-align: center;
+}
+
+.feature-box {
+    background: #181d2a;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.feature-box h3 {
+    font-size: 1.5rem;
+    color: #ff015b;
+    margin-bottom: 1rem;
+}
+
+.feature-box p {
+    font-size: 1rem;
+}
+
+.feature-box:hover {
+    transform: translateY(-10px);
+}
+
+/* CTA Section */
+.cta {
+    background: #ff015b;
+    color: #fff;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.cta a {
+    display: inline-block;
+    background: #fff;
+    color: #ff015b;
+    padding: 0.75rem 2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.cta a:hover {
+    background: #d10048;
+    color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .features {
+        grid-template-columns: 1fr;
+    }
+}
