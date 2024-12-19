@@ -49,9 +49,14 @@
     margin-bottom: 2rem;
 }
 
+.project-form form {
+    max-width: 600px; /* Set maximum width for the form */
+    margin: 0 auto; /* Center the form */
+    text-align: left; /* Align form labels and fields to the left */
+}
+
 .form-group {
     margin-bottom: 1.5rem;
-    text-align: left;
 }
 
 .form-group label {
@@ -62,9 +67,17 @@
 
 input, select, textarea {
     width: 100%;
+    max-width: 100%; /* Ensure inputs do not exceed the form width */
     padding: 0.75rem;
     border-radius: 5px;
     border: none;
+    background: #1e2536;
+    color: #fff;
+    font-size: 1rem;
+}
+
+textarea {
+    resize: none; /* Prevent resizing of the textarea */
 }
 
 button {
@@ -76,8 +89,34 @@ button {
     cursor: pointer;
     font-weight: bold;
     transition: background 0.3s ease;
+    display: block;
+    margin: 1rem auto 0; /* Center the button */
 }
 
 button:hover {
     background: #d10048;
+}
+
+/* Priority Level Radio Group */
+.radio-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .project-form form {
+        padding: 0 1rem;
+    }
+
+    input, select, textarea {
+        padding: 0.6rem;
+    }
 }
