@@ -46,6 +46,16 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
+.consultation-item h3 {
+    color: #ff015b;
+    margin-bottom: 1rem;
+}
+
+.consultation-item p {
+    color: #fff;
+    font-size: 1rem;
+}
+
 /* Consultation Form */
 .consultation-form {
     padding: 4rem 2rem;
@@ -58,25 +68,42 @@
     margin-bottom: 1.5rem;
 }
 
+.consultation-form p {
+    color: #fff;
+    margin-bottom: 2rem;
+}
+
+.consultation-form form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 .consultation-form .form-group {
     margin-bottom: 1.5rem;
+    text-align: left;
 }
 
 .consultation-form label {
     display: block;
     margin-bottom: 0.5rem;
     color: #fff;
+    font-weight: bold;
 }
 
 .consultation-form input,
 .consultation-form select,
 .consultation-form textarea {
     width: 100%;
+    max-width: 100%;
     padding: 0.8rem;
     border: none;
     border-radius: 5px;
     background: #1e2536;
     color: #fff;
+}
+
+.consultation-form textarea {
+    resize: none;
 }
 
 .consultation-form button {
@@ -87,6 +114,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
+    font-weight: bold;
 }
 
 .consultation-form button:hover {
@@ -112,6 +140,10 @@
     color: #ff015b;
 }
 
+.faq-item p {
+    color: #fff;
+}
+
 /* CTA Section */
 .cta {
     padding: 3rem 2rem;
@@ -122,6 +154,10 @@
 
 .cta h2 {
     font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.cta p {
     margin-bottom: 1rem;
 }
 
@@ -144,5 +180,13 @@
 @media (max-width: 768px) {
     .consultation-grid {
         grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
     }
 }
