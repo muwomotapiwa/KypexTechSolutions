@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Security Assessment | KypexTech</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Shared CSS -->
+    <link rel="stylesheet" href="css/assessment.css"> <!-- Page-Specific CSS -->
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">KypexTech</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="menu-icon" id="menuIcon"></div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="index.html">Home</a>
+            <a href="index.html#services">Services</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Free Security Assessment</h1>
+        <p>Understand your vulnerabilities and enhance your security posture with KypexTech.</p>
+        <a href="#request-form" class="cta-button">Request Your Assessment</a>
+    </section>
+
+    <!-- Why Assessments Matter -->
+    <section class="why-assessments">
+        <h2>Why Assessments Matter</h2>
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <h3>Identify Vulnerabilities</h3>
+                <p>Pinpoint areas that need immediate attention.</p>
+            </div>
+            <div class="benefit-item">
+                <h3>Stay Compliant</h3>
+                <p>Ensure adherence to regulations and standards.</p>
+            </div>
+            <div class="benefit-item">
+                <h3>Minimize Risks</h3>
+                <p>Reduce the likelihood of data breaches and attacks.</p>
+            </div>
+            <div class="benefit-item">
+                <h3>Enhance Continuity</h3>
+                <p>Protect your business operations from disruption.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Process -->
+    <section class="assessment-process">
+        <h2>Our Assessment Process</h2>
+        <div class="process-steps">
+            <div class="step">
+                <span>1</span>
+                <p>Submit Your Request</p>
+            </div>
+            <div class="step">
+                <span>2</span>
+                <p>We Analyze Your System</p>
+            </div>
+            <div class="step">
+                <span>3</span>
+                <p>Receive a Detailed Report</p>
+            </div>
+            <div class="step">
+                <span>4</span>
+                <p>Implement Recommendations</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Request Form -->
+    <section id="request-form" class="request-form">
+        <h2>Request Your Free Assessment</h2>
+        <form id="assessmentForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your Full Name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+                <label for="company">Company Name</label>
+                <input type="text" id="company" name="company" placeholder="Your Company Name">
+            </div>
+            <div class="form-group">
+                <label for="industry">Industry</label>
+                <select id="industry" name="industry">
+                    <option value="">Select Your Industry</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Education">Education</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="assessmentType">Assessment Type</label>
+                <select id="assessmentType" name="assessmentType">
+                    <option value="">Select Assessment Type</option>
+                    <option value="Security">Security</option>
+                    <option value="Cloud">Cloud</option>
+                    <option value="IT Infrastructure">IT Infrastructure</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="notes">Additional Notes</label>
+                <textarea id="notes" name="notes" placeholder="Optional"></textarea>
+            </div>
+            <button type="submit">Request Assessment</button>
+        </form>
+    </section>
+
+    <!-- FAQs Section -->
+    <section class="faqs">
+        <h2>FAQs</h2>
+        <div class="faq-item">
+            <h3>How long does the assessment take?</h3>
+            <p>It typically takes 1-2 weeks depending on the complexity of your systems.</p>
+        </div>
+        <div class="faq-item">
+            <h3>What does the report include?</h3>
+            <p>The report includes identified vulnerabilities, recommendations, and next steps.</p>
+        </div>
+    </section>
+
+    <!-- Call-to-Action -->
+    <section class="cta">
+        <h2>Ready to Secure Your Business?</h2>
+        <a href="#request-form" class="cta-button">Start Your Assessment Today</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 KypexTech <br>A Subsidiary of Muwomo.Holding</p>
+        <div class="footer-links">
+            <a href="#">Facebook</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Twitter</a>
+        </div>
+    </footer>
+
+    <script src="js/assessment.js"></script>
+</body>
+</html>

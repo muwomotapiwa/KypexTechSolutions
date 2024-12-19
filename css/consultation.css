@@ -1,0 +1,148 @@
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(26, 33, 50, 0.6), rgba(0, 0, 0, 0.9)), url('../assets/consultation_background.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+}
+
+/* About Consultation Section */
+.about-consultation {
+    padding: 4rem 2rem;
+    background: #1e2536;
+    text-align: center;
+    color: #fff;
+}
+
+.about-consultation h2 {
+    color: #ff015b;
+    margin-bottom: 2rem;
+}
+
+.consultation-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.consultation-item {
+    background: #181d2a;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Consultation Form */
+.consultation-form {
+    padding: 4rem 2rem;
+    background: #181d2a;
+    text-align: center;
+}
+
+.consultation-form h2 {
+    color: #ff015b;
+    margin-bottom: 1.5rem;
+}
+
+.consultation-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.consultation-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.consultation-form input,
+.consultation-form select,
+.consultation-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    background: #1e2536;
+    color: #fff;
+}
+
+.consultation-form button {
+    background: #ff015b;
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.consultation-form button:hover {
+    background: #d10048;
+}
+
+/* FAQs Section */
+.faqs {
+    padding: 4rem 2rem;
+    background: #1e2536;
+}
+
+.faqs h2 {
+    color: #ff015b;
+    margin-bottom: 1.5rem;
+}
+
+.faq-item {
+    margin-bottom: 1rem;
+}
+
+.faq-item h3 {
+    color: #ff015b;
+}
+
+/* CTA Section */
+.cta {
+    padding: 3rem 2rem;
+    background: #ff015b;
+    text-align: center;
+    color: #fff;
+}
+
+.cta h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.cta a {
+    display: inline-block;
+    background: #fff;
+    color: #ff015b;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+}
+
+.cta a:hover {
+    background: #d10048;
+    color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .consultation-grid {
+        grid-template-columns: 1fr;
+    }
+}
