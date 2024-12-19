@@ -5,14 +5,17 @@
     background-position: center;
     height: 60vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: #fff;
+    padding: 2rem;
 }
 
 .hero h1 {
-    font-size: 3.5rem;
+    font-size: 3rem;
+    margin-bottom: 1rem;
 }
 
 .hero p {
@@ -27,13 +30,14 @@
     border-radius: 5px;
     text-decoration: none;
     transition: background 0.3s ease;
+    font-weight: bold;
 }
 
 .hero .cta-button:hover {
     background: #d10048;
 }
 
-/* Why Assessments */
+/* Why Assessments Matter */
 .why-assessments {
     padding: 4rem 2rem;
     background: #1e2536;
@@ -42,46 +46,53 @@
 
 .why-assessments h2 {
     color: #ff015b;
+    font-size: 2.5rem;
     margin-bottom: 2rem;
 }
 
 .benefits-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
+    justify-content: center;
 }
 
 .benefit-item {
     background: #181d2a;
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 10px;
     color: #fff;
+    text-align: center;
 }
 
 /* Assessment Process */
 .assessment-process {
     padding: 4rem 2rem;
-    text-align: center;
     background: #181d2a;
+    text-align: center;
 }
 
 .assessment-process h2 {
     color: #ff015b;
+    font-size: 2.5rem;
     margin-bottom: 2rem;
 }
 
 .process-steps {
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap;
     gap: 1rem;
+    justify-content: center;
 }
 
 .step {
     background: #1e2536;
     color: #fff;
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 10px;
+    flex: 1 1 250px;
     text-align: center;
+    margin: 0.5rem;
 }
 
 .step span {
@@ -96,21 +107,28 @@
 .request-form {
     padding: 4rem 2rem;
     background: #1e2536;
+    text-align: center;
 }
 
 .request-form h2 {
     color: #ff015b;
+    font-size: 2.5rem;
     margin-bottom: 2rem;
 }
 
 .request-form .form-group {
     margin-bottom: 1.5rem;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .request-form label {
     display: block;
     margin-bottom: 0.5rem;
     color: #fff;
+    font-weight: bold;
 }
 
 .request-form input,
@@ -120,6 +138,7 @@
     padding: 0.75rem;
     border: none;
     border-radius: 5px;
+    font-size: 1rem;
 }
 
 .request-form button {
@@ -129,13 +148,14 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background 0.3s ease;
 }
 
 .request-form button:hover {
     background: #d10048;
 }
 
-/* FAQs */
+/* FAQs Section */
 .faqs {
     padding: 4rem 2rem;
     background: #181d2a;
@@ -144,6 +164,7 @@
 
 .faqs h2 {
     color: #ff015b;
+    font-size: 2.5rem;
     margin-bottom: 2rem;
 }
 
@@ -160,11 +181,12 @@
 .cta {
     background: #ff015b;
     color: #fff;
-    text-align: center;
     padding: 3rem 2rem;
+    text-align: center;
 }
 
 .cta h2 {
+    font-size: 2.5rem;
     margin-bottom: 1rem;
 }
 
@@ -174,6 +196,7 @@
     padding: 0.75rem 2rem;
     border-radius: 5px;
     text-decoration: none;
+    font-weight: bold;
     transition: background 0.3s ease, color 0.3s ease;
 }
 
