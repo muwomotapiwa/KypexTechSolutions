@@ -42,7 +42,16 @@
     <!-- Contact Form Section -->
     <section class="contact-form">
         <h2>Send Us a Message</h2>
-        <form action="https://formsubmit.co/el/guhuze" method="POST">
+        <form action="https://api.web3forms.com/submit" method="POST">
+            <!-- Web3Forms Access Key -->
+            <input type="hidden" name="access_key" value="af31cdca-fdb5-4fd7-81bd-762838f8e47f">
+          
+            <!-- Optional redirect after submission -->
+            <!-- <input type="hidden" name="redirect" value="https://yourdomain.com/thank-you.html"> -->
+          
+            <!-- Honeypot (Spam protection) -->
+            <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+          
             <div class="form-group">
               <label for="name">Name:</label>
               <input type="text" id="name" name="name" placeholder="Your Full Name" required>
@@ -59,25 +68,24 @@
               <label for="subject">Subject:</label>
               <select id="subject" name="subject" required>
                 <option value="">-- Select a Subject --</option>
-                <option value="general">General Inquiry</option>
-                <option value="website">Website Development Request</option>
-                <option value="app">Mobile App Development Inquiry</option>
-                <option value="cybersecurity">Cybersecurity Consultation</option>
-                <option value="cloud">Cloud Services Inquiry</option>
-                <option value="consulting">IT Consulting Request</option>
-                <option value="analytics">Data Analytics Inquiry</option>
-                <option value="feedback">Feedback or Suggestions</option>
+                <option value="General Inquiry">General Inquiry</option>
+                <option value="Website Development Request">Website Development Request</option>
+                <option value="Mobile App Development Inquiry">Mobile App Development Inquiry</option>
+                <option value="Cybersecurity Consultation">Cybersecurity Consultation</option>
+                <option value="Cloud Services Inquiry">Cloud Services Inquiry</option>
+                <option value="IT Consulting Request">IT Consulting Request</option>
+                <option value="Data Analytics Inquiry">Data Analytics Inquiry</option>
+                <option value="Feedback or Suggestions">Feedback or Suggestions</option>
               </select>
             </div>
             <div class="form-group">
               <label for="message">Message:</label>
               <textarea id="message" name="message" placeholder="Write your message here..." rows="5" required></textarea>
             </div>
-            <!-- Optional hidden fields -->
-            <input type="hidden" name="_captcha" value="false">
-            <!-- <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html"> -->        
+          
             <button type="submit" class="cta-button">Submit</button>
           </form>
+          
           
     </section>
 
