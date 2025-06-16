@@ -107,3 +107,44 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Country Selector Section */
+.country-selector {
+    background: #1e2536;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: white;
+}
+
+.country-selector h2 {
+    font-size: 2rem;
+    color: #ff015b;
+    margin-bottom: 1rem;
+}
+
+.country-selector select {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    width: 250px;
+    margin-top: 10px;
+}
+
+.country-selector button {
+    background-color: #ff015b;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px 10px 0 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.country-selector button:hover {
+    background-color: #d10048;
+    transform: scale(1.05);
+}
+

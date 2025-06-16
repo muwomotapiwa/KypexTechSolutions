@@ -74,6 +74,28 @@ gtag('config', 'G-J6CSWZW97R');
         <a href="contact.html">Get in Touch</a>
     </section>
 
+    <!-- Country Selector Section -->
+<section class="country-selector">
+  <h2>🌍 Where Are You Based?</h2>
+  <p>Select your country to get the most relevant quote.</p>
+  <select id="country" onchange="handleCountrySelect()">
+    <option value="">-- Choose Country --</option>
+    <option value="Zimbabwe">🇿🇼 Zimbabwe</option>
+    <option value="South Africa">🇿🇦 South Africa</option>
+    <option value="Other">🌐 Other</option>
+  </select>
+
+  <div id="quoteButtons" style="margin-top: 20px; display: none;">
+    <button id="zimBtn" onclick="location.href='WebsiteQuote.html'">🇿🇼 Get Quote (Zimbabwe)</button>
+    <button id="otherBtn" onclick="location.href='WebsiteQuote.html'">🌐 Get International Quote</button>
+  </div>
+
+  <div id="saMessage" style="margin-top: 20px; display: none;">
+    <p>🇿🇦 South African pricing calculator coming soon. Stay tuned!</p>
+  </div>
+</section>
+
+
     <!-- Footer -->
     <footer>
         <p>&copy; 2024 KypexTech <br>A Subsidiary of MuwomoHoldings</p>
