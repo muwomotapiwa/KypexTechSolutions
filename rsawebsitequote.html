@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KypexTech Website Quote Calculator (RSA)</title>
+  <style>
+    body {
+      background-color: #1a2132;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+    }
+    .topbar {
+      background: #1a2132;
+      color: #ff015b;
+      padding: 12px 20px;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .hero {
+      background-color: #ff015b;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .calculator {
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    .card {
+      background: #262f45;
+      padding: 20px;
+      margin-top: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    select, input[type="text"], input[type="email"], input[type="range"] {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      background-color: #ff015b;
+      color: white;
+      padding: 12px 20px;
+      margin: 10px 5px 0 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: 0.3s ease;
+      box-shadow: 0 0 15px #ff015b80;
+      cursor: pointer;
+    }
+    button:hover {
+      box-shadow: 0 0 25px #ff015b;
+      transform: scale(1.03);
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #111;
+      margin-top: 40px;
+    }
+    .summary p {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    /* Additional Styles */
+    .page-range-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 12px;
+      color: #aaa;
+    }
+    .slider-container {
+      position: relative;
+      margin: 20px 0;
+    }
+    input[type="range"] {
+      width: 100%;
+      margin: 15px 0;
+    }
+    .package-info {
+      display: none;
+      background: #2a3650;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+      border-left: 4px solid #ff015b;
+    }
+    .package-info.active {
+      display: block;
+    }
+    .feature-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+    .feature-table th, .feature-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #3a4a6a;
+    }
+    .feature-table th {
+      color: #ff015b;
+    }
+    .package-toggle {
+      color: #ff015b;
+      cursor: pointer;
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 0.9em;
+    }
+    .package-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .package-highlight {
+      color: #ff015b;
+      font-weight: bold;
+    }
+    .addon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .addon-card {
+      background: #2a3650;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 3px solid #ff015b;
+    }
+    .addon-price {
+      color: #ff015b;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">KypexTech 🔥</div>
+
+  <div class="hero">
+    <h1>Website Quote Calculator (South Africa)</h1>
+    <p>Estimate your website cost and send your quote instantly!</p>
+  </div>
+
+  <div class="calculator">
+
+    <h2>💼 WEB DESIGN PACKAGES (SOUTH AFRICA PRICING)</h2>
+    <div class="card">
+      <div class="package-header">
+        <select id="package" onchange="onPackageChange()">
+          <option value="0">-- Choose Package --</option>
+          <option value="1000">🔹 Starter Package – R1000 (Once Off)</option>
+          <option value="2500">🔹 Standard Package – R2500 (Once Off)</option>
+          <option value="4000">🔹 Pro Business Package – R4000 (Once Off)</option>
+          <option value="7000">🔹 E-Commerce Package – R7000 (Once Off)</option>
+        </select>
+        <span class="package-toggle" onclick="toggleAllPackageInfo()">▼ Show All Packages</span>
+      </div>
+
+      <div id="packageInfo1000" class="package-info">
+        <p class="package-highlight">💡 Perfect for individuals, churches, small orgs & new startups.</p>
+        <h3>Included Features:</h3>
+        <table class="feature-table">
+          <tr><th>Feature</th><th>Explanation</th></tr>
+          <tr><td>✅ 1–3 Pages</td><td>A homepage + 1-2 additional pages (e.g. About, Services).</td></tr>
+          <tr><td>✅ Responsive Design</td><td>Your site looks good on phones, tablets, and desktops.</td></tr>
+          <tr><td>✅ Contact Form</td><td>So users can reach you directly.</td></tr>
+          <tr><td>✅ Social Media Links</td><td>Buttons linked to Facebook, Instagram, WhatsApp, etc.</td></tr>
+          <tr><td>✅ Google Analytics</td><td>Track who visits your site and what they do.</td></tr>
+          <tr><td>✅ 1 Month Hosting</td><td>We host the site for you free for the first month.</td></tr>
+        </table>
+      </div>
+
+      <div id="packageInfo2500" class="package-info">
+        <p class="package-highlight">💡 Great for businesses ready to grow and attract leads online.</p>
+        <h3>Included Features:</h3>
+        <table class="feature-table">
+          <tr><th>Feature</th><th>Explanation</th></tr>
+          <tr><td>✅ 4–6 Pages</td><td>More space for services, team, gallery, testimonials, etc.</td></tr>
+          <tr><td>✅ Content Creation</td><td>We help write clear and professional content.</td></tr>
+          <tr><td>✅ SEO Basics</td><td>Your site will be visible on Google for relevant keywords.</td></tr>
+          <tr><td>✅ Social Integration</td><td>Live links or feeds from your social media pages.</td></tr>
+          <tr><td>✅ 3 Months Hosting</td><td>You're covered for 90 days—renew when ready.</td></tr>
+        </table>
+      </div>
+
+      <div id="packageInfo4000" class="package-info">
+        <p class="package-highlight">💡 Ideal for professionals or growing brands needing more features.</p>
+        <h3>Included Features:</h3>
+        <table class="feature-table">
+          <tr><th>Feature</th><th>Explanation</th></tr>
+          <tr><td>✅ 7–10 Pages</td><td>Great for service listings, blog, FAQ, portfolio, and more.</td></tr>
+          <tr><td>✅ Custom Banners</td><td>Eye-catching visual headers for each page.</td></tr>
+          <tr><td>✅ SEO Integration</td><td>Optimized titles, descriptions, and metadata for search engines.</td></tr>
+          <tr><td>✅ 6 Months Hosting</td><td>Half a year of hosting included.</td></tr>
+        </table>
+      </div>
+
+      <div id="packageInfo7000" class="package-info">
+        <p class="package-highlight">💡 Perfect for businesses selling online — clothing, gadgets, services, etc.</p>
+        <h3>Included Features:</h3>
+        <table class="feature-table">
+          <tr><th>Feature</th><th>Explanation</th></tr>
+          <tr><td>✅ 11–20 Pages</td><td>Includes home, shop, about, contact, blog, policies, and more.</td></tr>
+          <tr><td>✅ Online Store</td><td>Sell products or services with cart, categories, checkout.</td></tr>
+          <tr><td>✅ Paynow & Payment Gateways</td><td>Accept online payments securely via Paynow.</td></tr>
+          <tr><td>✅ 12 Months Hosting</td><td>Full-year premium hosting included.</td></tr>
+        </table>
+      </div>
+
+      <div class="slider-container">
+        <label>Number of Pages: <span id="pagesCount">1</span></label>
+        <input type="range" id="pages" min="1" max="20" value="1" oninput="updatePages()" />
+        <div class="page-range-indicator">
+          <span id="minPages">1</span>
+          <span id="maxPages">3</span>
+        </div>
+      </div>
+    </div>
+
+    <h2>🎁 OPTIONAL ADD-ONS (Pick What You Need)</h2>
+    <div class="card">
+      <div class="addon-grid">
+        <div class="addon-card">
+          <label><input type="checkbox" value="200" onchange="calculateTotal()"> Extra Pages</label>
+          <p>Add 3 more custom pages to your site.</p>
+          <p class="addon-price">R200</p>
+        </div>
+        <div class="addon-card">
+          <label><input type="checkbox" value="300" onchange="calculateTotal()"> SEO Optimization</label>
+          <p>Boost Google rankings with technical SEO setup.</p>
+          <p class="addon-price">R300</p>
+        </div>
+        <div class="addon-card">
+          <label><input type="checkbox" value="350" onchange="calculateTotal()"> Paynow Integration</label>
+          <p>Accept payments directly on site.</p>
+          <p class="addon-price">R350</p>
+        </div>
+        <div class="addon-card">
+          <label><input type="checkbox" value="150" onchange="calculateTotal()"> WhatsApp/Live Chat</label>
+          <p>Add a floating button for instant customer chats.</p>
+          <p class="addon-price">R150</p>
+        </div>
+        <div class="addon-card">
+          <label><input type="checkbox" value="150" onchange="calculateTotal()"> Google Maps Integration</label>
+          <p>Add a map to help users find your location.</p>
+          <p class="addon-price">R150</p>
+        </div>
+        <div class="addon-card">
+          <label><input type="checkbox" value="1500" onchange="calculateTotal()"> Android App (WebView)</label>
+          <p>Turn your website into a basic Android app.</p>
+          <p class="addon-price">R1500</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>📊 Quote Breakdown</h2>
+    <div class="card summary">
+      <p><strong>Package:</strong> <span id="selectedPackage">None</span></p>
+      <p><strong>Pages:</strong> <span id="selectedPages">1</span></p>
+      <p><strong>Add-Ons:</strong> <span id="selectedAddOns">None</span></p>
+      <p><strong>Total:</strong> <span id="total">R0.00</span></p>
+    </div>
+
+    <h2>🧑 Your Details</h2>
+    <div class="card">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <input type="text" id="whatsapp" placeholder="Your WhatsApp Number" required>
+      <button onclick="sendWhatsApp()">Send via WhatsApp</button>
+      <button onclick="downloadPDF()">Download PDF Quote</button>
+      <button onclick="submitEmail()">Submit via Email</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 KypexTech | Powered by Innovation</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> 
+  <script>
+    // Package definitions with page ranges and prices in Rands
+    const packages = {
+      1000: { min: 1, max: 3, name: "Starter Package – R1000 (Once Off)", price: 1000 },
+      2500: { min: 4, max: 6, name: "Standard Package – R2500 (Once Off)", price: 2500 },
+      4000: { min: 7, max: 10, name: "Pro Business Package – R4000 (Once Off)", price: 4000 },
+      7000: { min: 11, max: 20, name: "E-Commerce Package – R7000 (Once Off)", price: 7000 }
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+      updatePageRangeIndicator(1000); // Default to Starter package range
+    });
+
+    function updatePages() {
+      const pagesInput = document.getElementById("pages");
+      const pages = parseInt(pagesInput.value);
+      document.getElementById("pagesCount").innerText = pages;
+
+      checkPackageMatch(pages);
+      calculateTotal();
+    }
+
+    function updatePageRangeIndicator(packageValue) {
+      const package = packages[packageValue];
+      if (!package) return;
+
+      document.getElementById("minPages").textContent = package.min;
+      document.getElementById("maxPages").textContent = package.max;
+
+      const pagesInput = document.getElementById("pages");
+      pagesInput.min = package.min;
+      pagesInput.max = package.max;
+      pagesInput.value = package.min;
+      document.getElementById("pagesCount").innerText = package.min;
+    }
+
+    function checkPackageMatch(selectedPages) {
+      const packageSelect = document.getElementById("package");
+      const currentPackage = parseInt(packageSelect.value);
+
+      let recommendedPackage = null;
+      for (const [value, range] of Object.entries(packages)) {
+        if (selectedPages >= range.min && selectedPages <= range.max) {
+          recommendedPackage = { value: parseInt(value), ...range };
+          break;
+        }
+      }
+
+      if (!recommendedPackage && selectedPages > packages[7000].max) {
+        recommendedPackage = { value: 7000, ...packages[7000] };
+      }
+
+      if (recommendedPackage && currentPackage !== recommendedPackage.value) {
+        const confirmChange = confirm(
+          `You've selected ${selectedPages} pages.\n` +
+          `This matches our ${recommendedPackage.name} (${recommendedPackage.min}-${recommendedPackage.max} pages).\n\n` +
+          `Would you like to change to the ${recommendedPackage.name}?`
+        );
+
+        if (confirmChange) {
+          packageSelect.value = recommendedPackage.value;
+          onPackageChange();
+        }
+      }
+    }
+
+    function onPackageChange() {
+      const packageSelect = document.getElementById("package");
+      const packageValue = packageSelect.value;
+      updatePageRangeIndicator(packageValue);
+      showPackageInfo(packageValue);
+      calculateTotal();
+    }
+
+    function showPackageInfo(packageValue) {
+      document.querySelectorAll('.package-info').forEach(el => {
+        el.classList.remove('active');
+      });
+      if (packageValue !== "0") {
+        document.getElementById(`packageInfo${packageValue}`).classList.add('active');
+      }
+    }
+
+    function toggleAllPackageInfo() {
+      const allHidden = Array.from(document.querySelectorAll('.package-info'))
+        .every(el => !el.classList.contains('active'));
+
+      document.querySelectorAll('.package-info').forEach(el => {
+        if (allHidden) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+
+      const toggleBtn = document.querySelector('.package-toggle');
+      toggleBtn.textContent = allHidden ? '▲ Hide Packages' : '▼ Show All Packages';
+    }
+
+    function calculateTotal() {
+      let total = parseInt(document.getElementById("package").value) || 0;
+      let packageText = document.getElementById("package").selectedOptions[0].text;
+      document.getElementById("selectedPackage").innerText = packageText;
+
+      const pages = parseInt(document.getElementById("pages").value);
+      document.getElementById("selectedPages").innerText = pages;
+
+      const currentPackageValue = parseInt(document.getElementById("package").value);
+      if (currentPackageValue && pages > packages[currentPackageValue].max) {
+        total += (pages - packages[currentPackageValue].max) * 100;
+      }
+
+      let addOns = [];
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        if (cb.checked) {
+          total += parseInt(cb.value);
+          addOns.push(cb.parentElement.textContent.trim());
+        }
+      });
+
+      document.getElementById("selectedAddOns").innerText = addOns.length ? addOns.join(", ") : "None";
+      document.getElementById("total").innerText = `R${total.toFixed(2)}`;
+    }
+
+    function sendWhatsApp() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const whatsappNumber = document.getElementById("whatsapp").value;
+      const package = document.getElementById("selectedPackage").innerText;
+      const pages = document.getElementById("selectedPages").innerText;
+      const addOns = document.getElementById("selectedAddOns").innerText;
+      const total = document.getElementById("total").innerText;
+
+      if (!name || !email || !whatsappNumber) {
+        alert("Please fill in all your details before sending");
+        return;
+      }
+
+      let msg = `*NEW WEBSITE QUOTE REQUEST* 🔥\n\n`;
+      msg += `👤 *Client Name:* ${name}\n`;
+      msg += `📧 *Email:* ${email}\n`;
+      msg += `📱 *WhatsApp:* ${whatsappNumber}\n\n`;
+      msg += `📦 *Selected Package:*\n${package}\n\n`;
+      msg += `📄 *Number of Pages:* ${pages}\n\n`;
+      msg += `➕ *Selected Add-Ons:*\n${addOns}\n\n`;
+      msg += `💰 *Total Quote Amount:* ${total}\n\n`;
+      msg += `💬 *Client Message:*\n"I'd like to proceed with this quote. Please contact me to discuss next steps."`;
+
+      const encoded = encodeURIComponent(msg);
+      confetti();
+      window.open(`https://wa.me/27715731602?text=${encoded}`, '_blank');
+    }
+
+    function downloadPDF() {
+      alert("PDF download feature coming in the next update!");
+    }
+
+    function submitEmail() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const whatsappNumber = document.getElementById("whatsapp").value;
+      const package = document.getElementById("selectedPackage").innerText;
+      const pages = document.getElementById("selectedPages").innerText;
+      const addOns = document.getElementById("selectedAddOns").innerText;
+      const total = document.getElementById("total").innerText;
+
+      if (!name || !email || !whatsappNumber) {
+        alert("Please fill in all your details before submitting");
+        return;
+      }
+
+      let details = `📝 *NEW QUOTE REQUEST* 📝\n\n`;
+      details += `🕒 ${new Date().toLocaleString()}\n\n`;
+      details += `👤 *Client Information:*\n`;
+      details += `- Name: ${name}\n`;
+      details += `- Email: ${email}\n`;
+      details += `- WhatsApp: ${whatsappNumber}\n\n`;
+      details += `📦 *Package Selected:*\n${package}\n\n`;
+      details += `📄 *Pages Selected:* ${pages}\n\n`;
+      details += `➕ *Add-Ons Selected:*\n${addOns}\n\n`;
+      details += `💰 *Total Quote:* ${total}\n\n`;
+      details += `📩 This quote request was submitted via the KypexTech website calculator.`;
+
+      alert(`✅ Thank you, ${name}!\n\nWe've received your quote request and will contact you shortly at:\n📧 ${email} or 📱 ${whatsappNumber}\n\nHere's your complete quote summary:\n\n${details}`);
+    }
+  </script>
+</body>
+</html>
