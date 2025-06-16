@@ -4,148 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KypexTech Website Quote Calculator (Zimbabwe)</title>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>  
-  <style>
-    body {
-      background-color: #1a2132;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-    }
-    .topbar {
-      background: #1a2132;
-      color: #ff015b;
-      padding: 12px 20px;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .hero {
-      background-color: #ff015b;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    .calculator {
-      padding: 20px;
-      max-width: 700px;
-      margin: auto;
-    }
-    .card {
-      background: #262f45;
-      padding: 20px;
-      margin-top: 15px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-    select, input[type="text"], input[type="email"], input[type="range"] {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
-    button {
-      background-color: #ff015b;
-      color: white;
-      padding: 12px 20px;
-      margin: 10px 5px 0 0;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: 0.3s ease;
-      box-shadow: 0 0 15px #ff015b80;
-      cursor: pointer;
-    }
-    button:hover {
-      box-shadow: 0 0 25px #ff015b;
-      transform: scale(1.03);
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #111;
-      margin-top: 40px;
-    }
-    .summary p {
-      margin: 10px 0;
-      line-height: 1.6;
-    }
-    /* Additional Styles */
-    .page-range-indicator {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 5px;
-      font-size: 12px;
-      color: #aaa;
-    }
-    .slider-container {
-      position: relative;
-      margin: 20px 0;
-    }
-    input[type="range"] {
-      width: 100%;
-      margin: 15px 0;
-    }
-    .package-info {
-      display: none;
-      background: #2a3650;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 10px;
-      border-left: 4px solid #ff015b;
-    }
-    .package-info.active {
-      display: block;
-    }
-    .feature-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0;
-    }
-    .feature-table th, .feature-table td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #3a4a6a;
-    }
-    .feature-table th {
-      color: #ff015b;
-    }
-    .package-toggle {
-      color: #ff015b;
-      cursor: pointer;
-      display: inline-block;
-      margin-left: 10px;
-      font-size: 0.9em;
-    }
-    .package-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .package-highlight {
-      color: #ff015b;
-      font-weight: bold;
-    }
-    .addon-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-    .addon-card {
-      background: #2a3650;
-      padding: 15px;
-      border-radius: 8px;
-      border-left: 3px solid #ff015b;
-    }
-    .addon-price {
-      color: #ff015b;
-      font-weight: bold;
-    }
-  </style>
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="css/zwwebsitequote.css">
+  <!-- External library for confetti animation -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> 
 </head>
 <body>
 
@@ -163,12 +25,12 @@
     <div class="card">
       <div class="package-header">
         <select id="package" onchange="onPackageChange()">
-          <option value="0">-- Choose Package --</option>
-          <option value="100">🔹 Starter Package – $<span id="starterPrice">5.60</span> (Once Off)</option>
-          <option value="220">🔹 Standard Package – $<span id="standardPrice">12.32</span> (Once Off)</option>
-          <option value="330">🔹 Pro Business Package – $<span id="proBusinessPrice">18.48</span> (Once Off)</option>
-          <option value="540">🔹 E-Commerce Package – $<span id="ecommercePrice">30.24</span> (Once Off)</option>
-        </select>
+        <option value="0">-- Choose Package --</option>
+        <option value="100">🔹 Starter Package – <span class="price-desktop-only">$<span id="starterPrice">5.60</span></span> (Once Off)</option>
+        <option value="220">🔹 Standard Package – <span class="price-desktop-only">$<span id="standardPrice">12.32</span></span> (Once Off)</option>
+        <option value="330">🔹 Pro Business Package – <span class="price-desktop-only">$<span id="proBusinessPrice">18.48</span></span> (Once Off)</option>
+        <option value="540">🔹 E-Commerce Package – <span class="price-desktop-only">$<span id="ecommercePrice">30.24</span></span> (Once Off)</option>
+      </select>
         <span class="package-toggle" onclick="toggleAllPackageInfo()">▼ Show All Packages</span>
       </div>
 
@@ -197,7 +59,7 @@
           <tr><td>✅ Google Analytics</td><td>Get traffic reports and audience insights.</td></tr>
           <tr><td>✅ Social Media Integration</td><td>Live links or feeds from your social media pages.</td></tr>
           <tr><td>✅ SEO Basics</td><td>Your site will be visible on Google for relevant keywords.</td></tr>
-          <tr><td>✅ 3 Months Hosting</td><td>You're covered for 90 days—renew when you're ready.</td></tr>
+          <tr><td>✅ 3 Months Hosting</td><td>You're covered for 90 days—renew when ready.</td></tr>
           <tr><td>✅ Google Maps</td><td>Display your physical location on a map on your site.</td></tr>
         </table>
       </div>
@@ -299,183 +161,7 @@
     <p>&copy; 2025 KypexTech | Powered by Innovation</p>
   </footer>
 
-  <script>
-    const packages = {
-      100: { min: 1, max: 3, name: "Starter Package", price: 100 },
-      220: { min: 4, max: 6, name: "Standard Package", price: 220 },
-      330: { min: 7, max: 10, name: "Pro Business Package", price: 330 },
-      540: { min: 11, max: 20, name: "E-Commerce Package", price: 540 }
-    };
-
-    // Backend-only exchange rate Rand to US (1 ZAR = 0.056 USD)
-    let exchangeRate = 0.96;
-
-    function updatePrices() {
-      document.getElementById("starterPrice").innerText = (packages[100].price * exchangeRate).toFixed(2);
-      document.getElementById("standardPrice").innerText = (packages[220].price * exchangeRate).toFixed(2);
-      document.getElementById("proBusinessPrice").innerText = (packages[330].price * exchangeRate).toFixed(2);
-      document.getElementById("ecommercePrice").innerText = (packages[540].price * exchangeRate).toFixed(2);
-
-      document.getElementById("addOnExtraPages").innerText = (20 * exchangeRate).toFixed(2);
-      document.getElementById("addOnSEO").innerText = (20 * exchangeRate).toFixed(2);
-      document.getElementById("addOnPaynow").innerText = (30 * exchangeRate).toFixed(2);
-      document.getElementById("addOnWhatsApp").innerText = (15 * exchangeRate).toFixed(2);
-      document.getElementById("addOnMaps").innerText = (15 * exchangeRate).toFixed(2);
-      document.getElementById("addOnApp").innerText = (120 * exchangeRate).toFixed(2);
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      updatePageRangeIndicator(100); // Default to Starter package range
-      updatePrices(); // Update prices based on exchange rate
-    });
-
-    function updatePages() {
-      const pagesInput = document.getElementById("pages");
-      const pages = parseInt(pagesInput.value);
-      document.getElementById("pagesCount").innerText = pages;
-
-      checkPackageMatch(pages);
-      calculateTotal();
-    }
-
-    function updatePageRangeIndicator(packageValue) {
-      const package = packages[packageValue];
-      if (!package) return;
-
-      document.getElementById("minPages").textContent = package.min;
-      document.getElementById("maxPages").textContent = package.max;
-
-      const pagesInput = document.getElementById("pages");
-      pagesInput.min = package.min;
-      pagesInput.max = package.max;
-      pagesInput.value = package.min;
-      document.getElementById("pagesCount").innerText = package.min;
-    }
-
-    function checkPackageMatch(selectedPages) {
-      const packageSelect = document.getElementById("package");
-      const currentPackage = parseInt(packageSelect.value);
-
-      let recommendedPackage = null;
-      for (const [value, range] of Object.entries(packages)) {
-        if (selectedPages >= range.min && selectedPages <= range.max) {
-          recommendedPackage = { value: parseInt(value), ...range };
-          break;
-        }
-      }
-
-      if (!recommendedPackage && selectedPages > packages[540].max) {
-        recommendedPackage = { value: 540, ...packages[540] };
-      }
-
-      if (recommendedPackage && currentPackage !== recommendedPackage.value) {
-        const confirmChange = confirm(
-          `You've selected ${selectedPages} pages.\n` +
-          `This matches our ${recommendedPackage.name} (${recommendedPackage.min}-${recommendedPackage.max} pages).\n\n` +
-          `Would you like to change to the ${recommendedPackage.name}?`
-        );
-
-        if (confirmChange) {
-          packageSelect.value = recommendedPackage.value;
-          onPackageChange();
-        }
-      }
-    }
-
-    function onPackageChange() {
-      const packageSelect = document.getElementById("package");
-      const packageValue = packageSelect.value;
-      updatePageRangeIndicator(packageValue);
-      showPackageInfo(packageValue);
-      calculateTotal();
-    }
-
-    function showPackageInfo(packageValue) {
-      document.querySelectorAll('.package-info').forEach(el => el.classList.remove('active'));
-      if (packageValue !== "0") {
-        document.getElementById(`packageInfo${packageValue}`).classList.add('active');
-      }
-    }
-
-    function toggleAllPackageInfo() {
-      const allHidden = Array.from(document.querySelectorAll('.package-info'))
-        .every(el => !el.classList.contains('active'));
-
-      document.querySelectorAll('.package-info').forEach(el => {
-        el.classList.toggle('active', allHidden);
-      });
-
-      const toggleBtn = document.querySelector('.package-toggle');
-      toggleBtn.textContent = allHidden ? '▲ Hide Packages' : '▼ Show All Packages';
-    }
-
-    function calculateTotal() {
-      let total = 0;
-      const packageSelect = document.getElementById("package");
-      const packageValue = packageSelect.value;
-
-      if (packageValue !== "0") {
-        total = packages[packageValue].price * exchangeRate;
-      }
-
-      document.getElementById("selectedPackage").innerText = packageSelect.selectedOptions[0].text;
-
-      const pages = parseInt(document.getElementById("pages").value);
-      document.getElementById("selectedPages").innerText = pages;
-
-      if (packageValue !== "0" && pages > packages[packageValue].max) {
-        total += (pages - packages[packageValue].max) * (10 * exchangeRate); // extra page cost
-      }
-
-      let addOns = [];
-      document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-        if (cb.checked) {
-          const value = parseInt(cb.value) * exchangeRate;
-          total += value;
-          addOns.push(`${cb.parentElement.textContent.trim()} ($${value.toFixed(2)})`);
-        }
-      });
-
-      document.getElementById("selectedAddOns").innerText = addOns.length ? addOns.join(", ") : "None";
-      document.getElementById("total").innerText = `$${total.toFixed(2)}`;
-    }
-
-    function sendWhatsApp() {
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const whatsappNumber = document.getElementById("whatsapp").value;
-      const package = document.getElementById("selectedPackage").innerText;
-      const pages = document.getElementById("selectedPages").innerText;
-      const addOns = document.getElementById("selectedAddOns").innerText;
-      const total = document.getElementById("total").innerText;
-
-      if (!name || !email || !whatsappNumber) {
-        alert("Please fill in all your details before sending");
-        return;
-      }
-
-      let msg = `*NEW WEBSITE QUOTE REQUEST* 🔥\n\n`;
-      msg += `👤 *Client Name:* ${name}\n`;
-      msg += `📧 *Email:* ${email}\n`;
-      msg += `📱 *WhatsApp:* ${whatsappNumber}\n\n`;
-      msg += `📦 *Selected Package:*\n${package}\n\n`;
-      msg += `📄 *Number of Pages:* ${pages}\n\n`;
-      msg += `➕ *Selected Add-Ons:*\n${addOns}\n\n`;
-      msg += `💰 *Total Quote Amount:* ${total}\n\n`;
-      msg += `💬 *Client Message:*\n"I'd like to proceed with this quote. Please contact me to discuss next steps."`;
-
-      const encoded = encodeURIComponent(msg);
-      confetti();
-      window.open(`https://wa.me/27715731602?text=${encoded}`, '_blank');
-    }
-
-    function downloadPDF() {
-      alert("PDF download feature coming soon!");
-    }
-
-    function submitEmail() {
-      alert("Quote submitted successfully via email.");
-    }
-  </script>
+  <!-- Link to external JavaScript -->
+  <script src="js/zwwebsitequote.js"></script>
 </body>
 </html>
