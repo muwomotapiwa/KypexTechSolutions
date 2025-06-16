@@ -10,20 +10,29 @@ menuIcon.addEventListener('click', () => {
 function handleCountrySelect() {
     const selected = document.getElementById("country").value;
     const buttonsDiv = document.getElementById("quoteButtons");
-    const saMessage = document.getElementById("saMessage");
 
+    // Hide all buttons first
     buttonsDiv.style.display = "none";
-    saMessage.style.display = "none";
+    ['zimBtn', 'rsaBtn', 'zamBtn', 'botsBtn', 'otherBtn'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.style.display = "none";
+    });
 
+    // Show the relevant button
     if (selected === "Zimbabwe") {
         buttonsDiv.style.display = "block";
         document.getElementById("zimBtn").style.display = "inline-block";
-        document.getElementById("otherBtn").style.display = "none";
+    } else if (selected === "South Africa") {
+        buttonsDiv.style.display = "block";
+        document.getElementById("rsaBtn").style.display = "inline-block";
+    } else if (selected === "Zambia") {
+        buttonsDiv.style.display = "block";
+        document.getElementById("zamBtn").style.display = "inline-block";
+    } else if (selected === "Botswana") {
+        buttonsDiv.style.display = "block";
+        document.getElementById("botsBtn").style.display = "inline-block";
     } else if (selected === "Other") {
         buttonsDiv.style.display = "block";
-        document.getElementById("zimBtn").style.display = "none";
         document.getElementById("otherBtn").style.display = "inline-block";
-    } else if (selected === "South Africa") {
-        saMessage.style.display = "block";
     }
 }
