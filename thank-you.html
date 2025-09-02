@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You | KypexTech</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Shared CSS -->
+    <link rel="stylesheet" href="css/thank-you.css"> <!-- Page-Specific CSS -->
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">KypexTech</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="menu-icon" id="menuIcon"></div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="index.html">Home</a>
+            <a href="index.html#services">Services</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </header>
+
+    <!-- Thank You Section -->
+    <section class="thankyou">
+        <h1 id="thankTitle">Thank you!</h1>
+        <p id="thankMessage">We’ve received your submission. Our team will contact you shortly.</p>
+        <a class="cta-button" href="index.html">Back to Home</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 KypexTech <br>A Subsidiary of Muwomo.Holding</p>
+        <div class="footer-links">
+            <a href="#">Facebook</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Twitter</a>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            // Try to get the name from URL first, then from localStorage
+            const name = params.get('name') || params.get('contactName') || localStorage.getItem('lastSubmitName') || '';
+            // Prefer explicit form label, else subject, else derived from page
+            const formLabel = params.get('form') || localStorage.getItem('lastSubmitForm') || params.get('subject') || '';
+            const page = params.get('page') || localStorage.getItem('lastSubmitPage') || '';
+
+            const nicePage = page ? page.replace('.html','').replace(/[-_]/g,' ').replace(/\b\w/g, c => c.toUpperCase()) : '';
+
+            const title = document.getElementById('thankTitle');
+            const msg = document.getElementById('thankMessage');
+
+            const safeName = name ? name.trim() : '';
+            const what = formLabel || (nicePage ? `${nicePage} form` : 'form');
+
+            if (safeName) {
+                title.textContent = `Thank you, ${safeName}!`;
+                msg.textContent = `We’ve received your ${what} submission. Our team will be in touch shortly.`;
+            } else {
+                title.textContent = 'Thank you!';
+                msg.textContent = `We’ve received your ${what} submission. Our team will be in touch shortly.`;
+            }
+
+            // Clear stored data for privacy
+            localStorage.removeItem('lastSubmitName');
+            localStorage.removeItem('lastSubmitForm');
+            localStorage.removeItem('lastSubmitPage');
+        })();
+    </script>
+    <script src="js/script.js"></script>
+</body>
+</html>
+
