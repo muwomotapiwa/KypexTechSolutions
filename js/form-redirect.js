@@ -24,12 +24,19 @@
     const name = getValue(form, ['input[name="name"]', 'input[name="contactName"]']);
     const formLabel = getValue(form, ['input[name="form"]', 'input[name="subject"]']);
     const page = getValue(form, ['input[name="page"]']);
+    // Consultation scheduling fields (if present)
+    const preferredDate = getValue(form, ['input[name="preferred_date"]']);
+    const preferredTime = getValue(form, ['input[name="preferred_time"]']);
+    const timezone = getValue(form, ['input[name="timezone"]']);
 
     // Use sessionStorage instead of localStorage to minimize persistence
     try {
       if (name) sessionStorage.setItem('lastSubmitName', name);
       if (formLabel) sessionStorage.setItem('lastSubmitForm', formLabel);
       if (page) sessionStorage.setItem('lastSubmitPage', page);
+      if (preferredDate) sessionStorage.setItem('preferredDate', preferredDate);
+      if (preferredTime) sessionStorage.setItem('preferredTime', preferredTime);
+      if (timezone) sessionStorage.setItem('preferredTimezone', timezone);
     } catch (e) { /* ignore storage errors */ }
   }
 

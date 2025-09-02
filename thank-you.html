@@ -36,6 +36,12 @@
     <section class="thankyou">
         <h1 id="thankTitle">Thank you!</h1>
         <p id="thankMessage">We’ve received your submission. Our team will contact you shortly.</p>
+        <div id="calendarActions" style="display:none; margin-top:16px;">
+            <p style="margin-bottom:12px;">Add your consultation to your calendar:</p>
+            <a id="gcalLink" class="cta-button" target="_blank" rel="noopener">Add to Google Calendar</a>
+            <a id="outlookLink" class="cta-button" target="_blank" rel="noopener">Open in Outlook</a>
+            <a id="icsDownload" class="cta-button" download="kypextech-consultation.ics">Download .ics</a>
+        </div>
         <a class="cta-button" href="index.html">Back to Home</a>
     </section>
 
@@ -74,11 +80,79 @@
                 msg.textContent = `We’ve received your ${what} submission. Our team will be in touch shortly.`;
             }
 
+            // If this was a consultation request and we have scheduling fields, show calendar actions
+            const isConsultation = (formLabel && /consultation/i.test(formLabel)) || /consultation\.html$/i.test(page || '');
+            const date = sessionStorage.getItem('preferredDate');
+            const time = sessionStorage.getItem('preferredTime');
+            const tz = sessionStorage.getItem('preferredTimezone') || Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            function toUTC(dateStr, timeStr) {
+              // Interpret selected local date/time as in the user's current zone
+              const local = new Date(`${dateStr}T${timeStr}:00`);
+              return local;
+            }
+            function fmtGoogle(dt) {
+              // YYYYMMDDTHHMMSSZ using UTC
+              const y = dt.getUTCFullYear();
+              const m = String(dt.getUTCMonth()+1).padStart(2,'0');
+              const d = String(dt.getUTCDate()).padStart(2,'0');
+              const hh = String(dt.getUTCHours()).padStart(2,'0');
+              const mm = String(dt.getUTCMinutes()).padStart(2,'0');
+              const ss = '00';
+              return `${y}${m}${d}T${hh}${mm}${ss}Z`;
+            }
+            function icsEscape(s){return (s||'').replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');}
+
+            if (isConsultation && date && time) {
+              const startLocal = toUTC(date, time);
+              const endLocal = new Date(startLocal.getTime() + 30*60000); // default 30 mins
+              const titleText = 'Consultation with KypexTech';
+              const details = `Requested by ${safeName || 'client'} via KypexTech.`;
+
+              const gStart = fmtGoogle(startLocal);
+              const gEnd = fmtGoogle(endLocal);
+              const gcal = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titleText)}&dates=${gStart}%2F${gEnd}&details=${encodeURIComponent(details)}&location=${encodeURIComponent('Online')}&ctz=${encodeURIComponent(tz)}`;
+              const outlook = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(titleText)}&startdt=${encodeURIComponent(startLocal.toISOString())}&enddt=${encodeURIComponent(endLocal.toISOString())}&body=${encodeURIComponent(details)}&location=${encodeURIComponent('Online')}`;
+
+              const ics = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//KypexTech//Consultation//EN',
+                'CALSCALE:GREGORIAN',
+                'METHOD:PUBLISH',
+                'BEGIN:VEVENT',
+                `UID:${Date.now()}@kypextech.co.za`,
+                `DTSTAMP:${fmtGoogle(new Date())}`,
+                `DTSTART:${fmtGoogle(startLocal)}`,
+                `DTEND:${fmtGoogle(endLocal)}`,
+                `SUMMARY:${icsEscape(titleText)}`,
+                `DESCRIPTION:${icsEscape(details)}`,
+                `LOCATION:${icsEscape('Online')}`,
+                'END:VEVENT',
+                'END:VCALENDAR'
+              ].join('\r\n');
+
+              const calEl = document.getElementById('calendarActions');
+              const gEl = document.getElementById('gcalLink');
+              const oEl = document.getElementById('outlookLink');
+              const iEl = document.getElementById('icsDownload');
+              if (gEl) gEl.href = gcal;
+              if (oEl) oEl.href = outlook;
+              if (iEl) {
+                const blob = new Blob([ics], {type: 'text/calendar'});
+                iEl.href = URL.createObjectURL(blob);
+              }
+              if (calEl) calEl.style.display = 'block';
+            }
+
             // Clear stored data for privacy
             try {
               sessionStorage.removeItem('lastSubmitName');
               sessionStorage.removeItem('lastSubmitForm');
               sessionStorage.removeItem('lastSubmitPage');
+              sessionStorage.removeItem('preferredDate');
+              sessionStorage.removeItem('preferredTime');
+              sessionStorage.removeItem('preferredTimezone');
             } catch (e) { /* ignore */ }
         })();
     </script>
