@@ -1,4 +1,15 @@
 /* Page-specific styles for Thank You page */
+
+/* Ensure footer sticks to the bottom */
+.thankyou-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.thankyou-page footer {
+  margin-top: auto;
+}
+
 .thankyou {
   padding: 80px 20px;
   max-width: 900px;
@@ -13,12 +24,15 @@
 
 .thankyou p {
   font-size: 1.1rem;
-  color: #333;
   margin-bottom: 24px;
+}
+
+/* Make the submission confirmation message white */
+#thankMessage {
+  color: #fff;
 }
 
 .thankyou .cta-button {
   display: inline-block;
   padding: 10px 18px;
 }
-
