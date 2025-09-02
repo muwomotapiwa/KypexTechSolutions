@@ -86,7 +86,11 @@
     <!-- Request Form -->
     <section id="request-form" class="request-form">
         <h2>Request Your Free Assessment</h2>
-        <form id="assessmentForm">
+        <form id="assessmentForm" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="af31cdca-fdb5-4fd7-81bd-762838f8e47f">
+            <input type="hidden" name="subject" value="Assessment Form Submission - KypexTech">
+            <input type="hidden" name="page" value="assessment.html">
+            <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" placeholder="Your Full Name" required>

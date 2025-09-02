@@ -49,18 +49,22 @@ gtag('config', 'G-J6CSWZW97R');
     <!-- Project Form Section -->
     <section id="projectForm" class="project-form">
         <h2>Project Brief</h2>
-        <form id="projectStartForm">
+        <form id="projectStartForm" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="af31cdca-fdb5-4fd7-81bd-762838f8e47f">
+            <input type="hidden" name="subject" value="Project Start Form Submission - KypexTech">
+            <input type="hidden" name="page" value="project-start.html">
+            <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
             <div class="form-group">
                 <label for="projectName">Project Name</label>
-                <input type="text" id="projectName" placeholder="Enter your project name" required>
+                <input type="text" id="projectName" name="projectName" placeholder="Enter your project name" required>
             </div>
             <div class="form-group">
                 <label for="companyName">Company Name</label>
-                <input type="text" id="companyName" placeholder="Enter your company name" required>
+                <input type="text" id="companyName" name="companyName" placeholder="Enter your company name" required>
             </div>
             <div class="form-group">
                 <label for="projectType">Type of Project</label>
-                <select id="projectType" required>
+                <select id="projectType" name="projectType" required>
                     <option value="" disabled selected>Select a project type</option>
                     <option value="website">Website Development</option>
                     <option value="mobileApp">Mobile App Development</option>
@@ -72,11 +76,11 @@ gtag('config', 'G-J6CSWZW97R');
             </div>
             <div class="form-group">
                 <label for="projectDescription">Project Description</label>
-                <textarea id="projectDescription" rows="4" placeholder="Provide a brief description of your project" required></textarea>
+                <textarea id="projectDescription" name="projectDescription" rows="4" placeholder="Provide a brief description of your project" required></textarea>
             </div>
             <div class="form-group">
                 <label for="budget">Estimated Budget</label>
-                <select id="budget" required>
+                <select id="budget" name="budget" required>
                     <option value="" disabled selected>Select your budget range</option>
                     <option value="below5k">Below $5,000</option>
                     <option value="5k-10k">$5,000 - $10,000</option>
@@ -86,7 +90,7 @@ gtag('config', 'G-J6CSWZW97R');
             </div>
             <div class="form-group">
                 <label for="deadline">Deadline</label>
-                <input type="date" id="deadline" required>
+                <input type="date" id="deadline" name="deadline" required>
             </div>
             <div class="form-group">
                 <label>Priority Level</label>
@@ -98,15 +102,15 @@ gtag('config', 'G-J6CSWZW97R');
             </div>
             <div class="form-group">
                 <label for="contactName">Your Name</label>
-                <input type="text" id="contactName" placeholder="Enter your name" required>
+                <input type="text" id="contactName" name="contactName" placeholder="Enter your name" required>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
             <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" placeholder="Enter your phone number" required>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
             </div>
             <button type="submit" class="cta-button">Submit</button>
         </form>
