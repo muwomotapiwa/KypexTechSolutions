@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com; form-action https://api.web3forms.com; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You | KypexTech</title>
@@ -51,10 +53,10 @@
         (function () {
             const params = new URLSearchParams(window.location.search);
             // Try to get the name from URL first, then from localStorage
-            const name = params.get('name') || params.get('contactName') || localStorage.getItem('lastSubmitName') || '';
+            const name = params.get('name') || params.get('contactName') || sessionStorage.getItem('lastSubmitName') || '';
             // Prefer explicit form label, else subject, else derived from page
-            const formLabel = params.get('form') || localStorage.getItem('lastSubmitForm') || params.get('subject') || '';
-            const page = params.get('page') || localStorage.getItem('lastSubmitPage') || '';
+            const formLabel = params.get('form') || sessionStorage.getItem('lastSubmitForm') || params.get('subject') || '';
+            const page = params.get('page') || sessionStorage.getItem('lastSubmitPage') || '';
 
             const nicePage = page ? page.replace('.html','').replace(/[-_]/g,' ').replace(/\b\w/g, c => c.toUpperCase()) : '';
 
@@ -73,9 +75,11 @@
             }
 
             // Clear stored data for privacy
-            localStorage.removeItem('lastSubmitName');
-            localStorage.removeItem('lastSubmitForm');
-            localStorage.removeItem('lastSubmitPage');
+            try {
+              sessionStorage.removeItem('lastSubmitName');
+              sessionStorage.removeItem('lastSubmitForm');
+              sessionStorage.removeItem('lastSubmitPage');
+            } catch (e) { /* ignore */ }
         })();
     </script>
     <script src="js/script.js"></script>

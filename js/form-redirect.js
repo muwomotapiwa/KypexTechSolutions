@@ -25,9 +25,12 @@
     const formLabel = getValue(form, ['input[name="form"]', 'input[name="subject"]']);
     const page = getValue(form, ['input[name="page"]']);
 
-    if (name) localStorage.setItem('lastSubmitName', name);
-    if (formLabel) localStorage.setItem('lastSubmitForm', formLabel);
-    if (page) localStorage.setItem('lastSubmitPage', page);
+    // Use sessionStorage instead of localStorage to minimize persistence
+    try {
+      if (name) sessionStorage.setItem('lastSubmitName', name);
+      if (formLabel) sessionStorage.setItem('lastSubmitForm', formLabel);
+      if (page) sessionStorage.setItem('lastSubmitPage', page);
+    } catch (e) { /* ignore storage errors */ }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
