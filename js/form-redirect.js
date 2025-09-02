@@ -8,6 +8,21 @@
     return '';
   }
 
+  function submitViaIframe(form) {
+    try {
+      const iframe = document.createElement('iframe');
+      const name = 'hidden_iframe_' + Math.random().toString(36).slice(2);
+      iframe.name = name;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      const prevTarget = form.getAttribute('target');
+      form.setAttribute('target', name);
+      form.submit();
+      if (prevTarget === null) form.removeAttribute('target'); else form.setAttribute('target', prevTarget);
+      setTimeout(() => { try { document.body.removeChild(iframe); } catch (_) {} }, 5000);
+    } catch (_) {}
+  }
+
   async function handleSubmit(e) {
     const form = e.target;
     // Ensure redirect is an absolute URL so Web3Forms doesn't send to its default success page
@@ -50,7 +65,7 @@
       if (timezone) sessionStorage.setItem('preferredTimezone', timezone);
     } catch (e) { /* ignore storage errors */ }
 
-    // Submit via fetch to guarantee redirect, fallback to native submit on failure
+    // Submit via fetch to guarantee redirect; avoid navigating to the API JSON page
     try {
       e.preventDefault();
       const fd = new FormData(form);
@@ -62,21 +77,25 @@
         headers: { 'Accept': 'application/json' }
       });
       const data = await resp.json().catch(() => ({}));
-      if (resp.ok && (data.success !== false)) {
-        const q = new URLSearchParams();
-        const formName = formLabel || '';
-        const pageName = page || '';
-        if (formName) q.set('form', formName);
-        if (pageName) q.set('page', pageName);
-        if (name) q.set('name', name);
-        // Redirect client-side immediately
-        const url = absoluteThanks + (q.toString() ? ('?' + q.toString()) : '');
-        window.location.assign(url);
-      } else {
-        form.submit();
+      const q = new URLSearchParams();
+      if (formLabel) q.set('form', formLabel);
+      if (page) q.set('page', page);
+      if (name) q.set('name', name);
+      if (!(resp.ok && data && data.success !== false)) {
+        q.set('status', 'review'); // show generic success but note may need manual review
       }
+      const url = absoluteThanks + (q.toString() ? ('?' + q.toString()) : '');
+      window.location.assign(url);
     } catch (err) {
-      try { form.submit(); } catch (_) {}
+      // Network/CORS error. Submit in a hidden iframe to avoid navigating away, then redirect.
+      try { submitViaIframe(form); } catch (_) {}
+      const q = new URLSearchParams();
+      if (formLabel) q.set('form', formLabel);
+      if (page) q.set('page', page);
+      if (name) q.set('name', name);
+      q.set('status', 'queued');
+      const url = absoluteThanks + (q.toString() ? ('?' + q.toString()) : '');
+      window.location.assign(url);
     }
   }
 
