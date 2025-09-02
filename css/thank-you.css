@@ -11,7 +11,14 @@
 }
 
 .thankyou {
-  padding: 80px 20px;
+  /* Fill available space between fixed header and footer */
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Add top padding so content is clear of the fixed header */
+  padding: 120px 20px 60px;
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
@@ -35,4 +42,11 @@
 .thankyou .cta-button {
   display: inline-block;
   padding: 10px 18px;
+}
+
+@media (max-width: 768px) {
+  .thankyou {
+    padding-top: 100px;
+    padding-bottom: 40px;
+  }
 }
