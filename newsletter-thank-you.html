@@ -3,22 +3,22 @@
 <head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com; form-action https://api.web3forms.com; frame-src 'self' https://api.web3forms.com; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J6CSWZW97R"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-
-gtag('config', 'G-J6CSWZW97R');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile App Development | KypexTech</title>
-    <link rel="stylesheet" href="css/style.css"> <!-- Shared CSS -->
-    <link rel="stylesheet" href="css/mobile-app-development.css"> <!-- Page-Specific CSS -->
+    <title>You're Subscribed | KypexTech</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/thank-you.css">
+    <!-- Optional: GA tag; consistent with other pages -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J6CSWZW97R"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-J6CSWZW97R');
+    </script>
+    <style>
+      .thankyou small.desc { color: rgba(255,255,255,0.8); display:block; margin-top: 8px; }
+    </style>
 </head>
-<body>
+<body class="thankyou-page">
     <!-- Header -->
     <header>
         <div class="logo">KypexTech</div>
@@ -40,86 +40,30 @@ gtag('config', 'G-J6CSWZW97R');
             <a href="contact.html">Contact</a>
         </div>
     </header>
-    
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Mobile App Development</h1>
-        <p>Feature-rich, scalable, and user-friendly apps for iOS and Android.</p>
-        <a href="consultation.html" class="cta-button">Get a Free Consultation</a>
-    </section>
-
-    <!-- Overview Section -->
-    <section class="overview">
-        <h2>Custom Mobile App Solutions</h2>
-        <p>We build powerful and intuitive mobile applications tailored to your business needs, ensuring success on both iOS and Android platforms.</p>
-    </section>
-
-    <!-- Key Features Section -->
-    <section class="features">
-        <h2>Why Choose Our Mobile App Development?</h2>
-        <div class="feature-grid">
-            <div class="feature-box">
-                <h3>Custom App Development</h3>
-                <p>We tailor each app to fit your unique business goals and needs.</p>
-            </div>
-            <div class="feature-box">
-                <h3>iOS & Android Expertise</h3>
-                <p>We develop apps for both iOS and Android platforms with precision.</p>
-            </div>
-            <div class="feature-box">
-                <h3>User-Centric Design</h3>
-                <p>Focus on stunning UI/UX to enhance user engagement.</p>
-            </div>
-            <div class="feature-box">
-                <h3>Performance & Scalability</h3>
-                <p>Apps that are optimized for performance and future growth.</p>
-            </div>
-            <div class="feature-box">
-                <h3>App Store Optimization</h3>
-                <p>Get your app discovered faster in stores.</p>
-            </div>
-            <div class="feature-box">
-                <h3>Security & Compliance</h3>
-                <p>Secure apps that meet the highest industry standards.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Development Process -->
-    <section class="process">
-        <h2>Our Development Process</h2>
-        <ul>
-            <li>1. <strong>Planning & Strategy</strong>: Understanding your vision.</li>
-            <li>2. <strong>UI/UX Design</strong>: Crafting user-friendly experiences.</li>
-            <li>3. <strong>Development</strong>: Coding your application.</li>
-            <li>4. <strong>Testing</strong>: Ensuring quality and performance.</li>
-            <li>5. <strong>Launch</strong>: Deploying the app on iOS and Android.</li>
-            <li>6. <strong>Maintenance</strong>: Ongoing updates and support.</li>
-        </ul>
-    </section>
-
-    <!-- Call-to-Action Section -->
-    <section class="cta">
-        <h2>Ready to Build Your Mobile App?</h2>
-        <a href="project-start.html" class="cta-button">Start Your Project</a>
+    <!-- Confirmation Section -->
+    <section class="thankyou">
+        <h1>Thanks for subscribing!</h1>
+        <p id="thankMessage">You're on the list. Expect thoughtful, no‑spam updates from KypexTech about new services, case studies, and helpful tips once a month.</p>
+        <small class="desc">Not what you expected? You can unsubscribe anytime via the link in our emails.</small>
+        <a class="cta-button" href="index.html" style="margin-top:16px;">Back to Home</a>
     </section>
 
     <!-- Footer -->
     <footer class="site-footer">
         <section class="footer-newsletter" aria-label="Newsletter">
-            <h3>Subscribe to our newsletter</h3>
+            <h3>Share with a teammate</h3>
             <form class="newsletter-form" action="https://api.web3forms.com/submit" method="POST">
                 <input type="hidden" name="access_key" value="af31cdca-fdb5-4fd7-81bd-762838f8e47f">
                 <input type="hidden" name="subject" value="Newsletter Signup - KypexTech">
-                <input type="hidden" name="page" value="mobile-app-development.html">
+                <input type="hidden" name="page" value="newsletter-thank-you.html">
                 <input type="hidden" name="form" value="Newsletter">
                 <input type="hidden" name="redirect" value="https://www.kypextech.co.za/newsletter-thank-you.html">
-                <label for="newsletter-email-mobile" class="sr-only">Email address</label>
-                <input id="newsletter-email-mobile" type="email" name="email" placeholder="e.g. john@doe.com" required>
+                <label for="newsletter-email-nts" class="sr-only">Email address</label>
+                <input id="newsletter-email-nts" type="email" name="email" placeholder="e.g. teammate@company.com" required>
                 <button type="submit" class="btn-subscribe">Subscribe now</button>
             </form>
-            <p class="note">Get the latest to your inbox monthly. No spam — ever.</p>
+            <p class="note">Tell a colleague — they can unsubscribe any time.</p>
         </section>
         <hr class="footer-sep">
         <section class="footer-columns">

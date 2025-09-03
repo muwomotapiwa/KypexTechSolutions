@@ -21,29 +21,25 @@
     return sharedIframeName;
   }
 
+  function resolveRedirect(formLabel) {
+    const isNewsletter = /newsletter/i.test(formLabel || '');
+    const path = isNewsletter ? 'newsletter-thank-you.html' : 'thank-you.html';
+    return new URL(path, window.location.href).href;
+  }
+
   function handleSubmit(e) {
     const form = e.target;
-    // Ensure redirect is an absolute URL so Web3Forms doesn't send to its default success page
-    const absoluteThanks = new URL('thank-you.html', window.location.href).href;
-    let redirectEl = form.querySelector('input[name="redirect"]');
-    if (!redirectEl) {
-      redirectEl = document.createElement('input');
-      redirectEl.type = 'hidden';
-      redirectEl.name = 'redirect';
-      form.appendChild(redirectEl);
-    }
-    redirectEl.value = absoluteThanks;
-    // Store name, subject/form label, and page for the thank-you page
+
+    // Extract metadata first
     const name = getValue(form, ['input[name="name"]', 'input[name="contactName"]']);
     const formLabel = getValue(form, ['input[name="form"]', 'input[name="subject"]']);
     const page = getValue(form, ['input[name="page"]']);
-    // Consultation scheduling fields (if present)
     const preferredDate = getValue(form, ['input[name="preferred_date"]']);
     const preferredTime = getValue(form, ['input[name="preferred_time"]']);
     const timezone = getValue(form, ['input[name="timezone"]']);
 
-    // Ensure redirect is an absolute URL so Web3Forms doesn't send to its default success page
-    const absoluteThanks = new URL('thank-you.html', window.location.href).href;
+    // Redirect destination depends on the form
+    const absoluteThanks = resolveRedirect(formLabel);
     let redirectEl = form.querySelector('input[name="redirect"]');
     if (!redirectEl) {
       redirectEl = document.createElement('input');
@@ -53,7 +49,7 @@
     }
     redirectEl.value = absoluteThanks;
 
-    // Use sessionStorage instead of localStorage to minimize persistence
+    // Store minimal info (session only)
     try {
       if (name) sessionStorage.setItem('lastSubmitName', name);
       if (formLabel) sessionStorage.setItem('lastSubmitForm', formLabel);
@@ -63,13 +59,12 @@
       if (timezone) sessionStorage.setItem('preferredTimezone', timezone);
     } catch (e) { /* ignore storage errors */ }
 
-    // Always submit in a hidden iframe so the top window never navigates to the API
+    // Submit in hidden iframe; redirect top window immediately
     e.preventDefault();
     const iframeName = ensureSharedIframe();
     form.setAttribute('target', iframeName);
     form.submit();
 
-    // Then redirect the top window immediately
     const q = new URLSearchParams();
     if (formLabel) q.set('form', formLabel);
     if (page) q.set('page', page);
@@ -85,11 +80,10 @@
     } catch (_) { return false; }
   }
 
-  // Capture submit on the document for any current/future forms
+  // Capture submit on the document for any current/future Web3Forms
   document.addEventListener('submit', function (e) {
     const form = e.target;
-    if (!isWeb3Form(form)) return; 
-    // Ensure iframe exists before we proceed
+    if (!isWeb3Form(form)) return;
     ensureSharedIframe();
     handleSubmit(e);
   }, true);
