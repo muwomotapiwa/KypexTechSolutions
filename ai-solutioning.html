@@ -4,19 +4,26 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com https://ipwho.is; form-action https://api.web3forms.com; frame-src 'self' https://api.web3forms.com; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J6CSWZW97R"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-
-gtag('config', 'G-J6CSWZW97R');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J6CSWZW97R"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-J6CSWZW97R');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Consulting | KypexTech</title>
-    <link rel="stylesheet" href="css/style.css"> <!-- Shared CSS -->
-    <link rel="stylesheet" href="css/it-consulting.css"> <!-- Page-Specific CSS -->
+    <title>AI Solutioning | KypexTech</title>
+    <meta name="description" content="Design, build and operate production-grade AI solutions: GenAI & RAG, NLP, computer vision, predictive modeling and MLOps.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ai.css">
+    <link rel="preload" as="style" href="css/ai.css">
+    <link rel="preload" as="script" href="js/script.js">
+    <meta name="theme-color" content="#0f1422">
+    <meta property="og:title" content="AI Solutioning | KypexTech">
+    <meta property="og:description" content="Production-grade AI that delivers impact. GenAI, NLP, CV, ML, and MLOps.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.kypextech.co.za/ai-solutioning.html">
 </head>
 <body>
     <!-- Header -->
@@ -42,56 +49,91 @@ gtag('config', 'G-J6CSWZW97R');
             <a href="contact.html">Contact</a>
         </div>
     </header>
-    
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>IT Consulting</h1>
-        <p>Expert guidance to optimize your IT infrastructure and drive innovation.</p>
-        <a href="consultation.html" class="cta-button">Schedule a Free Consultation</a>
+    <!-- Hero -->
+    <section class="ai-hero">
+        <div class="ai-hero-inner">
+            <span class="ai-eyebrow">Flagship</span>
+            <h1>AI Solutioning</h1>
+            <p class="lead">We architect, build, and operationalize robust AI systems that create measurable value. From discovery to deployment, our work blends rigorous software engineering with state-of-the-art AI research.</p>
+            <div class="ai-ctas">
+                <a href="#capabilities" class="btn-ai-primary">See Capabilities</a>
+                <a href="consultation.html" class="btn-ai-secondary">Book AI Consultation</a>
+            </div>
+            <ul class="ai-hero-pills" aria-label="Highlights">
+                <li>GenAI & RAG</li>
+                <li>NLP & Chatbots</li>
+                <li>Computer Vision</li>
+                <li>Predictive Modeling</li>
+                <li>MLOps</li>
+                <li>Responsible AI</li>
+            </ul>
+        </div>
     </section>
 
-    <!-- Overview Section -->
-    <section class="overview">
-        <h2>Empowering Businesses with IT Excellence</h2>
-        <p>At KypexTech, we specialize in providing expert IT consulting services to help businesses optimize their infrastructure, adopt cutting-edge technologies, and achieve their goals.</p>
-    </section>
-
-    <!-- Key IT Consulting Services -->
-    <section class="key-services">
-        <h2>Our IT Consulting Services</h2>
-        <div class="service-grid">
-            <div class="service-box">
-                <h3>IT Strategy Development</h3>
-                <p>Aligning IT goals with your business objectives for sustained growth.</p>
+    <!-- Capabilities -->
+    <section id="capabilities" class="ai-caps">
+        <h2>Core Capabilities</h2>
+        <div class="caps-grid">
+            <div class="cap">
+                <h3>GenAI & RAG</h3>
+                <p>Domain-grounded assistants using retrieval-augmented generation, function calling, safety filters, and evaluation.</p>
             </div>
-            <div class="service-box">
-                <h3>Infrastructure Assessment</h3>
-                <p>Evaluating systems to identify areas for improvement and innovation.</p>
+            <div class="cap">
+                <h3>Natural Language</h3>
+                <p>Classification, summarization, intent detection, chatbots, multilingual pipelines, and knowledge extraction.</p>
             </div>
-            <div class="service-box">
-                <h3>Technology Selection</h3>
-                <p>Recommending the best tools and platforms to drive efficiency.</p>
+            <div class="cap">
+                <h3>Computer Vision</h3>
+                <p>Detection, OCR, quality inspection, and visual search using efficient, deployable models.</p>
             </div>
-            <div class="service-box">
-                <h3>Cloud Integration</h3>
-                <p>Seamlessly adopting and optimizing cloud environments for your business.</p>
+            <div class="cap">
+                <h3>Predictive Modeling</h3>
+                <p>Forecasting, recommendations, anomaly detection, and decision optimization with robust validation.</p>
             </div>
-            <div class="service-box">
-                <h3>Cybersecurity Planning</h3>
-                <p>Ensuring robust IT security and compliance with industry standards.</p>
+            <div class="cap">
+                <h3>MLOps</h3>
+                <p>CI/CD for ML, feature stores, model registries, monitoring, drift detection, and rollback strategies.</p>
             </div>
-            <div class="service-box">
-                <h3>Digital Transformation</h3>
-                <p>Helping businesses leverage technology for innovation and growth.</p>
+            <div class="cap">
+                <h3>Responsible AI</h3>
+                <p>Governance, privacy-by-design, bias testing, red-teaming, and human-in-the-loop oversight.</p>
             </div>
         </div>
     </section>
 
-    <!-- Call-to-Action Section -->
-    <section class="cta">
-        <h2>Transform Your IT Strategy Today</h2>
-        <a href="consultation.html" class="cta-button">Book Your Free IT Consultation</a>
+    <!-- Process -->
+    <section class="ai-process">
+        <h2>From Idea To Impact</h2>
+        <ol class="process">
+            <li>
+                <h4>Discovery</h4>
+                <p>Problem framing, use-case value mapping, and data assessment.</p>
+            </li>
+            <li>
+                <h4>Design</h4>
+                <p>Solution architecture, safety-by-default, KPI definition, and success criteria.</p>
+            </li>
+            <li>
+                <h4>Build</h4>
+                <p>Model development with tight engineering loops, evaluation and baselines.</p>
+            </li>
+            <li>
+                <h4>Deploy</h4>
+                <p>Secure APIs, containers, infrastructure-as-code, canary releases.</p>
+            </li>
+            <li>
+                <h4>Operate</h4>
+                <p>Monitoring, alerting, drift detection, feedback loops, continuous improvement.</p>
+            </li>
+        </ol>
+    </section>
+
+    <!-- CTA -->
+    <section class="ai-cta">
+        <h2>Let’s Build Something Intelligent</h2>
+        <p>Tell us about your use case and we’ll propose a pragmatic AI roadmap you can execute.</p>
+        <a href="contact.html" class="btn-ai-primary">Start Your AI Project</a>
     </section>
 
     <!-- Footer -->
@@ -101,12 +143,12 @@ gtag('config', 'G-J6CSWZW97R');
             <form class="newsletter-form" action="https://api.web3forms.com/submit" method="POST">
                 <input type="hidden" name="access_key" value="af31cdca-fdb5-4fd7-81bd-762838f8e47f">
                 <input type="hidden" name="subject" value="Newsletter Signup - KypexTech">
-                <input type="hidden" name="page" value="it-consulting.html">
+                <input type="hidden" name="page" value="ai-solutioning.html">
                 <input type="hidden" name="form" value="Newsletter">
                 <input type="hidden" name="redirect" value="https://www.kypextech.co.za/newsletter-thank-you.html">
                 <input type="checkbox" name="botcheck" class="hidden" style="display:none;">
-                <label for="newsletter-email-it" class="sr-only">Email address</label>
-                <input id="newsletter-email-it" type="email" name="email" placeholder="e.g. john@doe.com" required>
+                <label for="newsletter-email-ai" class="sr-only">Email address</label>
+                <input id="newsletter-email-ai" type="email" name="email" placeholder="e.g. john@doe.com" required>
                 <button type="submit" class="btn-subscribe">Subscribe now</button>
             </form>
             <p class="note">Get the latest to your inbox monthly. No spam — ever.</p>
@@ -153,7 +195,7 @@ gtag('config', 'G-J6CSWZW97R');
             </nav>
         </section>
         <div class="footer-bottom">
-            <p>&copy; 2024 KypexTech · A Subsidiary of MuwomoGroup</p>
+            <p>&copy; 2024 KypexTech — A Subsidiary of MuwomoGroup</p>
         </div>
     </footer>
 
@@ -161,3 +203,4 @@ gtag('config', 'G-J6CSWZW97R');
     <script src="js/script.js"></script>
 </body>
 </html>
+
