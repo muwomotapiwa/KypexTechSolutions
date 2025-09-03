@@ -9,6 +9,7 @@
   }
 
   let sharedIframeName = '';
+  let sharedIframeEl = null;
 
   function ensureSharedIframe() {
     if (sharedIframeName) return sharedIframeName;
@@ -18,6 +19,7 @@
     iframe.style.display = 'none';
     iframe.setAttribute('aria-hidden', 'true');
     document.body.appendChild(iframe);
+    sharedIframeEl = iframe;
     return sharedIframeName;
   }
 
@@ -63,14 +65,22 @@
     e.preventDefault();
     const iframeName = ensureSharedIframe();
     form.setAttribute('target', iframeName);
-    form.submit();
 
     const q = new URLSearchParams();
     if (formLabel) q.set('form', formLabel);
     if (page) q.set('page', page);
     if (name) q.set('name', name);
     const url = absoluteThanks + (q.toString() ? ('?' + q.toString()) : '');
-    window.location.assign(url);
+
+    let navigated = false;
+    function go(){ if (navigated) return; navigated = true; window.location.assign(url); }
+    if (sharedIframeEl) {
+      sharedIframeEl.addEventListener('load', go, { once: true });
+    }
+    // Fallback in case load doesn't fire due to cross-origin quirks
+    setTimeout(go, 1200);
+
+    form.submit();
   }
 
   function isWeb3Form(form) {
