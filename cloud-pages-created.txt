@@ -1,0 +1,6 @@
+cloud-migration.html
+cloud-security.html
+cloud-optimization.html
+hybrid-cloud.html
+cloud-storage.html
+cloud-crm.html

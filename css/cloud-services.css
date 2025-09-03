@@ -76,6 +76,9 @@
 }
 
 .service-box {
+    display: block;
+    text-decoration: none;
+    color: inherit;
     background: #181d2a;
     padding: 2rem;
     border-radius: 10px;
