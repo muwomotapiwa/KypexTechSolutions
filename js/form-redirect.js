@@ -8,22 +8,20 @@
     return '';
   }
 
-  function submitViaIframe(form) {
-    try {
-      const iframe = document.createElement('iframe');
-      const name = 'hidden_iframe_' + Math.random().toString(36).slice(2);
-      iframe.name = name;
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-      const prevTarget = form.getAttribute('target');
-      form.setAttribute('target', name);
-      form.submit();
-      if (prevTarget === null) form.removeAttribute('target'); else form.setAttribute('target', prevTarget);
-      setTimeout(() => { try { document.body.removeChild(iframe); } catch (_) {} }, 5000);
-    } catch (_) {}
+  let sharedIframeName = '';
+
+  function ensureSharedIframe() {
+    if (sharedIframeName) return sharedIframeName;
+    const iframe = document.createElement('iframe');
+    sharedIframeName = 'web3forms_background_iframe';
+    iframe.name = sharedIframeName;
+    iframe.style.display = 'none';
+    iframe.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(iframe);
+    return sharedIframeName;
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     const form = e.target;
     // Ensure redirect is an absolute URL so Web3Forms doesn't send to its default success page
     const absoluteThanks = new URL('thank-you.html', window.location.href).href;
@@ -65,42 +63,34 @@
       if (timezone) sessionStorage.setItem('preferredTimezone', timezone);
     } catch (e) { /* ignore storage errors */ }
 
-    // Submit via fetch to guarantee redirect; avoid navigating to the API JSON page
-    try {
-      e.preventDefault();
-      const fd = new FormData(form);
-      // Append derived fields if any were added above
-      if (!fd.get('redirect')) fd.set('redirect', absoluteThanks);
-      const resp = await fetch(form.action || 'https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: fd,
-        headers: { 'Accept': 'application/json' }
-      });
-      const data = await resp.json().catch(() => ({}));
-      const q = new URLSearchParams();
-      if (formLabel) q.set('form', formLabel);
-      if (page) q.set('page', page);
-      if (name) q.set('name', name);
-      if (!(resp.ok && data && data.success !== false)) {
-        q.set('status', 'review'); // show generic success but note may need manual review
-      }
-      const url = absoluteThanks + (q.toString() ? ('?' + q.toString()) : '');
-      window.location.assign(url);
-    } catch (err) {
-      // Network/CORS error. Submit in a hidden iframe to avoid navigating away, then redirect.
-      try { submitViaIframe(form); } catch (_) {}
-      const q = new URLSearchParams();
-      if (formLabel) q.set('form', formLabel);
-      if (page) q.set('page', page);
-      if (name) q.set('name', name);
-      q.set('status', 'queued');
-      const url = absoluteThanks + (q.toString() ? ('?' + q.toString()) : '');
-      window.location.assign(url);
-    }
+    // Always submit in a hidden iframe so the top window never navigates to the API
+    e.preventDefault();
+    const iframeName = ensureSharedIframe();
+    form.setAttribute('target', iframeName);
+    form.submit();
+
+    // Then redirect the top window immediately
+    const q = new URLSearchParams();
+    if (formLabel) q.set('form', formLabel);
+    if (page) q.set('page', page);
+    if (name) q.set('name', name);
+    const url = absoluteThanks + (q.toString() ? ('?' + q.toString()) : '');
+    window.location.assign(url);
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const forms = document.querySelectorAll('form[action="https://api.web3forms.com/submit"]');
-    forms.forEach(f => f.addEventListener('submit', handleSubmit));
-  });
+  function isWeb3Form(form) {
+    try {
+      const action = (form && form.action) ? String(form.action) : '';
+      return action.indexOf('https://api.web3forms.com/submit') === 0;
+    } catch (_) { return false; }
+  }
+
+  // Capture submit on the document for any current/future forms
+  document.addEventListener('submit', function (e) {
+    const form = e.target;
+    if (!isWeb3Form(form)) return; 
+    // Ensure iframe exists before we proceed
+    ensureSharedIframe();
+    handleSubmit(e);
+  }, true);
 })();
