@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com; form-action https://api.web3forms.com; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com; form-action https://api.web3forms.com; frame-src 'self' https://api.web3forms.com; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J6CSWZW97R"></script>
@@ -51,7 +51,8 @@ gtag('config', 'G-J6CSWZW97R');
     <!-- Project Form Section -->
     <section id="projectForm" class="project-form">
         <h2>Project Brief</h2>
-        <form id="projectStartForm" action="https://api.web3forms.com/submit" method="POST">
+        <iframe name="web3forms_iframe" style="display:none" aria-hidden="true"></iframe>
+        <form id="projectStartForm" action="https://api.web3forms.com/submit" method="POST" target="web3forms_iframe" onsubmit="(function(f){var n=f.querySelector('[name=\'contactName\']')||f.querySelector('[name=\'name\']');var nm=n?n.value:'';var u='https://www.kypextech.co.za/thank-you.html?form=Project%20Start&page=project-start.html&name='+encodeURIComponent(nm);window.location.href=u;})(this); return true;">
             <input type="hidden" name="access_key" value="af31cdca-fdb5-4fd7-81bd-762838f8e47f">
             <input type="hidden" name="subject" value="Project Start Form Submission - KypexTech">
             <input type="hidden" name="page" value="project-start.html">
