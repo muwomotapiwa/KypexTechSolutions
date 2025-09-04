@@ -11,7 +11,7 @@
 #agent-widget .msg.agent{align-self:flex-start;background:#1e2536;color:#fff}
 #agent-widget .msg.user{align-self:flex-end;background:#ff015b;color:#fff}
 #agent-widget .agent-input{display:flex;gap:6px;padding:8px;border-top:1px solid rgba(255,255,255,.08);background:#181d2a}
-#agent-widget .agent-input input{flex:1;background:#0f1422;color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:8px}
+#agent-widget .agent-input input{flex:1;background:#0f1422;color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:8px;font-size:16px}
 #agent-widget .agent-input button{background:#ff015b;color:#fff;border:none;border-radius:10px;padding:8px 10px;cursor:pointer}
 #agent-widget .agent-input .agent-mic.listening{background:#5b4bff}
 @media (max-width: 480px){#agent-widget .agent-panel{width:92vw;right:4vw}}
