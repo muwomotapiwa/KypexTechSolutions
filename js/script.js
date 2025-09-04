@@ -65,3 +65,15 @@ document.addEventListener('click', (e) => {
     }, { capture: true });
   } catch (_) { /* ignore */ }
 })();
+
+// Lazy-load the AI assistant sitewide
+(function loadAgent(){
+  try {
+    if (document.getElementById('kypex-agent-js')) return;
+    var s = document.createElement('script');
+    s.src = 'js/agent.js?v=1';
+    s.id = 'kypex-agent-js';
+    s.defer = true;
+    document.head.appendChild(s);
+  } catch(_) {}
+})();

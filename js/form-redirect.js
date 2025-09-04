@@ -98,3 +98,15 @@
     handleSubmit(e);
   }, true);
 })();
+
+// Also ensure AI assistant loads on pages that don't include js/script.js
+(function loadAgentFromForms(){
+  try {
+    if (document.getElementById('kypex-agent-js')) return;
+    var s = document.createElement('script');
+    s.src = 'js/agent.js?v=1';
+    s.id = 'kypex-agent-js';
+    s.defer = true;
+    document.head.appendChild(s);
+  } catch (_) { }
+})();
