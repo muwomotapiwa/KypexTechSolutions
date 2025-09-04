@@ -8,6 +8,15 @@
   var API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + encodeURIComponent(GEMINI_KEY);
 
   var CONFIG = { email: 'hello@kypextech.co.za', whatsapp: '+27605023284' };
+  // Optional OpenAI TTS config for consistent voice across devices
+  // Provide key via: <meta name="openai-tts-key" content="sk-..."> or localStorage.openai_tts_key
+  var OPENAI_TTS = {
+    key: null,
+    model: 'gpt-4o-mini-tts',
+    voice: 'aoede', // enforce Aoede voice
+    format: 'mp3',
+    endpoint: 'https://api.openai.com/v1/audio/speech'
+  };
 
   // ---------- Curated Knowledge Base (marketing-focused) ----------
   // Keep concise so we can also send to Gemini each turn.
@@ -106,6 +115,7 @@
   var panel, logEl, inputEl, muteBtn;
   var history = []; // for LLM context
   var muted = false;
+  var ttsAudioEl = null; // HTMLAudioElement for OpenAI TTS playback
 
   function bindUI(){
     panel = document.getElementById('agentPanel');
@@ -136,7 +146,11 @@
     }
     setTimeout(function(){ if (inputEl) inputEl.focus(); }, 40);
   }
-  function closePanel(){ try{ if (window.speechSynthesis) window.speechSynthesis.cancel(); }catch(_){} document.getElementById('agent-widget').classList.remove('open'); }
+  function closePanel(){
+    try{ if (window.speechSynthesis) window.speechSynthesis.cancel(); }catch(_){}
+    try{ if (ttsAudioEl){ ttsAudioEl.pause(); ttsAudioEl.src=''; ttsAudioEl=null; } }catch(_){}
+    document.getElementById('agent-widget').classList.remove('open');
+  }
   function togglePanel(){ var root = document.getElementById('agent-widget'); if (root.classList.contains('open')) { closePanel(); } else { openPanel(); } }
 
   // ---------- Chat helpers ----------
@@ -147,7 +161,19 @@
     logEl.appendChild(row); logEl.scrollTop = logEl.scrollHeight;
     persistHistory('user', text);
   }
+  function enforceClientPolicy(text){
+    try{
+      var s = String(text||'');
+      // Never talk about how to improve the client's site
+      var taboo = /(improv(e|ing|ement)s?|optimis(e|z)e|fix|revamp|redo|redesign|speed up|seo|accessibility|ux)\b[^.\n]*(site|website)\b/i;
+      if (taboo.test(s)) {
+        return 'I can help with next steps. Would you like me to open a relevant page or book a consultation?';
+      }
+      return s;
+    }catch(_){ return text; }
+  }
   function addAgentMsg(text, noStore){
+    text = enforceClientPolicy(text);
     var row = document.createElement('div');
     row.className = 'msg agent'; row.textContent = text;
     logEl.appendChild(row); logEl.scrollTop = logEl.scrollHeight;
@@ -167,18 +193,63 @@
       return s;
     } catch(_) { return text; }
   }
-  function speak(text){
+  async function speak(text){
     try {
-      if (window.speechSynthesis) window.speechSynthesis.cancel(); // interrupt ongoing speech
       var clean = sanitizeForTTS(text);
-      var u = new SpeechSynthesisUtterance(clean);
-      u.rate=1.02; u.pitch=1.0; u.volume=1.0;
-      var vs = window.speechSynthesis.getVoices();
-      var v = vs.find(function(x){ return /en-(ZA|US|GB)/i.test(x.lang); }) || vs[0];
-      if (v) u.voice = v; window.speechSynthesis.speak(u);
+      // Stop any existing TTS
+      try{ if (window.speechSynthesis) window.speechSynthesis.cancel(); }catch(_){}
+      try{ if (ttsAudioEl){ ttsAudioEl.pause(); ttsAudioEl.src=''; ttsAudioEl=null; } }catch(_){}
+
+      // Prefer OpenAI TTS (Aoede) if key is available
+      if (OPENAI_TTS.key) {
+        try{
+          var res = await fetch(OPENAI_TTS.endpoint, {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + OPENAI_TTS.key,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: OPENAI_TTS.model,
+              voice: OPENAI_TTS.voice,
+              input: clean,
+              format: OPENAI_TTS.format
+            })
+          });
+          if (res.ok) {
+            var buf = await res.arrayBuffer();
+            var mime = OPENAI_TTS.format === 'mp3' ? 'audio/mpeg' : 'audio/webm';
+            var blob = new Blob([buf], { type: mime });
+            var url = URL.createObjectURL(blob);
+            ttsAudioEl = new Audio(url);
+            ttsAudioEl.onended = function(){ try{ URL.revokeObjectURL(url); }catch(_){ } };
+            await ttsAudioEl.play();
+            return;
+          }
+        }catch(_){ /* fall through to Web Speech on failure */ }
+      }
+
+      // Fallback to Web Speech API (attempt to select Aoede by name, else English voice)
+      if (window.speechSynthesis) {
+        var u = new SpeechSynthesisUtterance(clean);
+        u.rate=1.02; u.pitch=1.0; u.volume=1.0;
+        var vs = window.speechSynthesis.getVoices() || [];
+        var v = vs.find(function(x){ return /aoede/i.test(x.name||'') || /aoede/i.test(x.voiceURI||''); })
+              || vs.find(function(x){ return /en-(ZA|US|GB)/i.test(x.lang||''); })
+              || vs[0];
+        if (v) u.voice = v; window.speechSynthesis.speak(u);
+      }
     } catch(_){}
   }
-  function toggleMute(){ muted = !muted; try{ sessionStorage.setItem('agent_muted', muted?'1':'0'); }catch(_){} updateMuteUI(); }
+  function toggleMute(){
+    muted = !muted;
+    try{ sessionStorage.setItem('agent_muted', muted?'1':'0'); }catch(_){ }
+    if (muted) {
+      try{ if (window.speechSynthesis) window.speechSynthesis.cancel(); }catch(_){ }
+      try{ if (ttsAudioEl){ ttsAudioEl.pause(); ttsAudioEl.src=''; ttsAudioEl=null; } }catch(_){ }
+    }
+    updateMuteUI();
+  }
   function updateMuteUI(){ if (muteBtn) muteBtn.textContent = muted ? 'Unmute' : 'Mute'; }
 
   // ---------- Actions ----------
@@ -247,7 +318,7 @@
   // ---------- Gemini ----------
   function capturePageContext(max){ try{ var parts=[]; parts.push('Title: ' + (document.title||'')); var m=document.querySelector('meta[name="description"]'); if(m&&m.content) parts.push('Meta: ' + m.content); var hs=Array.from(document.querySelectorAll('h1, h2, h3')).map(function(h){return h.textContent.trim();}).filter(Boolean); if(hs.length) parts.push('Headings: ' + hs.join(' | ')); var ctx=parts.join('\n'); return ctx.slice(0,max||1000);}catch(_){return '';} }
   async function askGemini(prompt){
-    var system = 'You are Agent-Kypex, the friendly website assistant for KypexTech. You know the product and service catalog below and speak as a helpful marketing guide. Never say you lack real-time access or cannot know; use the provided knowledge and page context. Answer in 1-3 short sentences with a helpful next step (open a page, book consultation, or suggest a form). If a question is off-topic, politely steer back to how you can help.';
+    var system = 'You are Agent-Kypex, the friendly website assistant for KypexTech. You know the product and service catalog below and speak as a helpful marketing guide. Never say you lack real-time access or cannot know; use the provided knowledge and page context. Answer in 1-3 short sentences with a helpful next step (open a page, book consultation, or suggest a form). If a question is off-topic, politely steer back to how you can help. Never discuss how to improve the client\'s site; do not give website improvement advice.';
     var pageCtx = capturePageContext(800);
     var catalog = KB.map(function(it){ return it.name+': '+it.summary; }).join('\n');
     var contents = [];
@@ -260,11 +331,11 @@
     var res = await fetch(API_URL,{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
     if (!res.ok) throw new Error('gemini http');
     var data = await res.json();
-    var text = (((data.candidates||[])[0]||{}).content||{}).parts && (((data.candidates||[])[0]||{}).content.parts.map(function(p){return p.text;}).join('\n')) || 'We can help with that. Would you like me to open the relevant page or book a consultation?';
+    var text = (((data.candidates||[])[0]||{}).content||{}).parts && (((data.candidates||[])[0]||{}).content.parts.map(function(p){return p.text;}).join('\n')) || 'I can help with next steps. Would you like me to open a relevant page or book a consultation?';
     history.push({role:'user', parts:[{text: prompt}]});
     history.push({role:'model', parts:[{text: text}]});
     while (history.length>12) history.shift();
-    return text;
+    return enforceClientPolicy(text);
   }
 
   // ---------- Persistence ----------
@@ -278,6 +349,13 @@
   // ---------- Boot ----------
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', onReady); else onReady();
   function onReady(){
+    // Load OpenAI TTS key from meta or localStorage
+    try{
+      var meta = document.querySelector('meta[name="openai-tts-key"]');
+      var k = meta && meta.content ? meta.content.trim() : '';
+      if (!k) { try{ k = localStorage.getItem('openai_tts_key')||''; }catch(_){ } }
+      if (k) OPENAI_TTS.key = k;
+    }catch(_){ }
     initUI();
     // Do not auto-open; user toggles with the AI button
     restoreHistory();
