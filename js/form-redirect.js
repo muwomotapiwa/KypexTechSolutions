@@ -104,7 +104,7 @@
   try {
     if (document.getElementById('kypex-agent-js')) return;
     var s = document.createElement('script');
-    s.src = 'js/agent.js?v=1';
+    s.src = 'js/agent.js?v=2';
     s.id = 'kypex-agent-js';
     s.defer = true;
     document.head.appendChild(s);

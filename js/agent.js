@@ -116,6 +116,55 @@
   var history = []; // for LLM context
   var muted = false;
   var ttsAudioEl = null; // HTMLAudioElement for OpenAI TTS playback
+  var lastSuggestion = null; // remember last suggested action to execute on user consent
+  var clickLog = []; // recent user clicks for context
+  var currentSectionId = null; // current visible section
+  var awaitingOverviewChoice = false; // awaiting y/n for site overview
+
+  // ---------- Click + Section Tracking ----------
+  function getSectionIdFrom(el){
+    try{
+      var n = el && el.closest && el.closest('section[id], [id][data-section]');
+      if (n && n.id) return n.id;
+      // Walk up for any id if no section wrapper
+      var p = el; var hops=0;
+      while (p && hops<5){ if (p.id) return p.id; p=p.parentElement; hops++; }
+    }catch(_){}
+    return null;
+  }
+  function describeEl(el){
+    var t = '';
+    try{ t = (el.textContent||'').trim().replace(/\s+/g,' ').slice(0,80); }catch(_){ }
+    var id = ''; try{ id = el.id||''; }catch(_){ }
+    var al = ''; try{ al = el.getAttribute && el.getAttribute('aria-label') || ''; }catch(_){ }
+    var role = ''; try{ role = el.getAttribute && el.getAttribute('role') || ''; }catch(_){ }
+    return { text:t, id:id, aria:al, role:role };
+  }
+  function startClickTracking(){
+    try{
+      document.addEventListener('click', function(e){
+        var el = e.target && e.target.closest && e.target.closest('a, button, [role="button"], input[type="submit"], .btn, .cta');
+        if (!el) return;
+        var meta = describeEl(el);
+        meta.section = getSectionIdFrom(el) || currentSectionId || '';
+        meta.page = location.pathname.replace(/^\/+/, '') || 'index.html';
+        clickLog.push(meta);
+        if (clickLog.length>15) clickLog.shift();
+        try{ sessionStorage.setItem('agent_clicks', JSON.stringify(clickLog)); }catch(_){ }
+        try{ if (window.gtag) window.gtag('event','agent_click', meta); }catch(_){ }
+      }, true);
+    }catch(_){ }
+  }
+  function startSectionObserver(){
+    try{
+      var els = Array.from(document.querySelectorAll('section[id], main > section[id], [data-section][id]'));
+      if (!els.length) return;
+      var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(ent){ if (ent.isIntersecting){ currentSectionId = ent.target.id; } });
+      }, { root:null, threshold:0.4 });
+      els.forEach(function(s){ obs.observe(s); });
+    }catch(_){ }
+  }
 
   function bindUI(){
     panel = document.getElementById('agentPanel');
@@ -138,9 +187,9 @@
     var introDone = false;
     try { introDone = sessionStorage.getItem('agent_intro_done') === '1'; } catch(_){}
     if (!introDone && !logEl.dataset.greeted){
-      var greet = "Hi, I'm Agent-Kypex. Ask me anything about our services, quotes, or forms. I can also navigate and fill forms for you.";
+      var greet = 'Welcome to KypexTech. We specialize in delivering cutting-edge IT and AI solutions — from web and mobile development to cloud, cybersecurity, consulting, and data analytics. My mission is to empower businesses with technology, creativity, and innovation, helping you grow smarter, faster, and more securely. How may we help you today.';
       addAgentMsg(greet, true);
-      speakHints();
+      setTimeout(function(){ addAgentMsg('Would you like a quick site overview? Type y for Yes or n for No.'); awaitingOverviewChoice = true; }, 50);
       logEl.dataset.greeted = '1';
       try { sessionStorage.setItem('agent_intro_done','1'); } catch(_){}
     }
@@ -181,6 +230,45 @@
     if (!muted) speak(text);
   }
 
+  function buildSiteOverview(){
+    var lines = [
+      'KypexTech Website Overview',
+      '',
+      '1) Home (index.html)',
+      '- Find: Hero intro, AI Solutioning highlight, and Core Services overview (Web, Mobile, Cybersecurity, Cloud, IT Consulting, Data Analytics).',
+      '- Do: Explore Our Services, view AI offerings, subscribe to the newsletter.',
+      '',
+      '2) AI Solutioning (ai-solutioning.html)',
+      '- Find: GenAI & RAG, NLP & Chatbots, Predictive Models, Computer Vision, MLOps, Responsible AI, and the "Idea → Impact" steps.',
+      '- Do: Review capabilities and start an AI consultation/project.',
+      '',
+      '3) Portfolio (portfolio.html)',
+      '- Find: Case studies (e.g., Minable Scientific), tech stacks, outcomes.',
+      '- Do: Explore work and start your own project.',
+      '',
+      '4) About (about.html)',
+      '- Find: Company profile, mission/vision/values, and what sets us apart.',
+      '- Do: Learn our philosophy and get in touch.',
+      '',
+      '5) Contact (contact.html)',
+      '- Find: Contact form, FAQs, hours.',
+      '- Do: Submit inquiries and schedule meetings.',
+      '',
+      'Core Services',
+      '• Website Development (website-development.html): Responsive design, custom builds, SEO basics. Includes a Quote Calculator (packages, pages, add-ons like SEO, payments, WhatsApp, Maps, Android app).',
+      '• Cloud Services (cloud-services.html): Migration, Security, Optimization, Hybrid, Storage, CRM.',
+      '• Cloud Migration (cloud-migration.html): Discovery → Planning → Secure Migration → Validation → Handover.',
+      '• Cloud Security (cloud-security.html): IAM, Network, Data Protection, Threat Detection, Compliance.',
+      '• Cloud Optimization (cloud-optimization.html): Rightsizing, Autoscaling, Cost Controls, Performance, Observability.',
+      '• Hybrid Cloud (hybrid-cloud.html): Networking, Identity, Placement, Management, BC/DR.',
+      '• Cloud Storage (cloud-storage.html): Object/Block/File, Backup & DR, Lifecycle Policies.',
+      '• Cloud CRM (cloud-crm.html): Implementation, Integrations, Automation, Migration (Salesforce/HubSpot/Zoho).',
+      '',
+      'Would you like me to open any of these pages or guide you through a section?'
+    ];
+    return lines.join('\n');
+  }
+
   // ---------- TTS (no mic) ----------
   function sanitizeForTTS(text){
     try {
@@ -193,53 +281,71 @@
       return s;
     } catch(_) { return text; }
   }
+  var speakQueue = [];
+  var speaking = false;
   async function speak(text){
     try {
-      var clean = sanitizeForTTS(text);
-      // Stop any existing TTS
-      try{ if (window.speechSynthesis) window.speechSynthesis.cancel(); }catch(_){}
-      try{ if (ttsAudioEl){ ttsAudioEl.pause(); ttsAudioEl.src=''; ttsAudioEl=null; } }catch(_){}
+      if (muted) return;
+      speakQueue.push(String(text||''));
+      if (speaking) return;
+      speaking = true;
+      while (speakQueue.length && !muted){
+        var msg = sanitizeForTTS(speakQueue.shift());
 
-      // Prefer OpenAI TTS (Aoede) if key is available
-      if (OPENAI_TTS.key) {
-        try{
-          var res = await fetch(OPENAI_TTS.endpoint, {
-            method: 'POST',
-            headers: {
-              'Authorization': 'Bearer ' + OPENAI_TTS.key,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              model: OPENAI_TTS.model,
-              voice: OPENAI_TTS.voice,
-              input: clean,
-              format: OPENAI_TTS.format
-            })
+        // Try OpenAI TTS first (Aoede)
+        var played = false;
+        if (OPENAI_TTS.key) {
+          try{
+            var res = await fetch(OPENAI_TTS.endpoint, {
+              method: 'POST',
+              headers: {
+                'Authorization': 'Bearer ' + OPENAI_TTS.key,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                model: OPENAI_TTS.model,
+                voice: OPENAI_TTS.voice,
+                input: msg,
+                format: OPENAI_TTS.format
+              })
+            });
+            if (res.ok) {
+              var buf = await res.arrayBuffer();
+              var mime = OPENAI_TTS.format === 'mp3' ? 'audio/mpeg' : 'audio/webm';
+              var blob = new Blob([buf], { type: mime });
+              var url = URL.createObjectURL(blob);
+              ttsAudioEl = new Audio(url);
+              await new Promise(function(resolve){
+                var done = function(){ try{ URL.revokeObjectURL(url); }catch(_){ } resolve(); };
+                ttsAudioEl.onended = done; ttsAudioEl.onerror = done;
+                ttsAudioEl.play().catch(done);
+              });
+              played = true;
+            }
+          }catch(_){ /* ignore and fall back */ }
+        }
+
+        if (!played && window.speechSynthesis){
+          await new Promise(function(resolve){
+            try{
+              var u = new SpeechSynthesisUtterance(msg);
+              u.rate=1.02; u.pitch=1.0; u.volume=1.0;
+              var vs = window.speechSynthesis.getVoices() || [];
+              var v = vs.find(function(x){ return /aoede/i.test(x.name||'') || /aoede/i.test(x.voiceURI||''); })
+                    || vs.find(function(x){ return /en-(ZA|US|GB)/i.test(x.lang||''); })
+                    || vs[0];
+              if (v) u.voice = v;
+              u.onend = resolve; u.onerror = resolve;
+              window.speechSynthesis.speak(u);
+            }catch(_){ resolve(); }
           });
-          if (res.ok) {
-            var buf = await res.arrayBuffer();
-            var mime = OPENAI_TTS.format === 'mp3' ? 'audio/mpeg' : 'audio/webm';
-            var blob = new Blob([buf], { type: mime });
-            var url = URL.createObjectURL(blob);
-            ttsAudioEl = new Audio(url);
-            ttsAudioEl.onended = function(){ try{ URL.revokeObjectURL(url); }catch(_){ } };
-            await ttsAudioEl.play();
-            return;
-          }
-        }catch(_){ /* fall through to Web Speech on failure */ }
+        }
       }
-
-      // Fallback to Web Speech API (attempt to select Aoede by name, else English voice)
-      if (window.speechSynthesis) {
-        var u = new SpeechSynthesisUtterance(clean);
-        u.rate=1.02; u.pitch=1.0; u.volume=1.0;
-        var vs = window.speechSynthesis.getVoices() || [];
-        var v = vs.find(function(x){ return /aoede/i.test(x.name||'') || /aoede/i.test(x.voiceURI||''); })
-              || vs.find(function(x){ return /en-(ZA|US|GB)/i.test(x.lang||''); })
-              || vs[0];
-        if (v) u.voice = v; window.speechSynthesis.speak(u);
-      }
-    } catch(_){}
+    } catch(_){
+      // swallow
+    } finally {
+      speaking = false;
+    }
   }
   function toggleMute(){
     muted = !muted;
@@ -260,6 +366,58 @@
     assessment:'assessment.html', consultation:'consultation.html', start:'project-start.html', home:'index.html'
   };
   function route(key){ addAgentMsg('Opening ' + key + '...'); setTimeout(function(){ window.location.href = ROUTES[key]; }, 120); return true; }
+
+  function executeSuggestion(sug){
+    try{
+      if (!sug) return false;
+      if (sug.type==='page' && sug.route){ return route(sug.route); }
+      if (sug.type==='link' && sug.href){ window.location.href = sug.href; return true; }
+      if (sug.type==='section' && sug.id){ var el=document.getElementById(sug.id); if (el){ el.scrollIntoView({behavior:'smooth',block:'start'}); addAgentMsg('Scrolled to section #' + sug.id + '.'); return true; } }
+      if (sug.type==='click' && sug.selector){ var el2=document.querySelector(sug.selector); if (el2){ try{ el2.click(); addAgentMsg('Activated ' + (el2.textContent||el2.getAttribute('aria-label')||'the button') + '.'); return true; }catch(_){ } } }
+    }catch(_){ }
+    return false;
+  }
+
+  function findCTAs(){
+    var items=[];
+    try{
+      var anchors = Array.from(document.querySelectorAll('a, button'));
+      anchors.forEach(function(a){
+        var txt=((a.textContent||'').trim().toLowerCase());
+        var href=(a.getAttribute&&a.getAttribute('href'))||'';
+        var lab=(a.getAttribute&&a.getAttribute('aria-label'))||'';
+        function push(type, route){ items.push({label:a.textContent.trim()||lab||href, type:type, route:route, href:href}); }
+        if (/consult/.test(txt)||/consult/.test(href)||/consult/.test(lab)) push('page','consultation');
+        else if (/assess/.test(txt)||/assessment/.test(href)||/assess/.test(lab)) push('page','assessment');
+        else if (/contact/.test(txt)||/contact/.test(href)||/contact/.test(lab)) push('page','contact');
+        else if (/quote|pricing|estimate/.test(txt)||/quote/.test(href)) items.push({label:a.textContent.trim()||lab||href, type:'link', href:href||'#'});
+      });
+    }catch(_){ }
+    return items;
+  }
+
+  function suggestContextualHint(){
+    try{
+      var page = (location.pathname||'').toLowerCase();
+      var sec = currentSectionId ? ('#'+currentSectionId) : '';
+      var ctas = findCTAs();
+      // Prefer top-priority CTAs
+      var primary = ctas.find(function(x){return x.type==='page' && (x.route==='consultation'||x.route==='assessment'||x.route==='contact');});
+      if (primary){
+        lastSuggestion = primary;
+        var routeName = primary.route;
+        return 'If you like, I can take you to ' + (routeName==='consultation'?'the Free Consultation':routeName==='assessment'?'the Security Assessment':'the Contact page') + '. Say "yes" to proceed.';
+      }
+      // Otherwise suggest a visible section
+      if (currentSectionId){
+        lastSuggestion = {type:'section', id:currentSectionId};
+        return 'You are on section #' + currentSectionId + '. I can scroll or point you to actions nearby.';
+      }
+      // Fallback generic
+      lastSuggestion = null;
+      return '';
+    }catch(_){ return ''; }
+  }
   function openWhatsApp(message){ var num=CONFIG.whatsapp.replace(/\D+/g,''); var url='https://wa.me/'+num+'?text='+encodeURIComponent(message||'Hi KypexTech!'); window.open(url,'_blank','noopener'); }
   function openMail(subject, body){ var url='mailto:'+encodeURIComponent(CONFIG.email)+'?subject='+encodeURIComponent(subject||'Enquiry from website')+'&body='+encodeURIComponent(body||''); window.location.href=url; }
 
@@ -271,6 +429,33 @@
 
   function handleLocalIntents(text){
     var t=(text||'').toLowerCase();
+    // Handle initial overview choice
+    if (awaitingOverviewChoice) {
+      if (/^(y|yes)\b/.test(t)) {
+        awaitingOverviewChoice = false;
+        addAgentMsg(buildSiteOverview());
+        return true;
+      }
+      if (/^(n|no)\b/.test(t)) {
+        awaitingOverviewChoice = false;
+        addAgentMsg('No problem — how can we help you today?');
+        return true;
+      }
+    }
+    // Section navigation by id: "go to services" or "scroll to #contact"
+    if (/^(go to|scroll to|show me)\s+#?([a-z0-9][\w-]{1,80})\b/.test(t)){
+      var secId = RegExp.$2;
+      var dest = document.getElementById(secId);
+      if (dest){ dest.scrollIntoView({behavior:'smooth', block:'start'}); addAgentMsg('Scrolled to section #' + secId + '.'); currentSectionId = secId; return true; }
+      addAgentMsg('I could not find section #' + secId + ' on this page.');
+      return true;
+    }
+    // Accept last suggestion with consent words
+    if (lastSuggestion && /^(yes|ok|okay|sure|please|go ahead|do it|proceed|let's go|sounds good)\b/.test(t)){
+      var done = executeSuggestion(lastSuggestion);
+      if (!done && lastSuggestion && lastSuggestion.route) return route(lastSuggestion.route);
+      return true;
+    }
     if (routeToBestForm(t)) return true;
     // nav
     if (/\bai\b|artificial intelligence|genai|assistant/.test(t)) return route('ai');
@@ -344,6 +529,19 @@
 
   // ---------- Hints + GA ----------
   function speakHints(){ try{ var p=(location.pathname||'').toLowerCase(); if(p.indexOf('website-development.html')>=0){ addAgentMsg('Tip: Type your country and "website quote", or type "submit form" when done.'); return; } if(p.indexOf('consultation.html')>=0){ addAgentMsg('You can type preferred date, preferred time, timezone, then "submit form".'); return; } if(p.indexOf('contact.html')>=0){ addAgentMsg('You can type name, email, message, then "submit form".'); return; } if(p.indexOf('ai-solutioning.html')>=0){ addAgentMsg('Ask about assistants, RAG, vision, or type "book a consultation".'); return; } if(p.indexOf('index.html')>=0||p=='/'){ addAgentMsg('Try: "website quote", "book consultation", or "open AI solutions".'); return; } }catch(_){}}
+  function speakHints(){
+    try{
+      // Dynamic contextual suggestion first
+      var dyn = suggestContextualHint();
+      if (dyn) { addAgentMsg(dyn); return; }
+      var p=(location.pathname||'').toLowerCase();
+      if(p.indexOf('website-development.html')>=0){ addAgentMsg('Tip: Type your country and "website quote", or type "submit form" when done.'); return; }
+      if(p.indexOf('consultation.html')>=0){ addAgentMsg('You can type preferred date, preferred time, timezone, then "submit form".'); return; }
+      if(p.indexOf('contact.html')>=0){ addAgentMsg('You can type name, email, message, then "submit form".'); return; }
+      if(p.indexOf('ai-solutioning.html')>=0){ addAgentMsg('Ask about assistants, RAG, vision, or type "book a consultation".'); return; }
+      if(p.indexOf('index.html')>=0||p=='/'){ addAgentMsg('Try: "website quote", "book consultation", or "open AI solutions".'); return; }
+    }catch(_){}
+  }
   function track(action){ try{ if(window.gtag) window.gtag('event','agent_action',{action:action,page:location.pathname}); }catch(_){ }}
 
   // ---------- Boot ----------
@@ -357,6 +555,8 @@
       if (k) OPENAI_TTS.key = k;
     }catch(_){ }
     initUI();
+    startClickTracking();
+    startSectionObserver();
     // Do not auto-open; user toggles with the AI button
     restoreHistory();
   }
