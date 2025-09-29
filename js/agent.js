@@ -94,6 +94,68 @@
       portfolio:'portfolio', website:'website', start:'start', crm:'cloud', security:'cybersecurity', mobile:'mobile'
     };
 
+    // ---------- Home page (Marketing / Sales) ----------
+    addQNA([
+      /(what|which) (kind|type)s? of (it )?solutions (do|does) you (speciali[sz]e|offer)/i,
+      /(how|in what ways?).*help my business grow/i
+    ], "We specialize in AI solutioning, website and mobile app development, cybersecurity, cloud services, IT consulting, and data analytics. Each service is designed to remove roadblocks, enhance efficiency, and give your business the digital edge it needs to grow confidently. (P.S. You can also subscribe to our newsletter in the footer to get monthly updates.)", null);
+    addQNA([
+      /(which|what) services? should i (explore|look at|check out) (first|initially)/i,
+      /new to kypextech.*(services|start)/i
+    ], "Most new clients begin with our AI Solutioning or Website Development, because they create immediate visibility and smarter operations. But if you are unsure, booking a free consultation is the best starting point. You can also subscribe to our newsletter for ongoing tips and updates.", null);
+    addQNA([
+      /learn more about your company (background|story|history)/i,
+      /where can i find (the )?about (page|section)/i
+    ], "You can learn more on the About Us page, accessible from the Home page navigation. You will also find links to our Portfolio, Services, and Contact sections. And do not miss the newsletter subscription option in the footer.", null);
+    addQNA([
+      /what (exactly )?is included in (your )?ai solutioning/i,
+      /tell me about (the )?ai solutioning (offering|package)/i
+    ], "We deliver Generative AI, chatbots, predictive models, computer vision, and full MLOps support. Our goal is production-grade AI that makes a real impact. You can always subscribe in the footer for updates on our newest AI breakthroughs.", null);
+    addQNA([
+      /how do you ensure (the )?ai systems.*(production|reliable)/i,
+      /(make sure|ensure).*(ai systems?).*production-ready/i
+    ], "We follow strict engineering practices: testing, CI/CD pipelines, and responsible AI standards. That way, the systems you deploy are scalable, compliant, and dependable. Want more AI insights? Subscribe to our newsletter in the footer.", null);
+    addQNA([
+      /who leads (your )?ai projects?/i,
+      /(ai team|ai projects?).*(expertise|background)/i
+    ], "Our AI team is led by a Software Engineering MSc candidate specializing in Artificial Intelligence, supported by experienced developers and consultants. Together, they bring both academic depth and business practicality. You can keep up with their latest work by subscribing at the footer.", null);
+    addQNA([
+      /(how|where) do i book (an )?ai consultation/i,
+      /(prepare|prep).*ai consultation/i
+    ], "Simply click Book AI Consultation on the Home page. To prepare, bring your current challenges, datasets (if any), and growth goals. And if you would like ongoing preparation tips, subscribe via the footer newsletter.", null);
+    addQNA([
+      /do you (custom|bespoke).*(websites|sites)/i,
+      /(templates?|template based).*websites?/i
+    ], "We create custom websites designed to reflect your unique brand and goals. Templates can inspire, but your site is always built to stand out. For inspiration and case studies, subscribe via the newsletter link in the footer.", null);
+    addQNA([
+      /develop (both )?ios and android apps?/i,
+      /(advanced features|feature rich).*(mobile apps|applications)/i
+    ], "Yes -- we design and build high-performance apps for both iOS and Android, with features like e-commerce, chat, payments, and AI integrations. For ongoing app development insights, subscribe in the footer.", null);
+    addQNA([
+      /what (cybersecurity|cloud) (projects|migrations?).*(handled|delivered)/i,
+      /(experience|past work).*(cybersecurity|cloud migrations?)/i
+    ], "We have implemented penetration testing, endpoint protection, and compliance programs, as well as migrations to AWS and Azure with secure, scalable setups. For future updates on security best practices, subscribe via the footer newsletter.", null);
+    addQNA([
+      /where can i see (examples|case studies)/i,
+      /(show|view).*portfolio/i
+    ], "Our Portfolio page highlights projects and success stories. You will find it in the Home page navigation, and you can stay updated on new case studies through the footer newsletter subscription.", null);
+    addQNA([
+      /(best|good).*way to contact you/i,
+      /(project discussion|reach out).*contact/i
+    ], "Visit our Contact page, where you will find a quick form and email details. We usually reply within one business day. And if you want to keep the conversation warm, subscribe via the newsletter link in the footer.", null);
+    addQNA([
+      /what is included in the free (security )?assessment/i,
+      /free (security )?(assessment|consultation).*(include|cover)/i
+    ], "The free security assessment reviews your IT environment for risks, while the consultation provides tailored advice on next steps. You can subscribe to our newsletter in the footer to keep learning about new offers and resources.", null);
+    addQNA([
+      /what (kind|type) of updates.*newsletter/i,
+      /subscribe.*newsletter.*receive/i
+    ], "You will get monthly updates on new service launches, AI insights, cybersecurity tips, and exclusive resources -- always practical, never spammy.", null);
+    addQNA([
+      /are you part of (a )?larger group/i,
+      /muwomogroup/i
+    ], "Yes, KypexTech is a proud subsidiary of MuwomoGroup. This backing gives us scale and resources while we stay agile and client-focused. You can subscribe at the footer to receive group and company news.", null);
+
     // ---------- AI Solutioning (General) ----------
     addQNA([
       /what is ("?production[- ]grade"? )?ai\??/i,
@@ -106,16 +168,154 @@
     addQNA([
       /free consultation for ai/i,
       /do you offer a free consultation for ai/i
-    ], 'Yes — we offer a free AI consultation. In 20–30 minutes we clarify goals, assess data readiness, outline quick wins, and recommend next steps with effort/impact trade‑offs. Would you like to book a slot now?', 'consultation');
+    ], "Yes, the AI consultation is free. In 20-30 minutes we clarify goals, assess data readiness, and outline quick wins. Want me to open the Consultation page?", 'consultation');
     addQNA([
       /typical timeline for an ai project/i,
       /how long .* ai project/i
-    ], 'Timelines depend on scope and data readiness. A common pattern is: Discovery 1–2 weeks; Prototype/POC 2–4 weeks; Pilot 4–8 weeks; Hardening & deployment 2–6 weeks; then continuous improvement. We’ll tailor this to your team and risk profile after discovery.', D.ai);
+    ], "It depends on the scope. A pilot or proof of concept can launch in a few weeks, while a full deployment may take a few months. We confirm a realistic timeline right after Discovery.", D.ai);
     addQNA([
       /how do you ensure .*responsible.*safe/i,
       /responsible ai|safe ai/i
     ], 'We implement privacy by default (minimize/obfuscate PII, encrypt data, least‑privilege access), safety checks (content moderation, allow/deny lists, jailbreak mitigation), fairness evaluations, and human‑in‑the‑loop for sensitive steps. Governance includes audit logs, versioning, approvals, and incident playbooks.', D.ai);
 
+    // ---------- AI Solutioning Page (Marketing) ----------
+    addQNA([
+      /what does ai solutioning mean/i,
+      /ai solutioning (?:is|mean).*/i
+    ], "AI Solutioning is our flagship service. It means taking the latest AI research and engineering it into production-ready systems that solve real problems - from smarter chatbots to predictive models that help you make better decisions.", null);
+    addQNA([
+      /(what|which) (business )?(problems|challenges|use cases).*(ai|artificial intelligence)/i,
+      /(cut costs|improve customer|automate workflows).*ai/i
+    ], "We help teams cut costs, speed up workflows, improve customer experiences, detect risks, and unlock insights from their data. From automating repetitive tasks to building custom virtual assistants, we turn your challenges into growth opportunities.", null);
+    addQNA([
+      /(ensure|make sure).*(ai).*(measurable|real) value/i,
+      /(how|what) (do|does) you measure ai success/i
+    ], "Every engagement is tied to clear KPIs. We validate the impact during design, measure results after deployment, and keep tuning so the value stays visible and sustained.", null);
+    addQNA([
+      /(who leads|who heads).*(ai (practice|work))/i,
+      /(ai team|ai projects?).*(background|experience)/i
+    ], "Our AI practice is led by a Software Engineering MSc candidate specializing in AI, backed by consultants with hands-on industry expertise. You get cutting-edge research plus practical delivery.", null);
+    addQNA([
+      /(focus(ed)?|specialise|specialize).*(industries).*(ai)/i,
+      /(which|what) industries.*ai practice/i
+    ], "We work across industries - retail, finance, healthcare, logistics, education, and more. Our methods adapt to your sector so the AI fits your reality.", null);
+    addQNA([
+      /(how|what).*(idea).*(discovery).*(deployment)/i,
+      /take an idea from discovery to deployment/i
+    ], "We follow a structured five-step path: Discovery, Design, Build, Deploy, Operate. Each stage matures the idea into a safe, scalable, measurable AI solution.", null);
+    addQNA([
+      /define (kpis?|success metrics)/i,
+      /(help|set) (kpis?|metrics) before (coding|building)/i
+    ], "Yes. During Design we agree on the KPIs that prove success before any code is written.", null);
+    addQNA([
+      /(handle|take care of).*(deployment|monitoring)/i,
+      /do you just build the model/i
+    ], "We go beyond the model. Our team handles deployment, secure APIs, infrastructure, and monitoring so your AI keeps performing.", null);
+    addQNA([
+      /(what does )?operate (phase)? look like/i,
+      /once the ai is live.*operate/i
+    ], "Operate means continuous monitoring, performance tracking, drift detection, and feedback loops. We keep improving the system after launch.", null);
+    addQNA([
+      /(work|collaborate).*(in[- ]house|internal).*(data team)/i
+    ], "Absolutely. We regularly co-create with internal teams, share knowledge, and align on standards so your in-house capability grows.", null);
+    addQNA([
+      /(which|what) ai capabilities do you offer/i,
+      /full spectrum of ai capabilities/i
+    ], "We cover the full spectrum: GenAI and RAG assistants, NLP, chatbots, computer vision, predictive modeling, MLOps, and Responsible AI.", null);
+    addQNA([
+      /(build|create).*(custom )?(chatbots|virtual assistants)/i
+    ], "Yes. We design chatbots and advanced virtual assistants tailored to your workflows and tone of voice.", null);
+    addQNA([
+      /(connect|ground).*(ai (assistant|bot)).*(knowledge base|documents|faq)/i,
+      /rag pipeline/i
+    ], "Yes. With retrieval-augmented generation we ground assistants in your documents, FAQs, or databases so answers stay accurate and cite sources.", null);
+    addQNA([
+      /(multilingual|multiple languages|low-resource languages)/i
+    ], "We support multilingual AI and can tailor pipelines for low-resource languages when needed.", null);
+    addQNA([
+      /(summaris(e|ze)|extract).*(documents|data)/i
+    ], "Yes. Our NLP systems handle summarisation, classification, and structured data extraction from large document sets.", null);
+    addQNA([
+      /(computer vision|ocr|defect detection|quality inspection)/i
+    ], "Yes. We deliver computer vision solutions from OCR to defect detection, tuned for accuracy and speed.", null);
+    addQNA([
+      /(recommendation engines?|forecast(ing)? models?)/i
+    ], "Yes. We build recommendation engines for personalisation and forecasting models for demand, sales, or risk.", null);
+    addQNA([
+      /(manage|handle).*(model )?drift/i
+    ], "We monitor performance continuously, detect drift early, and retrain so the model stays accurate as conditions change.", null);
+    addQNA([
+      /(provide|set up).*(mlops|ci\/cd for ml)/i
+    ], "Yes. We implement model registries, feature stores, CI/CD, and rollback strategies so your ML stack is production-ready.", null);
+    addQNA([
+      /(ensure|guarantee).*(responsible ai|privacy|bias)/i
+    ], "Responsible AI is core to our work. We run bias tests, privacy audits, red-team exercises, and use human-in-the-loop safeguards for sensitive steps.", null);
+    addQNA([
+      /(which|what) (ai )?(platforms|frameworks|stacks) (do you|does kypextech) work with/i
+    ], "We work across AWS, Azure, Google Cloud and frameworks like PyTorch, TensorFlow, and LangChain - we match the tooling to your needs.", null);
+    addQNA([
+      /(deploy).*(preferred|our) (cloud|on-prem)/i
+    ], "Yes. We deploy to your preferred cloud, hybrid setups, or on-prem environments while meeting compliance and security policies.", null);
+    addQNA([
+      /(rag|retrieval[- ]augmented).*(citations|sources)/i
+    ], "Yes. Our GenAI assistants can ground answers in your knowledge base and include source citations for transparency.", null);
+    addQNA([
+      /(human in the loop|humans? review).*(ai)/i
+    ], "We design human-in-the-loop workflows whenever a decision needs oversight before it goes live.", null);
+    addQNA([
+      /(secure).*(api|infrastructure).*(deploy)/i
+    ], "We secure deployments with API gateways, encryption, access controls, and infrastructure-as-code for consistent, auditable setups.", null);
+    addQNA([
+      /(prepare|bring).*(before|prior to).*(ai consultation)/i
+    ], "Bring your business challenges, goals, and any data points you have. I can open the Consultation page when you are ready.", 'consultation');
+    addQNA([
+      /(is|are).*(ai consultation).*(free|cost)/i
+    ], "Yes, the AI consultation is free - it helps you explore the right path before any commitment. Want me to open the Consultation page?", 'consultation');
+    addQNA([
+      /(how do i|where do i).*(book|schedule).*(ai consultation)/i
+    ], "Use the Book AI Consultation button on this page and I can take you there now.", 'consultation');
+    addQNA([
+      /(start|kick off).*(ai project).*(without|skip).*(consultation)/i
+    ], "If you are ready to start immediately we can jump straight in - I will open the Contact page so we can scope the work.", 'contact');
+    addQNA([
+      /(provide|send).*(roadmap|proposal).*(after).*(consultation|call)/i
+    ], "Yes. After we speak we prepare a tailored roadmap or proposal for your goals.", 'consultation');
+    addQNA([
+      /(share|upload).*(datasets?|requirements).*(team)/i
+    ], "The easiest way is via the Contact page or during the consultation - we will give you secure handover instructions.", 'contact');
+    addQNA([
+      /(fixed[- ]fee|fixed price).*(pilot|proof of concept)/i
+    ], "Yes. Many clients begin with a fixed-fee pilot so they can validate results quickly with low risk.", null);
+    addQNA([
+      /(how do you).*(scope|price).*(ai engagements?)/i
+    ], "We are flexible: hourly for short tasks, retainers for ongoing work, or subscription-style models for continuous AI value.", null);
+    addQNA([
+      /(ongoing support|sla).*(after).*(ai)/i
+    ], "Yes. We offer ongoing support with SLAs so your AI remains business-critical.", 'consultation');
+    addQNA([
+      /(case studies|success stories).*(ai)/i
+    ], "Our Portfolio page highlights AI success stories and the outcomes delivered. I can open it for you.", 'portfolio');
+    addQNA([
+      /(examples|evidence).*(ai impact|results)/i
+    ], "We have doubled response speeds, improved forecasts, and automated complex workflows. Let us walk you through the details in a consultation.", 'consultation');
+    addQNA([
+      /(newsletter).*(ai updates|case studies)/i
+    ], "Yes. Our monthly newsletter shares AI insights, case studies, and upcoming innovations.", null);
+    addQNA([
+      /(how often).*(ai tips|ai news)/i
+    ], "We send AI-focused tips monthly - concise, practical, and never spammy.", null);
+    addQNA([
+      /(walk|guide|take).*(through|over).*(ai capabilities)/i
+    ], "The AI page highlights six pillars: GenAI and RAG, Natural Language, Computer Vision, Predictive Modeling, MLOps, and Responsible AI. Let me know which one you want to explore first.", null);
+    addQNA([
+      /(take me|bring me|open).*(contact page)/i
+    ], "Sure - I will open the Contact page so you can reach the team.", 'contact');
+    addQNA([
+      /(need|want).*(cybersecurity).*(instead|rather)/i
+    ], "No problem. I can take you to our Cybersecurity page right away.", 'cybersecurity');
+    addQNA([
+      /(see|view).*(all services)/i
+    ], "Use the Services link in the navigation to browse everything from websites to cloud and analytics. I can jump you back to the Home page if you like.", 'home');
     // ---------- AI Capabilities ----------
     addQNA([/genai.*rag/i, /details.*rag/i], 'We build knowledge‑aware assistants using RAG. Content is cleaned and chunked, embedded with metadata, and retrieved via hybrid search (keyword + vector). Responses cite sources, respect access controls, and follow templates so outputs are consistent and safe.', D.ai);
     addQNA([/natural language.*(problems|services)/i, /nlp/i], 'Our NLP work covers classification/routing, entity/field extraction, summarization, sentiment/quality analysis, and conversational flows. Use cases include ticket triage, policy summarization, inbox automation, and knowledge assistants.', D.ai);
@@ -125,7 +325,7 @@
     addQNA([/responsible ai.*(bias|privacy)/i], 'We limit collection, anonymize when possible, and enforce granular permissions. Bias testing and targeted de‑bias strategies are applied where needed. For higher‑impact actions we keep a human‑approval path and transparent model/prompt cards.', D.ai);
 
     // ---------- AI Process ----------
-    addQNA([/what happens during the discovery phase/i], 'Discovery aligns value, feasibility, and risk. We meet stakeholders, inventory data and systems, clarify KPIs, constraints, and change‑management needs. Deliverable: scope options with effort/impact and a recommended path.', D.ai);
+    addQNA([/what happens during the discovery phase/i], "We focus on understanding your business problem, mapping the use-case value, and checking data readiness so we start with a clear roadmap instead of assumptions.", D.ai);
     addQNA([/safety[- ]by[- ]default.*design/i], 'Safety‑by‑default means the design prevents harm: least‑privilege access, PII redaction, content and tool‑use guardrails, sane defaults, rate limits, and adversarial testing plans covering abuse and edge cases.', D.ai);
     addQNA([/define success criteria|kpis for a project/i], 'We co‑define success using measurable KPIs such as resolution rate, accuracy/precision/recall, time saved, cost per interaction, and satisfaction. Targets are tracked via dashboards and controlled rollouts.', D.ai);
     addQNA([/deployment process look like/i], 'We promote through staging with validation, then canary/blue‑green. Feature flags let us ramp safely; we keep rollbacks ready. Documentation and admin/user training accompany releases.', D.ai);
@@ -505,6 +705,100 @@
     }catch(_){ return null; }
   }
 
+  function isHomePage(){
+    try{
+      var path = (location.pathname||'').toLowerCase();
+      if (!path || path==='/' || path==='\\') return true;
+      return path.indexOf('index.html')>=0;
+    }catch(_){ return false; }
+  }
+  function isLikelyQuestion(text){
+    try{
+      var t = String(text||'').trim();
+      if (!t) return false;
+      if (/\?$/.test(t)) return true;
+      return /^(who|what|where|when|why|how|does|do|can|is|are|should|which)\b/i.test(t);
+    }catch(_){ return false; }
+  }
+
+  var PAGE_ALIASES = {
+    home:['home page','homepage','home'],
+    ai:['ai page','ai solutioning page','ai solutioning','ai solutions page'],
+    website:['website development page','web development page','web dev page','website page'],
+    mobile:['mobile app page','mobile apps page','mobile development page'],
+    cybersecurity:['cybersecurity page','security page','cyber page'],
+    cloud:['cloud services page','cloud page'],
+    data:['data analytics page','analytics page'],
+    consultation:['consultation page','free consultation page','consult page'],
+    assessment:['assessment page','security assessment page','free assessment page'],
+    contact:['contact page','contact us page'],
+    start:['project start page','project-start page','start page'],
+    portfolio:['portfolio page'],
+    about:['about page','about us page']
+  };
+  var PAGE_SUMMARIES = {
+    home:"We are on the Home page. It highlights our promise, the AI flagship, and the core services grid. Ask me to explore services, open the AI page, or book a consultation. The newsletter signup lives in the footer.",
+    ai:"We are on the AI Solutioning page. It covers flagship capabilities such as GenAI and RAG, Natural Language, Computer Vision, Predictive Modeling, MLOps, and Responsible AI, plus the idea-to-impact process. I can book a consultation or walk you through any capability.",
+    website:"We are on the Website Development page. It outlines custom builds, responsive design, and the quote calculator with add-ons like SEO, payments, and WhatsApp. I can open the quote tool or detail the packages.",
+    mobile:"We are on the Mobile App Development page. It explains cross-platform builds, integrations, push notifications, and security. I can help you start an app project or review feature options.",
+    cybersecurity:"We are on the Cybersecurity page. It covers penetration testing, endpoint protection, compliance programs, and managed detection. Ask if you want the free assessment or a specific security service.",
+    cloud:"We are on the Cloud Services page. It details migrations, optimization, operations, storage, CRM, and hybrid strategies. I can open the contact form or focus on a specific cloud topic.",
+    data:"We are on the Data Analytics page. It highlights dashboards, ETL, forecasting, and data governance. I can show case studies or connect you to the consultation form.",
+    consultation:"We are on the Consultation page. This is where you can book a free session by sharing your preferred date, time, and timezone. Let me know if you want help completing the form.",
+    assessment:"We are on the Free Security Assessment page. It explains what the review includes and lets you request it. I can help with the form or open related security services.",
+    contact:"We are on the Contact page with the quick enquiry form, contact details, and FAQs. I can capture your name, email, message, and submit when ready.",
+    start:"We are on the Project Start page. It helps scope new work with project details, budget, and timing. I can assist with the form or suggest next steps.",
+    portfolio:"We are on the Portfolio page showcasing selected projects, tech stacks, and outcomes. Ask for a walkthrough or to open a specific case study.",
+    about:"We are on the About page. It shares KypexTech's profile, mission, values, and differentiators. Let me know if you want to jump to services or contact the team."
+  };
+  function getCurrentPageKey(){
+    try{
+      var path = (location.pathname||'').toLowerCase();
+      if (!path || path==='/' ) return 'home';
+      var file = path.split('/').pop() || '';
+      if (!file || file==='index' || file==='/') file = 'index.html';
+      var q = file.indexOf('?');
+      if (q>=0) file = file.slice(0,q);
+      switch(file){
+        case 'index.html':
+        case '': return 'home';
+        case 'ai-solutioning.html': return 'ai';
+        case 'website-development.html': return 'website';
+        case 'mobile-app-development.html': return 'mobile';
+        case 'cybersecurity.html': return 'cybersecurity';
+        case 'cloud-services.html': return 'cloud';
+        case 'data-analytics.html': return 'data';
+        case 'consultation.html': return 'consultation';
+        case 'assessment.html': return 'assessment';
+        case 'contact.html': return 'contact';
+        case 'project-start.html': return 'start';
+        case 'portfolio.html': return 'portfolio';
+        case 'about.html': return 'about';
+        default:
+          if (file.indexOf('quote')>=0) return 'website';
+          return 'home';
+      }
+    }catch(_){ return 'home'; }
+  }
+  function describeCurrentPage(){
+    var key = getCurrentPageKey();
+    return PAGE_SUMMARIES[key] || 'We are exploring KypexTech together. Tell me what you want to open next.';
+  }
+  function isCurrentPageQuery(text){
+    try{
+      var t = String(text||'').toLowerCase();
+      if (!t) return false;
+      if (t.indexOf('page')===-1) return false;
+      if (/\b(this|current)\s+page\b/.test(t)) return true;
+      var key = getCurrentPageKey();
+      var aliases = PAGE_ALIASES[key] || [];
+      for (var i=0;i<aliases.length;i++){
+        if (t.indexOf(aliases[i])>=0 && /(tell|what|describe|explain|info|information|overview|more|about|guide|walk)/.test(t)) return true;
+      }
+      return false;
+    }catch(_){ return false; }
+  }
+
   // ---------- Fuzzy QnA matching ----------
   function tokenize(str){
     try{
@@ -728,39 +1022,17 @@
 
   function buildSiteOverview(){
     var lines = [
-      'KypexTech Website Overview',
+      'KypexTech Quick Guide',
       '',
-      '1) Home (index.html)',
-      '- Find: Hero intro, AI Solutioning highlight, and Core Services overview (Web, Mobile, Cybersecurity, Cloud, IT Consulting, Data Analytics).',
-      '- Do: Explore Our Services, view AI offerings, subscribe to the newsletter.',
+      '1. Home - Hero intro, AI highlight, and core services. Start with Explore Our Services or subscribe via the footer.',
+      '2. AI Solutioning - GenAI, NLP, predictive models, computer vision, and MLOps. Great place to book a consultation.',
+      '3. Portfolio - Case studies and outcomes to spark your next project.',
+      '4. About - Mission, values, and what sets the team apart before you reach out.',
+      '5. Contact - Fast form and FAQs to schedule a call or send a message.',
       '',
-      '2) AI Solutioning (ai-solutioning.html)',
-      '- Find: GenAI & RAG, NLP & Chatbots, Predictive Models, Computer Vision, MLOps, Responsible AI, and the "Idea → Impact" steps.',
-      '- Do: Review capabilities and start an AI consultation/project.',
+      'Key services: Website Development, Mobile Apps, Cybersecurity, Cloud, IT Consulting, Data Analytics.',
       '',
-      '3) Portfolio (portfolio.html)',
-      '- Find: Case studies (e.g., Minable Scientific), tech stacks, outcomes.',
-      '- Do: Explore work and start your own project.',
-      '',
-      '4) About (about.html)',
-      '- Find: Company profile, mission/vision/values, and what sets us apart.',
-      '- Do: Learn our philosophy and get in touch.',
-      '',
-      '5) Contact (contact.html)',
-      '- Find: Contact form, FAQs, hours.',
-      '- Do: Submit inquiries and schedule meetings.',
-      '',
-      'Core Services',
-      '• Website Development (website-development.html): Responsive design, custom builds, SEO basics. Includes a Quote Calculator (packages, pages, add-ons like SEO, payments, WhatsApp, Maps, Android app).',
-      '• Cloud Services (cloud-services.html): Migration, Security, Optimization, Hybrid, Storage, CRM.',
-      '• Cloud Migration (cloud-migration.html): Discovery → Planning → Secure Migration → Validation → Handover.',
-      '• Cloud Security (cloud-security.html): IAM, Network, Data Protection, Threat Detection, Compliance.',
-      '• Cloud Optimization (cloud-optimization.html): Rightsizing, Autoscaling, Cost Controls, Performance, Observability.',
-      '• Hybrid Cloud (hybrid-cloud.html): Networking, Identity, Placement, Management, BC/DR.',
-      '• Cloud Storage (cloud-storage.html): Object/Block/File, Backup & DR, Lifecycle Policies.',
-      '• Cloud CRM (cloud-crm.html): Implementation, Integrations, Automation, Migration (Salesforce/HubSpot/Zoho).',
-      '',
-      'Would you like me to open any of these pages or guide you through a section?'
+      'Say a page name any time and I can open it for you.'
     ];
     return lines.join('\n');
   }
@@ -864,9 +1136,22 @@
     analytics:'data-analytics.html', portfolio:'portfolio.html', about:'about.html', contact:'contact.html',
     assessment:'assessment.html', consultation:'consultation.html', start:'project-start.html', home:'index.html'
   };
-  function route(key){ addAgentMsg('Opening ' + key + '...'); setTimeout(function(){ window.location.href = ROUTES[key]; }, 120); return true; }
+  function route(key){
+    if (!ROUTES[key]){ addAgentMsg('I could not find that page.'); return false; }
+    if (key === 'home'){
+      addAgentMsg('Opening the Home page...');
+      addAgentMsg('Once you are on the Home page, remember you can subscribe via the footer for monthly updates.');
+    } else {
+      addAgentMsg('Opening ' + key + '...');
+    }
+    setTimeout(function(){ window.location.href = ROUTES[key]; }, 120);
+    return true;
+  }
+
   function mapSpokenToRoute(s){
-    s = String(s||'').toLowerCase();
+    s = String(s||'').toLowerCase().trim();
+    if (!s) return null;
+    var noSpaces = s.replace(/\s+/g,'');
     if (/^ai( solutions| solutioning)?$/.test(s)) return 'ai';
     if (/^(website|web( |-)dev(elopment)?)$/.test(s)) return 'website';
     if (/^mobile( app)?$/.test(s)) return 'mobile';
@@ -876,11 +1161,39 @@
     if (/^data( analytics)?$/.test(s)) return 'analytics';
     if (/^portfolio$/.test(s)) return 'portfolio';
     if (/^about$/.test(s)) return 'about';
-    if (/^contact$/.test(s)) return 'contact';
+    if (/^contact( page| us)?$/.test(s) || /^c$/.test(s)) return 'contact';
     if (/^assessment$/.test(s)) return 'assessment';
     if (/^(project )?start$/.test(s)) return 'start';
-    if (/^home$/.test(s)) return 'home';
+    if (noSpaces==='home' || noSpaces==='homepage' || s==='h') return 'home';
     return null;
+  }
+
+  // Fuzzy routing helper – infer likely route from natural language
+  function inferRouteFromText(text){
+    try{
+      var s = String(text||'').toLowerCase();
+      // Normalize punctuation/spacing
+      s = s.replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+      // High-intent contact synonyms
+      if (/(get in touch|reach out|talk to (someone|a (human|person|rep))|speak to (someone|a (human|person|rep))|\bcontact( us)?\b|call you|phone you|whatsapp( us)?)/.test(s)) return 'contact';
+      // Consultation / booking intents
+      if (/(book|schedule|set up|arrange).*(consult(ation)?|meeting|call|demo)|\bconsultation\b/.test(s)) return 'consultation';
+      // Portfolio / case studies
+      if (/(portfolio|case studies|our work|examples)/.test(s)) return 'portfolio';
+      // About page
+      if (/(about( us)?|who (are|is) (you|kypextech))/.test(s)) return 'about';
+      // Services
+      if (/(\bai\b|genai|rag|nlp|mlops|computer vision)/.test(s)) return 'ai';
+      if (/(web( ?site)?( dev(elopment)?)?|build (me )?a site)/.test(s)) return 'website';
+      if (/(mobile( app)?|android|ios)/.test(s)) return 'mobile';
+      if (/(cyber\s*security|security posture|pen(etration)? test)/.test(s)) return 'cybersecurity';
+      if (/(cloud( services)?|aws|azure|gcp|migration|hybrid)/.test(s)) return 'cloud';
+      if (/(data analytics|dashboards?|\bbi\b|reports?)/.test(s)) return 'analytics';
+      if (/(assessment|security check|security audit)/.test(s)) return 'assessment';
+      if (/(start( a)? project|kick ?off)/.test(s)) return 'start';
+      if (/(^|\b)home(\s*page)?\b/.test(s) || s==='h') return 'home';
+      return null;
+    }catch(_){ return null; }
   }
 
   function executeSuggestion(sug){
@@ -945,6 +1258,10 @@
 
   function handleLocalIntents(text){
     var t=(text||'').toLowerCase();
+    if (isCurrentPageQuery(text)) {
+      addAgentMsg(describeCurrentPage());
+      return true;
+    }
     // Handle initial overview choice
     if (awaitingOverviewChoice) {
       if (/^(y|yes)\b/.test(t)) {
@@ -978,13 +1295,19 @@
       return true;
     }
     if (routeToBestForm(t)) return true;
-    // Explicit navigation commands only (avoid routing on bare keywords)
+    // Explicit navigation commands (support varied phrasing)
     var navMatch = /^(open|go to|take me to|navigate to|show( me)?)\s+(the\s+)?(.+)$/i.exec(t);
     if (navMatch){
-      var dest = (navMatch[5]||'').trim().replace(/\.$/,'');
-      var key = mapSpokenToRoute(dest);
-      if (key) return route(key);
+      // Group 4 captures the destination phrase
+      var dest = (navMatch[4]||'').trim().replace(/\.$/,'');
+      // Normalize common suffixes like "page" or "section"
+      dest = dest.replace(/\b(page|section)\b/g, '').trim();
+      var key = mapSpokenToRoute(dest) || inferRouteFromText(dest);
+      if (key && ROUTES[key]) return route(key);
     }
+    // Single-word or terse intents like "contact", "portfolio", "about"
+    var terseKey = mapSpokenToRoute(t) || inferRouteFromText(t);
+    if (terseKey && ROUTES[terseKey]) return route(terseKey);
     // comms
     if (/whats\s*app|whatsapp/.test(t)) { addAgentMsg('Opening WhatsApp...'); openWhatsApp('Hi KypexTech!'); return true; }
     if (/email|mail/.test(t)) { addAgentMsg('Opening an email draft...'); openMail('Enquiry from website'); return true; }
@@ -1014,6 +1337,10 @@
     if (f) { addAgentMsg(f); return; }
     var direct = kbAnswer(text);
     if (direct) { addAgentMsg(direct); return; }
+    if (isHomePage() && isLikelyQuestion(text)) {
+      addAgentMsg('I want to make sure you get the right help. If you need to talk to us directly, type "Open Contact Page", "contact page", "contact", or just "c" and I will open the Contact page for you.');
+      return;
+    }
     (async function(){
       var intent = await askGeminiIntent(text);
       if (intent){
@@ -1048,7 +1375,7 @@
     try{
       var pageCtx = capturePageContext(400);
       var schema = 'Return compact JSON only with keys: intent (navigate|question|affirmation|negation|book|contact|quote|smalltalk), topic (ai|analytics|security|cloud|website|mobile|crm|portfolio|about|contact|assessment|consultation|start|storage|migration|optimization|security-cloud|newsletter|general), route (ai|analytics|cybersecurity|cloud|website|mobile|portfolio|about|contact|assessment|consultation|start|home|null).';
-      var inst = 'Classify the user message. If it is just a keyword like "ai" without a navigation verb (open/go to/take me/show), set intent=question unless context clearly requests navigation. If message is an affirmation like yes/ok/sure, set intent=affirmation.';
+      var inst = 'Classify the user message. If it expresses a desire to open a page (e.g., "take me to contact", "lets go to the contact page", or a bare keyword like "contact"), set intent=navigate and choose the closest route from the allowed enum. If the text is simply yes/ok/sure, set intent=affirmation. Prefer contact for phrases like get in touch / talk to someone / reach out. Prefer consultation for book/schedule meeting/call/consultation.';
       var body = { contents:[
         {role:'user', parts:[{text: schema}]},
         {role:'user', parts:[{text: inst}]},
@@ -1093,7 +1420,7 @@
   function restoreHistory(){ try{ var store=JSON.parse(sessionStorage.getItem('agent_history')||'[]'); for(var i=0;i<store.length;i++){ var m=store[i]; var row=document.createElement('div'); row.className='msg ' + (m.role==='user'?'user':'agent'); row.textContent=m.text; logEl.appendChild(row);} logEl.scrollTop=logEl.scrollHeight; }catch(_){ } }
 
   // ---------- Hints + GA ----------
-  function speakHints(){ try{ var p=(location.pathname||'').toLowerCase(); if(p.indexOf('website-development.html')>=0){ addAgentMsg('Tip: Type your country and "website quote", or type "submit form" when done.'); return; } if(p.indexOf('consultation.html')>=0){ addAgentMsg('You can type preferred date, preferred time, timezone, then "submit form".'); return; } if(p.indexOf('contact.html')>=0){ addAgentMsg('You can type name, email, message, then "submit form".'); return; } if(p.indexOf('ai-solutioning.html')>=0){ addAgentMsg('Ask about assistants, RAG, vision, or type "book a consultation".'); return; } if(p.indexOf('index.html')>=0||p=='/'){ addAgentMsg('Try: "website quote", "book consultation", or "open AI solutions".'); return; } }catch(_){}}
+  function speakHints(){ try{ var p=(location.pathname||'').toLowerCase(); if(p.indexOf('website-development.html')>=0){ addAgentMsg('Tip: Type your country and "website quote", or type "submit form" when done.'); return; } if(p.indexOf('consultation.html')>=0){ addAgentMsg('You can type preferred date, preferred time, timezone, then "submit form".'); return; } if(p.indexOf('contact.html')>=0){ addAgentMsg('You can type name, email, message, then "submit form".'); return; } if(p.indexOf('ai-solutioning.html')>=0){ addAgentMsg('Ask about assistants, RAG, vision, or type "book a consultation".'); return; } if(p.indexOf('index.html')>=0||p=='/'){ addAgentMsg('This is the Home page. Try: "website quote", "book consultation", or "open AI solutions", and remember you can subscribe via the footer for monthly updates.'); return; } }catch(_){}}
   function speakHints(){
     try{
       // Dynamic contextual suggestion first
@@ -1104,7 +1431,7 @@
       if(p.indexOf('consultation.html')>=0){ addAgentMsg('You can type preferred date, preferred time, timezone, then "submit form".'); return; }
       if(p.indexOf('contact.html')>=0){ addAgentMsg('You can type name, email, message, then "submit form".'); return; }
       if(p.indexOf('ai-solutioning.html')>=0){ addAgentMsg('Ask about assistants, RAG, vision, or type "book a consultation".'); return; }
-      if(p.indexOf('index.html')>=0||p=='/'){ addAgentMsg('Try: "website quote", "book consultation", or "open AI solutions".'); return; }
+      if(p.indexOf('index.html')>=0||p=='/'){ addAgentMsg('This is the Home page. Try: "website quote", "book consultation", or "open AI solutions", and remember you can subscribe via the footer for monthly updates.'); return; }
     }catch(_){}
   }
   function track(action){ try{ if(window.gtag) window.gtag('event','agent_action',{action:action,page:location.pathname}); }catch(_){ }}
