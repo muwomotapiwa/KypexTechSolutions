@@ -78,6 +78,14 @@
     {rx:/assessment/i, id:'assessment'}
   ];
 
+  var TIP_MESSAGES = [
+    "Type 'Tell me more about this page' to get a quick summary without leaving.",
+    "Ask 'Open cloud security page' or any service name to jump there instantly.",
+    "Say 'Book AI consultation' and I will take you straight to the booking form.",
+    "Need a project quote? Type 'Start project form' to open the Project Start page.",
+    "Curious about our work? Try 'Show me the portfolio page'."
+  ];
+
   // ---------- QnA (page-specific answers) ----------
   var QNA = [];
   var QNA_READY = false;
@@ -728,6 +736,12 @@
     mobile:['mobile app page','mobile apps page','mobile development page'],
     cybersecurity:['cybersecurity page','security page','cyber page'],
     cloud:['cloud services page','cloud page'],
+    cloudMigration:['cloud migration page','cloud-migration page','migration page'],
+    cloudSecurity:['cloud security page','cloud-security page','cloud sec page'],
+    cloudOptimization:['cloud optimization page','cloud-optimization page','optimization page'],
+    hybridCloud:['hybrid cloud page','hybrid-cloud page'],
+    cloudStorage:['cloud storage page','cloud-storage page','storage page'],
+    cloudCrm:['cloud crm page','cloud-crm page','crm page'],
     data:['data analytics page','analytics page'],
     consultation:['consultation page','free consultation page','consult page'],
     assessment:['assessment page','security assessment page','free assessment page'],
@@ -742,7 +756,13 @@
     website:"We are on the Website Development page. It outlines custom builds, responsive design, and the quote calculator with add-ons like SEO, payments, and WhatsApp. I can open the quote tool or detail the packages.",
     mobile:"We are on the Mobile App Development page. It explains cross-platform builds, integrations, push notifications, and security. I can help you start an app project or review feature options.",
     cybersecurity:"We are on the Cybersecurity page. It covers penetration testing, endpoint protection, compliance programs, and managed detection. Ask if you want the free assessment or a specific security service.",
-    cloud:"We are on the Cloud Services page. It details migrations, optimization, operations, storage, CRM, and hybrid strategies. I can open the contact form or focus on a specific cloud topic.",
+    cloud:"We are on the Cloud Services page. It links to migration, security, optimization, hybrid, storage, and CRM options. I can open Project Start or book a free consultation for you.",
+    cloudMigration:"We are on the Cloud Migration page. It outlines discovery, planning, secure migration, validation, and handover. Say the word if you want to start a project or schedule a consultation.",
+    cloudSecurity:"We are on the Cloud Security page. It covers IAM, network controls, data protection, threat detection, and compliance. I can jump to Project Start or book the consultation whenever you are ready.",
+    cloudOptimization:"We are on the Cloud Optimization page. It highlights rightsizing, autoscaling, cost guardrails, performance tuning, and observability. Just ask if you would like Project Start or a consultation link.",
+    hybridCloud:"We are on the Hybrid Cloud page. It explains networking, identity, workload placement, management, and continuity strategies. I can take you to Project Start or set up a consultation at any time.",
+    cloudStorage:"We are on the Cloud Storage page. It covers object, block, and file storage, backup and recovery, lifecycle policies, and durability. Let me know if you want to kick off a project or book a consultation.",
+    cloudCrm:"We are on the Cloud CRM page. It describes CRM implementation, integrations, automation, and migrations for tools like Salesforce, HubSpot, and Zoho. I can open Project Start or book a consultation for you.",
     data:"We are on the Data Analytics page. It highlights dashboards, ETL, forecasting, and data governance. I can show case studies or connect you to the consultation form.",
     consultation:"We are on the Consultation page. This is where you can book a free session by sharing your preferred date, time, and timezone. Let me know if you want help completing the form.",
     assessment:"We are on the Free Security Assessment page. It explains what the review includes and lets you request it. I can help with the form or open related security services.",
@@ -767,6 +787,12 @@
         case 'mobile-app-development.html': return 'mobile';
         case 'cybersecurity.html': return 'cybersecurity';
         case 'cloud-services.html': return 'cloud';
+        case 'cloud-migration.html': return 'cloudMigration';
+        case 'cloud-security.html': return 'cloudSecurity';
+        case 'cloud-optimization.html': return 'cloudOptimization';
+        case 'hybrid-cloud.html': return 'hybridCloud';
+        case 'cloud-storage.html': return 'cloudStorage';
+        case 'cloud-crm.html': return 'cloudCrm';
         case 'data-analytics.html': return 'data';
         case 'consultation.html': return 'consultation';
         case 'assessment.html': return 'assessment';
@@ -865,6 +891,7 @@
 
   // ---------- UI ----------
   function initUI(){
+    injectTipStyles();
     if (document.getElementById('agent-widget')) return;
     var root = document.createElement('div');
     root.id = 'agent-widget';
@@ -895,6 +922,90 @@
   var ttsAudioEl = null; // HTMLAudioElement for OpenAI TTS playback
   var lastSuggestion = null; // remember last suggested action to execute on user consent
   var clickLog = []; // recent user clicks for context
+  function injectTipStyles(){
+    if (document.getElementById('agent-tip-styles')) return;
+    var css = [
+      '#agentTipsCard{position:fixed;right:32px;bottom:120px;width:260px;max-width:90vw;background:#0f1422;color:#f8fafc;border-radius:10px;box-shadow:0 12px 30px rgba(15,20,34,0.25);padding:16px;display:flex;gap:12px;align-items:flex-start;font-family:inherit;font-size:14px;line-height:1.4;z-index:9998;opacity:0;transform:translateY(20px);transition:opacity .3s ease,transform .3s ease;}',
+      '#agentTipsCard.show{opacity:1;transform:translateY(0);}',
+      '#agentTipsCard button{all:unset;cursor:pointer;}',
+      '#agentTipsCard .tip-close{margin-left:auto;color:#94a3b8;font-size:12px;}',
+      '#agentTipsCard .tip-close:hover{color:#e2e8f0;}',
+      '#agentTipsCard .tip-icon{flex:0 0 auto;background:#38bdf8;color:#0f172a;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;}',
+      '#agentTipsCard .tip-body{flex:1 1 auto;color:#e2e8f0;}',
+      '#agentTipsToggle{position:fixed;right:32px;bottom:120px;background:#0f172a;color:#e2e8f0;border-radius:20px;padding:8px 14px;font-size:13px;cursor:pointer;box-shadow:0 8px 20px rgba(15,20,34,0.2);display:none;z-index:9997;}',
+      '#agentTipsToggle:hover{background:#1e293b;}'
+    ].join('\n');
+    var styleTag = document.createElement('style');
+    styleTag.id = 'agent-tip-styles';
+    styleTag.textContent = css;
+    document.head.appendChild(styleTag);
+  }
+  function initTipsWidget(){
+    try{
+      if (!isDesktop()) return;
+      if (sessionStorage.getItem('agent_tips_suppressed') === '1') return;
+      if (document.getElementById('agentTipsCard')) return;
+      var card = document.createElement('div');
+      card.id = 'agentTipsCard';
+      var icon = document.createElement('div');
+      icon.className = 'tip-icon';
+      icon.textContent = '?';
+      var body = document.createElement('div');
+      body.className = 'tip-body';
+      var textNode = document.createElement('div');
+      textNode.id = 'agentTipsText';
+      body.appendChild(textNode);
+      var close = document.createElement('button');
+      close.className = 'tip-close';
+      close.setAttribute('aria-label', 'Hide tips');
+      close.textContent = 'Hide';
+      card.appendChild(icon);
+      card.appendChild(body);
+      card.appendChild(close);
+      document.body.appendChild(card);
+      var toggle = document.createElement('button');
+      toggle.id = 'agentTipsToggle';
+      toggle.textContent = 'Show tips';
+      document.body.appendChild(toggle);
+      var tips = TIP_MESSAGES.slice();
+      if (!tips.length){
+        card.remove();
+        toggle.remove();
+        return;
+      }
+      var index = Math.floor(Math.random() * tips.length);
+      function setTip(i){ textNode.textContent = tips[i]; }
+      function nextTip(){ index = (index + 1) % tips.length; setTip(index); }
+      var rotation = null;
+      function start(){ rotation = setInterval(nextTip, 7000); }
+      function stop(){ if (rotation){ clearInterval(rotation); rotation = null; } }
+      function showCard(){
+        card.style.display = 'flex';
+        requestAnimationFrame(function(){ card.classList.add('show'); });
+        toggle.style.display = 'none';
+        sessionStorage.setItem('agent_tips_hidden','0');
+        stop(); start();
+      }
+      function hideCard(){
+        card.classList.remove('show');
+        stop();
+        sessionStorage.setItem('agent_tips_hidden','1');
+        setTimeout(function(){ card.style.display = 'none'; toggle.style.display = 'inline-flex'; }, 250);
+      }
+      close.addEventListener('click', hideCard);
+      toggle.addEventListener('click', function(){ showCard(); });
+      setTip(index);
+      if (sessionStorage.getItem('agent_tips_hidden') === '1'){
+        card.style.display = 'none';
+        toggle.style.display = 'inline-flex';
+      } else {
+        card.style.display = 'flex';
+        requestAnimationFrame(function(){ card.classList.add('show'); });
+        start();
+      }
+    }catch(_){ }
+  }
+
   var currentSectionId = null; // current visible section
   var awaitingOverviewChoice = false; // awaiting y/n for site overview
 
@@ -1132,7 +1243,9 @@
   // ---------- Actions ----------
   var ROUTES = {
     ai:'ai-solutioning.html', website:'website-development.html', mobile:'mobile-app-development.html',
-    cybersecurity:'cybersecurity.html', cloud:'cloud-services.html', consulting:'it-consulting.html',
+    cybersecurity:'cybersecurity.html', cloud:'cloud-services.html', cloudMigration:'cloud-migration.html',
+    cloudSecurity:'cloud-security.html', cloudOptimization:'cloud-optimization.html', hybridCloud:'hybrid-cloud.html',
+    cloudStorage:'cloud-storage.html', cloudCrm:'cloud-crm.html', consulting:'it-consulting.html',
     analytics:'data-analytics.html', portfolio:'portfolio.html', about:'about.html', contact:'contact.html',
     assessment:'assessment.html', consultation:'consultation.html', start:'project-start.html', home:'index.html'
   };
@@ -1157,6 +1270,12 @@
     if (/^mobile( app)?$/.test(s)) return 'mobile';
     if (/^cyber( ?security)?$/.test(s)) return 'cybersecurity';
     if (/^cloud( services)?$/.test(s)) return 'cloud';
+    if (/^cloud migration$/.test(s) || noSpaces==='cloudmigration') return 'cloudMigration';
+    if (/^cloud security$/.test(s) || noSpaces==='cloudsecurity') return 'cloudSecurity';
+    if (/^cloud optimization$/.test(s) || noSpaces==='cloudoptimization') return 'cloudOptimization';
+    if (/^hybrid cloud$/.test(s) || noSpaces==='hybridcloud') return 'hybridCloud';
+    if (/^cloud storage$/.test(s) || noSpaces==='cloudstorage') return 'cloudStorage';
+    if (/^cloud crm$/.test(s) || noSpaces==='cloudcrm') return 'cloudCrm';
     if (/^consult(ation|ing)?$/.test(s)) return 'consultation';
     if (/^data( analytics)?$/.test(s)) return 'analytics';
     if (/^portfolio$/.test(s)) return 'portfolio';
@@ -1187,7 +1306,13 @@
       if (/(web( ?site)?( dev(elopment)?)?|build (me )?a site)/.test(s)) return 'website';
       if (/(mobile( app)?|android|ios)/.test(s)) return 'mobile';
       if (/(cyber\s*security|security posture|pen(etration)? test)/.test(s)) return 'cybersecurity';
-      if (/(cloud( services)?|aws|azure|gcp|migration|hybrid)/.test(s)) return 'cloud';
+      if (/cloud migration/.test(s)) return 'cloudMigration';
+      if (/cloud security/.test(s)) return 'cloudSecurity';
+      if (/cloud optimization/.test(s)) return 'cloudOptimization';
+      if (/hybrid cloud/.test(s)) return 'hybridCloud';
+      if (/cloud storage/.test(s)) return 'cloudStorage';
+      if (/cloud crm/.test(s)) return 'cloudCrm';
+      if (/(cloud( services)?|aws|azure|gcp)/.test(s)) return 'cloud';
       if (/(data analytics|dashboards?|\bbi\b|reports?)/.test(s)) return 'analytics';
       if (/(assessment|security check|security audit)/.test(s)) return 'assessment';
       if (/(start( a)? project|kick ?off)/.test(s)) return 'start';
@@ -1449,6 +1574,7 @@
     initUI();
     startClickTracking();
     startSectionObserver();
+    initTipsWidget();
     // Do not auto-open; user toggles with the AI button
     restoreHistory();
   }
