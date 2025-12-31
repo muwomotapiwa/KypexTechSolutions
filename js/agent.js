@@ -3,7 +3,7 @@
 (function(){
   if (window.KypexAgent) return; window.KypexAgent = { version:'0.4' };
 
-  var GEMINI_KEY = 'AIzaSyAG3pmTW3OHyJQaWmUu55z3O1QanHB4Fug';
+  var GEMINI_KEY = ''; // TODO: Set this via environment variable or secure configuration
   var GEMINI_MODEL = 'gemini-1.5-flash';
   var API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + encodeURIComponent(GEMINI_KEY);
 
