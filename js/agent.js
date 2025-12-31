@@ -1,11 +1,11 @@
 // Agent-Kypex (chat-first, TTS optional, no mic)
 // Note: Client-side API key is for testing. Use a proxy in production.
-(function(){
-  if (window.KypexAgent) return; window.KypexAgent = { version:'0.4' };
+(function () {
+  if (window.KypexAgent) return; window.KypexAgent = { version: '0.4' };
 
-  var GEMINI_KEY = ''; // TODO: Set this via environment variable or secure configuration
+  // API configuration - using Netlify function for secure API key management
   var GEMINI_MODEL = 'gemini-1.5-flash';
-  var API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + encodeURIComponent(GEMINI_KEY);
+  var API_URL = '/api/gemini'; // Netlify function endpoint
 
   var CONFIG = { email: 'hello@kypextech.co.za', whatsapp: '+27605023284' };
   // Optional OpenAI TTS config for consistent voice across devices
@@ -19,63 +19,77 @@
   };
 
   // ---------- Device detection (voice desktop-only) ----------
-  function isDesktop(){
-    try{
-      var ua = (navigator.userAgent||'');
+  function isDesktop() {
+    try {
+      var ua = (navigator.userAgent || '');
       var isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
-      var isIpadLike = /Macintosh/i.test(ua) && (navigator.maxTouchPoints||0) > 1; // iPadOS masquerading as Mac
+      var isIpadLike = /Macintosh/i.test(ua) && (navigator.maxTouchPoints || 0) > 1; // iPadOS masquerading as Mac
       var finePointer = (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) || false;
       return !isMobileUA && !isIpadLike && finePointer;
-    }catch(_){ return true; }
+    } catch (_) { return true; }
   }
 
   // ---------- Curated Knowledge Base (marketing-focused) ----------
   // Keep concise so we can also send to Gemini each turn.
   var KB = [
-    { id:'ai', name:'AI Solutioning', path:'ai-solutioning.html',
-      summary:'Production-grade AI: GenAI and RAG assistants, NLP/chatbots, computer vision, predictive models, MLOps, and Responsible AI.',
-      bullets:['GenAI and Retrieval Augmented Generation','NLP chatbots and assistants','Computer vision (OCR, detection, QA)','Forecasting and recommendations','MLOps (CI/CD, monitoring, drift)','Responsible AI and safety by default'] },
-    { id:'web', name:'Website Development', path:'website-development.html',
-      summary:'Responsive, fast, and SEO-ready sites tailored to your brand with clean UX and modern tooling.',
-      bullets:['Responsive design','Custom components and CMS','Performance and SEO best practices','E-commerce and payments','Analytics and hosting guidance'] },
-    { id:'mobile', name:'Mobile App Development', path:'mobile-app-development.html',
-      summary:'Feature-rich iOS/Android apps with great UX and secure integrations.',
-      bullets:['Cross-platform builds','Push notifications and auth','API integrations','Store submission support'] },
-    { id:'cyber', name:'Cybersecurity', path:'cybersecurity.html',
-      summary:'Security posture hardening and continuous protection across data, endpoints, cloud, and networks.',
-      bullets:['Network and endpoint security','Data protection and encryption','Cloud security and compliance','Threat monitoring and pen testing'] },
-    { id:'cloud', name:'Cloud Services', path:'cloud-services.html',
-      summary:'Migrations, optimization, and day-2 operations with security and cost guardrails.',
-      bullets:['Migration planning and execution','Cost optimization and autoscaling','Cloud security and backups','Storage, CRM, and hybrid cloud'] },
-    { id:'cloud-mig', name:'Cloud Migration', path:'cloud-migration.html', summary:'Plan and execute low-risk moves to AWS/Azure/GCP.' },
-    { id:'cloud-opt', name:'Cloud Optimization', path:'cloud-optimization.html', summary:'Reduce spend and improve performance with smart tuning.' },
-    { id:'cloud-sec', name:'Cloud Security', path:'cloud-security.html', summary:'Guardrails for identity, data, network, and compliance.' },
-    { id:'cloud-store', name:'Cloud Storage', path:'cloud-storage.html', summary:'Right-sized, durable storage with lifecycle policies.' },
-    { id:'cloud-crm', name:'Cloud CRM Solutions', path:'cloud-crm.html', summary:'Implement, integrate, and automate CRMs like Salesforce, HubSpot, or Zoho.' },
-    { id:'hybrid', name:'Hybrid Cloud', path:'hybrid-cloud.html', summary:'Blend on-prem and cloud with secure connectivity.' },
-    { id:'consult', name:'IT Consulting', path:'it-consulting.html',
-      summary:'Strategy, roadmaps, and pragmatic guidance for modern IT.' },
-    { id:'data', name:'Data Analytics', path:'data-analytics.html',
-      summary:'Dashboards, BI, ETL, and predictive insights to drive decisions.' },
-    { id:'assessment', name:'Free Security Assessment', path:'assessment.html', summary:'Identify gaps and prioritize security improvements.' },
-    { id:'free-consult', name:'Free Consultation', path:'consultation.html', summary:'Meet to scope needs and propose the next steps.' }
+    {
+      id: 'ai', name: 'AI Solutioning', path: 'ai-solutioning.html',
+      summary: 'Production-grade AI: GenAI and RAG assistants, NLP/chatbots, computer vision, predictive models, MLOps, and Responsible AI.',
+      bullets: ['GenAI and Retrieval Augmented Generation', 'NLP chatbots and assistants', 'Computer vision (OCR, detection, QA)', 'Forecasting and recommendations', 'MLOps (CI/CD, monitoring, drift)', 'Responsible AI and safety by default']
+    },
+    {
+      id: 'web', name: 'Website Development', path: 'website-development.html',
+      summary: 'Responsive, fast, and SEO-ready sites tailored to your brand with clean UX and modern tooling.',
+      bullets: ['Responsive design', 'Custom components and CMS', 'Performance and SEO best practices', 'E-commerce and payments', 'Analytics and hosting guidance']
+    },
+    {
+      id: 'mobile', name: 'Mobile App Development', path: 'mobile-app-development.html',
+      summary: 'Feature-rich iOS/Android apps with great UX and secure integrations.',
+      bullets: ['Cross-platform builds', 'Push notifications and auth', 'API integrations', 'Store submission support']
+    },
+    {
+      id: 'cyber', name: 'Cybersecurity', path: 'cybersecurity.html',
+      summary: 'Security posture hardening and continuous protection across data, endpoints, cloud, and networks.',
+      bullets: ['Network and endpoint security', 'Data protection and encryption', 'Cloud security and compliance', 'Threat monitoring and pen testing']
+    },
+    {
+      id: 'cloud', name: 'Cloud Services', path: 'cloud-services.html',
+      summary: 'Migrations, optimization, and day-2 operations with security and cost guardrails.',
+      bullets: ['Migration planning and execution', 'Cost optimization and autoscaling', 'Cloud security and backups', 'Storage, CRM, and hybrid cloud']
+    },
+    { id: 'cloud-mig', name: 'Cloud Migration', path: 'cloud-migration.html', summary: 'Plan and execute low-risk moves to AWS/Azure/GCP.' },
+    { id: 'cloud-opt', name: 'Cloud Optimization', path: 'cloud-optimization.html', summary: 'Reduce spend and improve performance with smart tuning.' },
+    { id: 'cloud-sec', name: 'Cloud Security', path: 'cloud-security.html', summary: 'Guardrails for identity, data, network, and compliance.' },
+    { id: 'cloud-store', name: 'Cloud Storage', path: 'cloud-storage.html', summary: 'Right-sized, durable storage with lifecycle policies.' },
+    { id: 'cloud-crm', name: 'Cloud CRM Solutions', path: 'cloud-crm.html', summary: 'Implement, integrate, and automate CRMs like Salesforce, HubSpot, or Zoho.' },
+    { id: 'hybrid', name: 'Hybrid Cloud', path: 'hybrid-cloud.html', summary: 'Blend on-prem and cloud with secure connectivity.' },
+    {
+      id: 'consult', name: 'IT Consulting', path: 'it-consulting.html',
+      summary: 'Strategy, roadmaps, and pragmatic guidance for modern IT.'
+    },
+    {
+      id: 'data', name: 'Data Analytics', path: 'data-analytics.html',
+      summary: 'Dashboards, BI, ETL, and predictive insights to drive decisions.'
+    },
+    { id: 'assessment', name: 'Free Security Assessment', path: 'assessment.html', summary: 'Identify gaps and prioritize security improvements.' },
+    { id: 'free-consult', name: 'Free Consultation', path: 'consultation.html', summary: 'Meet to scope needs and propose the next steps.' }
   ];
 
   var KEYWORDS = [
-    {rx:/(ai|artificial intelligence|genai|rag|chatbot|assistant)/i, id:'ai'},
-    {rx:/(web\s*site|web[- ]?dev|website development)/i, id:'web'},
-    {rx:/(mobile|app\b)/i, id:'mobile'},
-    {rx:/(cyber|security|infosec)/i, id:'cyber'},
-    {rx:/(cloud(?!\s*security)|cloud services)/i, id:'cloud'},
-    {rx:/migration/i, id:'cloud-mig'},
-    {rx:/optim(ization|ise)/i, id:'cloud-opt'},
-    {rx:/cloud security/i, id:'cloud-sec'},
-    {rx:/storage/i, id:'cloud-store'},
-    {rx:/crm/i, id:'cloud-crm'},
-    {rx:/hybrid/i, id:'hybrid'},
-    {rx:/consult(ing|ation)/i, id:'consult'},
-    {rx:/analytics|data/i, id:'data'},
-    {rx:/assessment/i, id:'assessment'}
+    { rx: /(ai|artificial intelligence|genai|rag|chatbot|assistant)/i, id: 'ai' },
+    { rx: /(web\s*site|web[- ]?dev|website development)/i, id: 'web' },
+    { rx: /(mobile|app\b)/i, id: 'mobile' },
+    { rx: /(cyber|security|infosec)/i, id: 'cyber' },
+    { rx: /(cloud(?!\s*security)|cloud services)/i, id: 'cloud' },
+    { rx: /migration/i, id: 'cloud-mig' },
+    { rx: /optim(ization|ise)/i, id: 'cloud-opt' },
+    { rx: /cloud security/i, id: 'cloud-sec' },
+    { rx: /storage/i, id: 'cloud-store' },
+    { rx: /crm/i, id: 'cloud-crm' },
+    { rx: /hybrid/i, id: 'hybrid' },
+    { rx: /consult(ing|ation)/i, id: 'consult' },
+    { rx: /analytics|data/i, id: 'data' },
+    { rx: /assessment/i, id: 'assessment' }
   ];
 
   var TIP_MESSAGES = [
@@ -89,17 +103,17 @@
   // ---------- QnA (page-specific answers) ----------
   var QNA = [];
   var QNA_READY = false;
-  function addQNA(patterns, answer, route){
-    try{
-      QNA.push({ patterns: (patterns||[]), answer: String(answer||''), route: route||null });
-    }catch(_){ }
+  function addQNA(patterns, answer, route) {
+    try {
+      QNA.push({ patterns: (patterns || []), answer: String(answer || ''), route: route || null });
+    } catch (_) { }
   }
-  function initQNA(){
+  function initQNA() {
     if (QNA_READY) return; QNA_READY = true;
     var D = {
       // Helper routes
-      ai:'ai', analytics:'analytics', cloud:'cloud', consulting:'consultation', assessment:'assessment', contact:'contact',
-      portfolio:'portfolio', website:'website', start:'start', crm:'cloud', security:'cybersecurity', mobile:'mobile'
+      ai: 'ai', analytics: 'analytics', cloud: 'cloud', consulting: 'consultation', assessment: 'assessment', contact: 'contact',
+      portfolio: 'portfolio', website: 'website', start: 'start', crm: 'cloud', security: 'cybersecurity', mobile: 'mobile'
     };
 
     // ---------- Home page (Marketing / Sales) ----------
@@ -698,88 +712,88 @@
     addQNA([/difference between your cybersecurity and cloud security/i], 'Cybersecurity covers your broader posture (identity, endpoints, network, process). Cloud security focuses on cloud provider configurations, workloads, and data controls.', D.security);
   }
 
-  function answerQnA(text){
-    try{
-      if (!text) return null; var s=String(text).trim(); if (!s) return null;
+  function answerQnA(text) {
+    try {
+      if (!text) return null; var s = String(text).trim(); if (!s) return null;
       if (!QNA_READY) initQNA();
-      for (var i=0;i<QNA.length;i++){
+      for (var i = 0; i < QNA.length; i++) {
         var item = QNA[i];
-        for (var j=0;j<item.patterns.length;j++){
+        for (var j = 0; j < item.patterns.length; j++) {
           var rx = item.patterns[j];
-          try{ if (rx.test(s)){ if (item.route){ lastSuggestion = {type:'page', route:item.route}; return item.answer + ' Would you like me to open the relevant page? Say "yes" to proceed.'; } return item.answer; } }catch(_){ }
+          try { if (rx.test(s)) { if (item.route) { lastSuggestion = { type: 'page', route: item.route }; return item.answer + ' Would you like me to open the relevant page? Say "yes" to proceed.'; } return item.answer; } } catch (_) { }
         }
       }
       return null;
-    }catch(_){ return null; }
+    } catch (_) { return null; }
   }
 
-  function isHomePage(){
-    try{
-      var path = (location.pathname||'').toLowerCase();
-      if (!path || path==='/' || path==='\\') return true;
-      return path.indexOf('index.html')>=0;
-    }catch(_){ return false; }
+  function isHomePage() {
+    try {
+      var path = (location.pathname || '').toLowerCase();
+      if (!path || path === '/' || path === '\\') return true;
+      return path.indexOf('index.html') >= 0;
+    } catch (_) { return false; }
   }
-  function isLikelyQuestion(text){
-    try{
-      var t = String(text||'').trim();
+  function isLikelyQuestion(text) {
+    try {
+      var t = String(text || '').trim();
       if (!t) return false;
       if (/\?$/.test(t)) return true;
       return /^(who|what|where|when|why|how|does|do|can|is|are|should|which)\b/i.test(t);
-    }catch(_){ return false; }
+    } catch (_) { return false; }
   }
 
   var PAGE_ALIASES = {
-    home:['home page','homepage','home'],
-    ai:['ai page','ai solutioning page','ai solutioning','ai solutions page'],
-    website:['website development page','web development page','web dev page','website page'],
-    mobile:['mobile app page','mobile apps page','mobile development page'],
-    cybersecurity:['cybersecurity page','security page','cyber page'],
-    cloud:['cloud services page','cloud page'],
-    cloudMigration:['cloud migration page','cloud-migration page','migration page'],
-    cloudSecurity:['cloud security page','cloud-security page','cloud sec page'],
-    cloudOptimization:['cloud optimization page','cloud-optimization page','optimization page'],
-    hybridCloud:['hybrid cloud page','hybrid-cloud page'],
-    cloudStorage:['cloud storage page','cloud-storage page','storage page'],
-    cloudCrm:['cloud crm page','cloud-crm page','crm page'],
-    data:['data analytics page','analytics page'],
-    consultation:['consultation page','free consultation page','consult page'],
-    assessment:['assessment page','security assessment page','free assessment page'],
-    contact:['contact page','contact us page'],
-    start:['project start page','project-start page','start page'],
-    portfolio:['portfolio page'],
-    about:['about page','about us page']
+    home: ['home page', 'homepage', 'home'],
+    ai: ['ai page', 'ai solutioning page', 'ai solutioning', 'ai solutions page'],
+    website: ['website development page', 'web development page', 'web dev page', 'website page'],
+    mobile: ['mobile app page', 'mobile apps page', 'mobile development page'],
+    cybersecurity: ['cybersecurity page', 'security page', 'cyber page'],
+    cloud: ['cloud services page', 'cloud page'],
+    cloudMigration: ['cloud migration page', 'cloud-migration page', 'migration page'],
+    cloudSecurity: ['cloud security page', 'cloud-security page', 'cloud sec page'],
+    cloudOptimization: ['cloud optimization page', 'cloud-optimization page', 'optimization page'],
+    hybridCloud: ['hybrid cloud page', 'hybrid-cloud page'],
+    cloudStorage: ['cloud storage page', 'cloud-storage page', 'storage page'],
+    cloudCrm: ['cloud crm page', 'cloud-crm page', 'crm page'],
+    data: ['data analytics page', 'analytics page'],
+    consultation: ['consultation page', 'free consultation page', 'consult page'],
+    assessment: ['assessment page', 'security assessment page', 'free assessment page'],
+    contact: ['contact page', 'contact us page'],
+    start: ['project start page', 'project-start page', 'start page'],
+    portfolio: ['portfolio page'],
+    about: ['about page', 'about us page']
   };
   var PAGE_SUMMARIES = {
-    home:"We are on the Home page. It highlights our promise, the AI flagship, and the core services grid. Ask me to explore services, open the AI page, or book a consultation. The newsletter signup lives in the footer.",
-    ai:"We are on the AI Solutioning page. It covers flagship capabilities such as GenAI and RAG, Natural Language, Computer Vision, Predictive Modeling, MLOps, and Responsible AI, plus the idea-to-impact process. I can book a consultation or walk you through any capability.",
-    website:"We are on the Website Development page. It outlines custom builds, responsive design, and the quote calculator with add-ons like SEO, payments, and WhatsApp. I can open the quote tool or detail the packages.",
-    mobile:"We are on the Mobile App Development page. It explains cross-platform builds, integrations, push notifications, and security. I can help you start an app project or review feature options.",
-    cybersecurity:"We are on the Cybersecurity page. It covers penetration testing, endpoint protection, compliance programs, and managed detection. Ask if you want the free assessment or a specific security service.",
-    cloud:"We are on the Cloud Services page. It links to migration, security, optimization, hybrid, storage, and CRM options. I can open Project Start or book a free consultation for you.",
-    cloudMigration:"We are on the Cloud Migration page. It outlines discovery, planning, secure migration, validation, and handover. Say the word if you want to start a project or schedule a consultation.",
-    cloudSecurity:"We are on the Cloud Security page. It covers IAM, network controls, data protection, threat detection, and compliance. I can jump to Project Start or book the consultation whenever you are ready.",
-    cloudOptimization:"We are on the Cloud Optimization page. It highlights rightsizing, autoscaling, cost guardrails, performance tuning, and observability. Just ask if you would like Project Start or a consultation link.",
-    hybridCloud:"We are on the Hybrid Cloud page. It explains networking, identity, workload placement, management, and continuity strategies. I can take you to Project Start or set up a consultation at any time.",
-    cloudStorage:"We are on the Cloud Storage page. It covers object, block, and file storage, backup and recovery, lifecycle policies, and durability. Let me know if you want to kick off a project or book a consultation.",
-    cloudCrm:"We are on the Cloud CRM page. It describes CRM implementation, integrations, automation, and migrations for tools like Salesforce, HubSpot, and Zoho. I can open Project Start or book a consultation for you.",
-    data:"We are on the Data Analytics page. It highlights dashboards, ETL, forecasting, and data governance. I can show case studies or connect you to the consultation form.",
-    consultation:"We are on the Consultation page. This is where you can book a free session by sharing your preferred date, time, and timezone. Let me know if you want help completing the form.",
-    assessment:"We are on the Free Security Assessment page. It explains what the review includes and lets you request it. I can help with the form or open related security services.",
-    contact:"We are on the Contact page with the quick enquiry form, contact details, and FAQs. I can capture your name, email, message, and submit when ready.",
-    start:"We are on the Project Start page. It helps scope new work with project details, budget, and timing. I can assist with the form or suggest next steps.",
-    portfolio:"We are on the Portfolio page showcasing selected projects, tech stacks, and outcomes. Ask for a walkthrough or to open a specific case study.",
-    about:"We are on the About page. It shares KypexTech's profile, mission, values, and differentiators. Let me know if you want to jump to services or contact the team."
+    home: "We are on the Home page. It highlights our promise, the AI flagship, and the core services grid. Ask me to explore services, open the AI page, or book a consultation. The newsletter signup lives in the footer.",
+    ai: "We are on the AI Solutioning page. It covers flagship capabilities such as GenAI and RAG, Natural Language, Computer Vision, Predictive Modeling, MLOps, and Responsible AI, plus the idea-to-impact process. I can book a consultation or walk you through any capability.",
+    website: "We are on the Website Development page. It outlines custom builds, responsive design, and the quote calculator with add-ons like SEO, payments, and WhatsApp. I can open the quote tool or detail the packages.",
+    mobile: "We are on the Mobile App Development page. It explains cross-platform builds, integrations, push notifications, and security. I can help you start an app project or review feature options.",
+    cybersecurity: "We are on the Cybersecurity page. It covers penetration testing, endpoint protection, compliance programs, and managed detection. Ask if you want the free assessment or a specific security service.",
+    cloud: "We are on the Cloud Services page. It links to migration, security, optimization, hybrid, storage, and CRM options. I can open Project Start or book a free consultation for you.",
+    cloudMigration: "We are on the Cloud Migration page. It outlines discovery, planning, secure migration, validation, and handover. Say the word if you want to start a project or schedule a consultation.",
+    cloudSecurity: "We are on the Cloud Security page. It covers IAM, network controls, data protection, threat detection, and compliance. I can jump to Project Start or book the consultation whenever you are ready.",
+    cloudOptimization: "We are on the Cloud Optimization page. It highlights rightsizing, autoscaling, cost guardrails, performance tuning, and observability. Just ask if you would like Project Start or a consultation link.",
+    hybridCloud: "We are on the Hybrid Cloud page. It explains networking, identity, workload placement, management, and continuity strategies. I can take you to Project Start or set up a consultation at any time.",
+    cloudStorage: "We are on the Cloud Storage page. It covers object, block, and file storage, backup and recovery, lifecycle policies, and durability. Let me know if you want to kick off a project or book a consultation.",
+    cloudCrm: "We are on the Cloud CRM page. It describes CRM implementation, integrations, automation, and migrations for tools like Salesforce, HubSpot, and Zoho. I can open Project Start or book a consultation for you.",
+    data: "We are on the Data Analytics page. It highlights dashboards, ETL, forecasting, and data governance. I can show case studies or connect you to the consultation form.",
+    consultation: "We are on the Consultation page. This is where you can book a free session by sharing your preferred date, time, and timezone. Let me know if you want help completing the form.",
+    assessment: "We are on the Free Security Assessment page. It explains what the review includes and lets you request it. I can help with the form or open related security services.",
+    contact: "We are on the Contact page with the quick enquiry form, contact details, and FAQs. I can capture your name, email, message, and submit when ready.",
+    start: "We are on the Project Start page. It helps scope new work with project details, budget, and timing. I can assist with the form or suggest next steps.",
+    portfolio: "We are on the Portfolio page showcasing selected projects, tech stacks, and outcomes. Ask for a walkthrough or to open a specific case study.",
+    about: "We are on the About page. It shares KypexTech's profile, mission, values, and differentiators. Let me know if you want to jump to services or contact the team."
   };
-  function getCurrentPageKey(){
-    try{
-      var path = (location.pathname||'').toLowerCase();
-      if (!path || path==='/' ) return 'home';
+  function getCurrentPageKey() {
+    try {
+      var path = (location.pathname || '').toLowerCase();
+      if (!path || path === '/') return 'home';
       var file = path.split('/').pop() || '';
-      if (!file || file==='index' || file==='/') file = 'index.html';
+      if (!file || file === 'index' || file === '/') file = 'index.html';
       var q = file.indexOf('?');
-      if (q>=0) file = file.slice(0,q);
-      switch(file){
+      if (q >= 0) file = file.slice(0, q);
+      switch (file) {
         case 'index.html':
         case '': return 'home';
         case 'ai-solutioning.html': return 'ai';
@@ -801,96 +815,96 @@
         case 'portfolio.html': return 'portfolio';
         case 'about.html': return 'about';
         default:
-          if (file.indexOf('quote')>=0) return 'website';
+          if (file.indexOf('quote') >= 0) return 'website';
           return 'home';
       }
-    }catch(_){ return 'home'; }
+    } catch (_) { return 'home'; }
   }
-  function describeCurrentPage(){
+  function describeCurrentPage() {
     var key = getCurrentPageKey();
     return PAGE_SUMMARIES[key] || 'We are exploring KypexTech together. Tell me what you want to open next.';
   }
-  function isCurrentPageQuery(text){
-    try{
-      var t = String(text||'').toLowerCase();
+  function isCurrentPageQuery(text) {
+    try {
+      var t = String(text || '').toLowerCase();
       if (!t) return false;
-      if (t.indexOf('page')===-1) return false;
+      if (t.indexOf('page') === -1) return false;
       if (/\b(this|current)\s+page\b/.test(t)) return true;
       var key = getCurrentPageKey();
       var aliases = PAGE_ALIASES[key] || [];
-      for (var i=0;i<aliases.length;i++){
-        if (t.indexOf(aliases[i])>=0 && /(tell|what|describe|explain|info|information|overview|more|about|guide|walk)/.test(t)) return true;
+      for (var i = 0; i < aliases.length; i++) {
+        if (t.indexOf(aliases[i]) >= 0 && /(tell|what|describe|explain|info|information|overview|more|about|guide|walk)/.test(t)) return true;
       }
       return false;
-    }catch(_){ return false; }
+    } catch (_) { return false; }
   }
 
   // ---------- Fuzzy QnA matching ----------
-  function tokenize(str){
-    try{
-      var stop = new Set(['a','an','the','and','or','but','to','for','of','on','in','with','my','is','are','do','does','can','how','what','when','where','why','which','who','will','be','we','you','your']);
-      return String(str||'').toLowerCase()
-        .replace(/[^a-z0-9\s]/g,' ')
-        .split(/\s+/).filter(function(t){ return t && !stop.has(t); });
-    }catch(_){ return []; }
+  function tokenize(str) {
+    try {
+      var stop = new Set(['a', 'an', 'the', 'and', 'or', 'but', 'to', 'for', 'of', 'on', 'in', 'with', 'my', 'is', 'are', 'do', 'does', 'can', 'how', 'what', 'when', 'where', 'why', 'which', 'who', 'will', 'be', 'we', 'you', 'your']);
+      return String(str || '').toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .split(/\s+/).filter(function (t) { return t && !stop.has(t); });
+    } catch (_) { return []; }
   }
-  function jaccard(a,b){
-    try{
+  function jaccard(a, b) {
+    try {
       var A = new Set(a), B = new Set(b);
-      var inter=0; A.forEach(function(x){ if (B.has(x)) inter++; });
-      var uni = A.size + B.size - inter; return uni? inter/uni : 0;
-    }catch(_){ return 0; }
+      var inter = 0; A.forEach(function (x) { if (B.has(x)) inter++; });
+      var uni = A.size + B.size - inter; return uni ? inter / uni : 0;
+    } catch (_) { return 0; }
   }
-  function patternTokens(rx){
-    try{
-      var s = (rx && rx.source) ? rx.source : String(rx||'');
-      s = s.replace(/\\s\+/g,' ').replace(/\W+/g,' ').replace(/\s+/g,' ');
+  function patternTokens(rx) {
+    try {
+      var s = (rx && rx.source) ? rx.source : String(rx || '');
+      s = s.replace(/\\s\+/g, ' ').replace(/\W+/g, ' ').replace(/\s+/g, ' ');
       return tokenize(s);
-    }catch(_){ return []; }
+    } catch (_) { return []; }
   }
-  function fuzzyAnswerQnA(text){
-    try{
+  function fuzzyAnswerQnA(text) {
+    try {
       if (!text) return null; if (!QNA_READY) initQNA();
       var t = tokenize(text);
       var best = null; var bestScore = 0;
-      for (var i=0;i<QNA.length;i++){
+      for (var i = 0; i < QNA.length; i++) {
         var item = QNA[i]; var maxScore = 0;
-        for (var j=0;j<item.patterns.length;j++){
+        for (var j = 0; j < item.patterns.length; j++) {
           var toks = patternTokens(item.patterns[j]);
           var sc = jaccard(t, toks);
-          if (sc>maxScore) maxScore = sc;
+          if (sc > maxScore) maxScore = sc;
         }
-        if (maxScore > bestScore){ bestScore = maxScore; best = item; }
+        if (maxScore > bestScore) { bestScore = maxScore; best = item; }
       }
-      if (best && bestScore >= 0.32){
-        if (best.route){ lastSuggestion = {type:'page', route:best.route}; return best.answer + ' Would you like me to open the relevant page? Say "yes" to proceed.'; }
+      if (best && bestScore >= 0.32) {
+        if (best.route) { lastSuggestion = { type: 'page', route: best.route }; return best.answer + ' Would you like me to open the relevant page? Say "yes" to proceed.'; }
         return best.answer;
       }
       return null;
-    }catch(_){ return null; }
+    } catch (_) { return null; }
   }
 
-  function findServiceMatch(text){
-    var t = String(text||'').toLowerCase();
-    for (var i=0;i<KEYWORDS.length;i++) if (KEYWORDS[i].rx.test(t)) return KEYWORDS[i].id;
+  function findServiceMatch(text) {
+    var t = String(text || '').toLowerCase();
+    for (var i = 0; i < KEYWORDS.length; i++) if (KEYWORDS[i].rx.test(t)) return KEYWORDS[i].id;
     // generic service intent
-    if (/services|what do you do|offer/i.test(text||'')) return 'ai'; // lead with AI, our flagship
+    if (/services|what do you do|offer/i.test(text || '')) return 'ai'; // lead with AI, our flagship
     return null;
   }
 
-  function kbAnswer(text){
+  function kbAnswer(text) {
     var id = findServiceMatch(text);
     if (!id) return null;
-    var item = KB.find(function(x){ return x.id===id; });
+    var item = KB.find(function (x) { return x.id === id; });
     if (!item) return null;
     var line = item.name + ': ' + item.summary;
-    var bullets = (item.bullets||[]).slice(0,4).join('; ');
+    var bullets = (item.bullets || []).slice(0, 4).join('; ');
     var cta = 'Would you like me to open ' + item.name + ' or book a consultation?';
-    return line + (bullets? ' — ' + bullets + '. ' : ' ') + cta;
+    return line + (bullets ? ' — ' + bullets + '. ' : ' ') + cta;
   }
 
   // ---------- UI ----------
-  function initUI(){
+  function initUI() {
     injectTipStyles();
     if (document.getElementById('agent-widget')) return;
     var root = document.createElement('div');
@@ -922,7 +936,7 @@
   var ttsAudioEl = null; // HTMLAudioElement for OpenAI TTS playback
   var lastSuggestion = null; // remember last suggested action to execute on user consent
   var clickLog = []; // recent user clicks for context
-  function injectTipStyles(){
+  function injectTipStyles() {
     if (document.getElementById('agent-tip-styles')) return;
     var css = [
       '#agentTipsCard{position:fixed;right:32px;bottom:120px;width:260px;max-width:90vw;background:#0f1422;color:#f8fafc;border-radius:10px;box-shadow:0 12px 30px rgba(15,20,34,0.25);padding:16px;display:flex;gap:12px;align-items:flex-start;font-family:inherit;font-size:14px;line-height:1.4;z-index:9998;opacity:0;transform:translateY(20px);transition:opacity .3s ease,transform .3s ease;}',
@@ -940,8 +954,8 @@
     styleTag.textContent = css;
     document.head.appendChild(styleTag);
   }
-  function initTipsWidget(){
-    try{
+  function initTipsWidget() {
+    try {
       if (!isDesktop()) return;
       if (sessionStorage.getItem('agent_tips_suppressed') === '1') return;
       if (document.getElementById('agentTipsCard')) return;
@@ -968,112 +982,112 @@
       toggle.textContent = 'Show tips';
       document.body.appendChild(toggle);
       var tips = TIP_MESSAGES.slice();
-      if (!tips.length){
+      if (!tips.length) {
         card.remove();
         toggle.remove();
         return;
       }
       var index = Math.floor(Math.random() * tips.length);
-      function setTip(i){ textNode.textContent = tips[i]; }
-      function nextTip(){ index = (index + 1) % tips.length; setTip(index); }
+      function setTip(i) { textNode.textContent = tips[i]; }
+      function nextTip() { index = (index + 1) % tips.length; setTip(index); }
       var rotation = null;
-      function start(){ rotation = setInterval(nextTip, 7000); }
-      function stop(){ if (rotation){ clearInterval(rotation); rotation = null; } }
-      function showCard(){
+      function start() { rotation = setInterval(nextTip, 7000); }
+      function stop() { if (rotation) { clearInterval(rotation); rotation = null; } }
+      function showCard() {
         card.style.display = 'flex';
-        requestAnimationFrame(function(){ card.classList.add('show'); });
+        requestAnimationFrame(function () { card.classList.add('show'); });
         toggle.style.display = 'none';
-        sessionStorage.setItem('agent_tips_hidden','0');
+        sessionStorage.setItem('agent_tips_hidden', '0');
         stop(); start();
       }
-      function hideCard(){
+      function hideCard() {
         card.classList.remove('show');
         stop();
-        sessionStorage.setItem('agent_tips_hidden','1');
-        setTimeout(function(){ card.style.display = 'none'; toggle.style.display = 'inline-flex'; }, 250);
+        sessionStorage.setItem('agent_tips_hidden', '1');
+        setTimeout(function () { card.style.display = 'none'; toggle.style.display = 'inline-flex'; }, 250);
       }
       close.addEventListener('click', hideCard);
-      toggle.addEventListener('click', function(){ showCard(); });
+      toggle.addEventListener('click', function () { showCard(); });
       setTip(index);
-      if (sessionStorage.getItem('agent_tips_hidden') === '1'){
+      if (sessionStorage.getItem('agent_tips_hidden') === '1') {
         card.style.display = 'none';
         toggle.style.display = 'inline-flex';
       } else {
         card.style.display = 'flex';
-        requestAnimationFrame(function(){ card.classList.add('show'); });
+        requestAnimationFrame(function () { card.classList.add('show'); });
         start();
       }
-    }catch(_){ }
+    } catch (_) { }
   }
 
   var currentSectionId = null; // current visible section
   var awaitingOverviewChoice = false; // awaiting y/n for site overview
 
   // ---------- Click + Section Tracking ----------
-  function getSectionIdFrom(el){
-    try{
+  function getSectionIdFrom(el) {
+    try {
       var n = el && el.closest && el.closest('section[id], [id][data-section]');
       if (n && n.id) return n.id;
       // Walk up for any id if no section wrapper
-      var p = el; var hops=0;
-      while (p && hops<5){ if (p.id) return p.id; p=p.parentElement; hops++; }
-    }catch(_){}
+      var p = el; var hops = 0;
+      while (p && hops < 5) { if (p.id) return p.id; p = p.parentElement; hops++; }
+    } catch (_) { }
     return null;
   }
-  function describeEl(el){
+  function describeEl(el) {
     var t = '';
-    try{ t = (el.textContent||'').trim().replace(/\s+/g,' ').slice(0,80); }catch(_){ }
-    var id = ''; try{ id = el.id||''; }catch(_){ }
-    var al = ''; try{ al = el.getAttribute && el.getAttribute('aria-label') || ''; }catch(_){ }
-    var role = ''; try{ role = el.getAttribute && el.getAttribute('role') || ''; }catch(_){ }
-    return { text:t, id:id, aria:al, role:role };
+    try { t = (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80); } catch (_) { }
+    var id = ''; try { id = el.id || ''; } catch (_) { }
+    var al = ''; try { al = el.getAttribute && el.getAttribute('aria-label') || ''; } catch (_) { }
+    var role = ''; try { role = el.getAttribute && el.getAttribute('role') || ''; } catch (_) { }
+    return { text: t, id: id, aria: al, role: role };
   }
-  function startClickTracking(){
-    try{
-      document.addEventListener('click', function(e){
+  function startClickTracking() {
+    try {
+      document.addEventListener('click', function (e) {
         var el = e.target && e.target.closest && e.target.closest('a, button, [role="button"], input[type="submit"], .btn, .cta');
         if (!el) return;
         var meta = describeEl(el);
         meta.section = getSectionIdFrom(el) || currentSectionId || '';
         meta.page = location.pathname.replace(/^\/+/, '') || 'index.html';
         clickLog.push(meta);
-        if (clickLog.length>15) clickLog.shift();
-        try{ sessionStorage.setItem('agent_clicks', JSON.stringify(clickLog)); }catch(_){ }
-        try{ if (window.gtag) window.gtag('event','agent_click', meta); }catch(_){ }
+        if (clickLog.length > 15) clickLog.shift();
+        try { sessionStorage.setItem('agent_clicks', JSON.stringify(clickLog)); } catch (_) { }
+        try { if (window.gtag) window.gtag('event', 'agent_click', meta); } catch (_) { }
       }, true);
-    }catch(_){ }
+    } catch (_) { }
   }
-  function startSectionObserver(){
-    try{
+  function startSectionObserver() {
+    try {
       var els = Array.from(document.querySelectorAll('section[id], main > section[id], [data-section][id]'));
       if (!els.length) return;
-      var obs = new IntersectionObserver(function(entries){
-        entries.forEach(function(ent){ if (ent.isIntersecting){ currentSectionId = ent.target.id; } });
-      }, { root:null, threshold:0.4 });
-      els.forEach(function(s){ obs.observe(s); });
-    }catch(_){ }
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (ent) { if (ent.isIntersecting) { currentSectionId = ent.target.id; } });
+      }, { root: null, threshold: 0.4 });
+      els.forEach(function (s) { obs.observe(s); });
+    } catch (_) { }
   }
 
-  function bindUI(){
+  function bindUI() {
     panel = document.getElementById('agentPanel');
     logEl = document.getElementById('agentLog');
     inputEl = document.getElementById('agentText');
     muteBtn = document.getElementById('agentMute');
     document.getElementById('agentFab').addEventListener('click', togglePanel);
-    document.getElementById('agentClose').addEventListener('click', function(){ try{ sessionStorage.setItem('agent_closed','1'); }catch(_){} closePanel(); });
+    document.getElementById('agentClose').addEventListener('click', function () { try { sessionStorage.setItem('agent_closed', '1'); } catch (_) { } closePanel(); });
     document.getElementById('agentForm').addEventListener('submit', onSubmit);
     muteBtn.addEventListener('click', toggleMute);
 
-    try{
+    try {
       var stored = sessionStorage.getItem('agent_muted');
       if (stored === null) {
         muted = !isDesktop();
-        try{ sessionStorage.setItem('agent_muted', muted ? '1' : '0'); }catch(_){ }
+        try { sessionStorage.setItem('agent_muted', muted ? '1' : '0'); } catch (_) { }
       } else {
         muted = stored === '1';
       }
-    }catch(_){ muted = !isDesktop(); }
-    if (muteBtn){
+    } catch (_) { muted = !isDesktop(); }
+    if (muteBtn) {
       var desktop = isDesktop();
       muteBtn.disabled = !desktop;
       muteBtn.title = desktop ? 'Toggle voice' : 'Voice available on desktop only';
@@ -1081,48 +1095,48 @@
     updateMuteUI();
   }
 
-  function openPanel(){
+  function openPanel() {
     var root = document.getElementById('agent-widget');
     root.classList.add('open');
     // Introduce once per session only
     var introDone = false;
-    try { introDone = sessionStorage.getItem('agent_intro_done') === '1'; } catch(_){}
-    if (!introDone && !logEl.dataset.greeted){
+    try { introDone = sessionStorage.getItem('agent_intro_done') === '1'; } catch (_) { }
+    if (!introDone && !logEl.dataset.greeted) {
       var greet = 'Welcome to KypexTech. We specialize in delivering cutting-edge IT and AI solutions — from web and mobile development to cloud, cybersecurity, consulting, and data analytics. My mission is to empower businesses with technology, creativity, and innovation, helping you grow smarter, faster, and more securely. How may we help you today.';
       addAgentMsg(greet, true);
-      setTimeout(function(){ addAgentMsg('Would you like a quick site overview? Type y for Yes or n for No.'); awaitingOverviewChoice = true; }, 50);
+      setTimeout(function () { addAgentMsg('Would you like a quick site overview? Type y for Yes or n for No.'); awaitingOverviewChoice = true; }, 50);
       logEl.dataset.greeted = '1';
-      try { sessionStorage.setItem('agent_intro_done','1'); } catch(_){}
+      try { sessionStorage.setItem('agent_intro_done', '1'); } catch (_) { }
     }
-    setTimeout(function(){ if (inputEl) inputEl.focus(); }, 40);
+    setTimeout(function () { if (inputEl) inputEl.focus(); }, 40);
   }
-  function closePanel(){
-    try{ if (window.speechSynthesis) window.speechSynthesis.cancel(); }catch(_){}
-    try{ if (ttsAudioEl){ ttsAudioEl.pause(); ttsAudioEl.src=''; ttsAudioEl=null; } }catch(_){}
+  function closePanel() {
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (_) { }
+    try { if (ttsAudioEl) { ttsAudioEl.pause(); ttsAudioEl.src = ''; ttsAudioEl = null; } } catch (_) { }
     document.getElementById('agent-widget').classList.remove('open');
   }
-  function togglePanel(){ var root = document.getElementById('agent-widget'); if (root.classList.contains('open')) { closePanel(); } else { openPanel(); } }
+  function togglePanel() { var root = document.getElementById('agent-widget'); if (root.classList.contains('open')) { closePanel(); } else { openPanel(); } }
 
   // ---------- Chat helpers ----------
-  function addUserMsg(text){
-    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch(_){}
+  function addUserMsg(text) {
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (_) { }
     var row = document.createElement('div');
     row.className = 'msg user'; row.textContent = text;
     logEl.appendChild(row); logEl.scrollTop = logEl.scrollHeight;
     persistHistory('user', text);
   }
-  function enforceClientPolicy(text){
-    try{
-      var s = String(text||'');
+  function enforceClientPolicy(text) {
+    try {
+      var s = String(text || '');
       // Never talk about how to improve the client's site
       var taboo = /(improv(e|ing|ement)s?|optimis(e|z)e|fix|revamp|redo|redesign|speed up|seo|accessibility|ux)\b[^.\n]*(site|website)\b/i;
       if (taboo.test(s)) {
         return 'I can help with next steps. Would you like me to open a relevant page or book a consultation?';
       }
       return s;
-    }catch(_){ return text; }
+    } catch (_) { return text; }
   }
-  function addAgentMsg(text, noStore){
+  function addAgentMsg(text, noStore) {
     text = enforceClientPolicy(text);
     var row = document.createElement('div');
     row.className = 'msg agent'; row.textContent = text;
@@ -1131,7 +1145,7 @@
     if (!muted) speak(text);
   }
 
-  function buildSiteOverview(){
+  function buildSiteOverview() {
     var lines = [
       'KypexTech Quick Guide',
       '',
@@ -1149,33 +1163,33 @@
   }
 
   // ---------- TTS (no mic) ----------
-  function sanitizeForTTS(text){
+  function sanitizeForTTS(text) {
     try {
-      var s = String(text||'');
+      var s = String(text || '');
       // Remove common formatting markers and distracting punctuation
       s = s.replace(/[\*`_~]|[“”]/g, ''); // markdown symbols + smart quotes
       s = s.replace(/\s+\*\*\s+/g, ' ');
       s = s.replace(/["';{}\[\]<>|\\]/g, '');
       s = s.replace(/\s+/g, ' ').trim();
       return s;
-    } catch(_) { return text; }
+    } catch (_) { return text; }
   }
   var speakQueue = [];
   var speaking = false;
-  async function speak(text){
+  async function speak(text) {
     try {
       // Enforce desktop-only voice
       if (muted || !isDesktop()) return;
-      speakQueue.push(String(text||''));
+      speakQueue.push(String(text || ''));
       if (speaking) return;
       speaking = true;
-      while (speakQueue.length && !muted){
+      while (speakQueue.length && !muted) {
         var msg = sanitizeForTTS(speakQueue.shift());
 
         // Try OpenAI TTS first (Aoede)
         var played = false;
         if (OPENAI_TTS.key) {
-          try{
+          try {
             var res = await fetch(OPENAI_TTS.endpoint, {
               method: 'POST',
               headers: {
@@ -1195,87 +1209,87 @@
               var blob = new Blob([buf], { type: mime });
               var url = URL.createObjectURL(blob);
               ttsAudioEl = new Audio(url);
-              await new Promise(function(resolve){
-                var done = function(){ try{ URL.revokeObjectURL(url); }catch(_){ } resolve(); };
+              await new Promise(function (resolve) {
+                var done = function () { try { URL.revokeObjectURL(url); } catch (_) { } resolve(); };
                 ttsAudioEl.onended = done; ttsAudioEl.onerror = done;
                 ttsAudioEl.play().catch(done);
               });
               played = true;
             }
-          }catch(_){ /* ignore and fall back */ }
+          } catch (_) { /* ignore and fall back */ }
         }
 
-        if (!played && window.speechSynthesis){
-          await new Promise(function(resolve){
-            try{
+        if (!played && window.speechSynthesis) {
+          await new Promise(function (resolve) {
+            try {
               var u = new SpeechSynthesisUtterance(msg);
-              u.rate=1.02; u.pitch=1.0; u.volume=1.0;
+              u.rate = 1.02; u.pitch = 1.0; u.volume = 1.0;
               var vs = window.speechSynthesis.getVoices() || [];
-              var v = vs.find(function(x){ return /aoede/i.test(x.name||'') || /aoede/i.test(x.voiceURI||''); })
-                    || vs.find(function(x){ return /en-(ZA|US|GB)/i.test(x.lang||''); })
-                    || vs[0];
+              var v = vs.find(function (x) { return /aoede/i.test(x.name || '') || /aoede/i.test(x.voiceURI || ''); })
+                || vs.find(function (x) { return /en-(ZA|US|GB)/i.test(x.lang || ''); })
+                || vs[0];
               if (v) u.voice = v;
               u.onend = resolve; u.onerror = resolve;
               window.speechSynthesis.speak(u);
-            }catch(_){ resolve(); }
+            } catch (_) { resolve(); }
           });
         }
       }
-    } catch(_){
+    } catch (_) {
       // swallow
     } finally {
       speaking = false;
     }
   }
-  function toggleMute(){
+  function toggleMute() {
     // Do not allow enabling voice on non-desktop devices
     if (!isDesktop()) { addAgentMsg('Voice is available on desktop only.'); return; }
     muted = !muted;
-    try{ sessionStorage.setItem('agent_muted', muted?'1':'0'); }catch(_){ }
+    try { sessionStorage.setItem('agent_muted', muted ? '1' : '0'); } catch (_) { }
     if (muted) {
-      try{ if (window.speechSynthesis) window.speechSynthesis.cancel(); }catch(_){ }
-      try{ if (ttsAudioEl){ ttsAudioEl.pause(); ttsAudioEl.src=''; ttsAudioEl=null; } }catch(_){ }
+      try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (_) { }
+      try { if (ttsAudioEl) { ttsAudioEl.pause(); ttsAudioEl.src = ''; ttsAudioEl = null; } } catch (_) { }
     }
     updateMuteUI();
   }
-  function updateMuteUI(){ if (muteBtn) { muteBtn.textContent = muted ? 'Unmute' : 'Mute'; } }
+  function updateMuteUI() { if (muteBtn) { muteBtn.textContent = muted ? 'Unmute' : 'Mute'; } }
 
   // ---------- Actions ----------
   var ROUTES = {
-    ai:'ai-solutioning.html', website:'website-development.html', mobile:'mobile-app-development.html',
-    cybersecurity:'cybersecurity.html', cloud:'cloud-services.html', cloudMigration:'cloud-migration.html',
-    cloudSecurity:'cloud-security.html', cloudOptimization:'cloud-optimization.html', hybridCloud:'hybrid-cloud.html',
-    cloudStorage:'cloud-storage.html', cloudCrm:'cloud-crm.html', consulting:'it-consulting.html',
-    analytics:'data-analytics.html', portfolio:'portfolio.html', about:'about.html', contact:'contact.html',
-    assessment:'assessment.html', consultation:'consultation.html', start:'project-start.html', home:'index.html'
+    ai: 'ai-solutioning.html', website: 'website-development.html', mobile: 'mobile-app-development.html',
+    cybersecurity: 'cybersecurity.html', cloud: 'cloud-services.html', cloudMigration: 'cloud-migration.html',
+    cloudSecurity: 'cloud-security.html', cloudOptimization: 'cloud-optimization.html', hybridCloud: 'hybrid-cloud.html',
+    cloudStorage: 'cloud-storage.html', cloudCrm: 'cloud-crm.html', consulting: 'it-consulting.html',
+    analytics: 'data-analytics.html', portfolio: 'portfolio.html', about: 'about.html', contact: 'contact.html',
+    assessment: 'assessment.html', consultation: 'consultation.html', start: 'project-start.html', home: 'index.html'
   };
-  function route(key){
-    if (!ROUTES[key]){ addAgentMsg('I could not find that page.'); return false; }
-    if (key === 'home'){
+  function route(key) {
+    if (!ROUTES[key]) { addAgentMsg('I could not find that page.'); return false; }
+    if (key === 'home') {
       addAgentMsg('Opening the Home page...');
       addAgentMsg('Once you are on the Home page, remember you can subscribe via the footer for monthly updates.');
     } else {
       addAgentMsg('Opening ' + key + '...');
     }
-    setTimeout(function(){ window.location.href = ROUTES[key]; }, 120);
+    setTimeout(function () { window.location.href = ROUTES[key]; }, 120);
     return true;
   }
 
-  function mapSpokenToRoute(s){
-    s = String(s||'').toLowerCase().trim();
+  function mapSpokenToRoute(s) {
+    s = String(s || '').toLowerCase().trim();
     if (!s) return null;
-    var noSpaces = s.replace(/\s+/g,'');
+    var noSpaces = s.replace(/\s+/g, '');
     if (/^ai( solutions| solutioning)?$/.test(s)) return 'ai';
     if (/^(website|web( |-)dev(elopment)?)$/.test(s)) return 'website';
     if (/^mobile( app)?$/.test(s)) return 'mobile';
     if (/^cyber( ?security)?$/.test(s)) return 'cybersecurity';
     if (/^cloud( services)?$/.test(s)) return 'cloud';
-    if (/^cloud migration$/.test(s) || noSpaces==='cloudmigration') return 'cloudMigration';
-    if (/^cloud security$/.test(s) || noSpaces==='cloudsecurity') return 'cloudSecurity';
-    if (/^cloud optimization$/.test(s) || noSpaces==='cloudoptimization') return 'cloudOptimization';
-    if (/^hybrid cloud$/.test(s) || noSpaces==='hybridcloud') return 'hybridCloud';
-    if (/^cloud storage$/.test(s) || noSpaces==='cloudstorage') return 'cloudStorage';
-    if (/^cloud crm$/.test(s) || noSpaces==='cloudcrm') return 'cloudCrm';
+    if (/^cloud migration$/.test(s) || noSpaces === 'cloudmigration') return 'cloudMigration';
+    if (/^cloud security$/.test(s) || noSpaces === 'cloudsecurity') return 'cloudSecurity';
+    if (/^cloud optimization$/.test(s) || noSpaces === 'cloudoptimization') return 'cloudOptimization';
+    if (/^hybrid cloud$/.test(s) || noSpaces === 'hybridcloud') return 'hybridCloud';
+    if (/^cloud storage$/.test(s) || noSpaces === 'cloudstorage') return 'cloudStorage';
+    if (/^cloud crm$/.test(s) || noSpaces === 'cloudcrm') return 'cloudCrm';
     if (/^consult(ation|ing)?$/.test(s)) return 'consultation';
     if (/^data( analytics)?$/.test(s)) return 'analytics';
     if (/^portfolio$/.test(s)) return 'portfolio';
@@ -1283,16 +1297,16 @@
     if (/^contact( page| us)?$/.test(s) || /^c$/.test(s)) return 'contact';
     if (/^assessment$/.test(s)) return 'assessment';
     if (/^(project )?start$/.test(s)) return 'start';
-    if (noSpaces==='home' || noSpaces==='homepage' || s==='h') return 'home';
+    if (noSpaces === 'home' || noSpaces === 'homepage' || s === 'h') return 'home';
     return null;
   }
 
   // Fuzzy routing helper – infer likely route from natural language
-  function inferRouteFromText(text){
-    try{
-      var s = String(text||'').toLowerCase();
+  function inferRouteFromText(text) {
+    try {
+      var s = String(text || '').toLowerCase();
       // Normalize punctuation/spacing
-      s = s.replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+      s = s.replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
       // High-intent contact synonyms
       if (/(get in touch|reach out|talk to (someone|a (human|person|rep))|speak to (someone|a (human|person|rep))|\bcontact( us)?\b|call you|phone you|whatsapp( us)?)/.test(s)) return 'contact';
       // Consultation / booking intents
@@ -1316,73 +1330,73 @@
       if (/(data analytics|dashboards?|\bbi\b|reports?)/.test(s)) return 'analytics';
       if (/(assessment|security check|security audit)/.test(s)) return 'assessment';
       if (/(start( a)? project|kick ?off)/.test(s)) return 'start';
-      if (/(^|\b)home(\s*page)?\b/.test(s) || s==='h') return 'home';
+      if (/(^|\b)home(\s*page)?\b/.test(s) || s === 'h') return 'home';
       return null;
-    }catch(_){ return null; }
+    } catch (_) { return null; }
   }
 
-  function executeSuggestion(sug){
-    try{
+  function executeSuggestion(sug) {
+    try {
       if (!sug) return false;
-      if (sug.type==='page' && sug.route){ return route(sug.route); }
-      if (sug.type==='link' && sug.href){ window.location.href = sug.href; return true; }
-      if (sug.type==='section' && sug.id){ var el=document.getElementById(sug.id); if (el){ el.scrollIntoView({behavior:'smooth',block:'start'}); addAgentMsg('Scrolled to section #' + sug.id + '.'); return true; } }
-      if (sug.type==='click' && sug.selector){ var el2=document.querySelector(sug.selector); if (el2){ try{ el2.click(); addAgentMsg('Activated ' + (el2.textContent||el2.getAttribute('aria-label')||'the button') + '.'); return true; }catch(_){ } } }
-    }catch(_){ }
+      if (sug.type === 'page' && sug.route) { return route(sug.route); }
+      if (sug.type === 'link' && sug.href) { window.location.href = sug.href; return true; }
+      if (sug.type === 'section' && sug.id) { var el = document.getElementById(sug.id); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); addAgentMsg('Scrolled to section #' + sug.id + '.'); return true; } }
+      if (sug.type === 'click' && sug.selector) { var el2 = document.querySelector(sug.selector); if (el2) { try { el2.click(); addAgentMsg('Activated ' + (el2.textContent || el2.getAttribute('aria-label') || 'the button') + '.'); return true; } catch (_) { } } }
+    } catch (_) { }
     return false;
   }
 
-  function findCTAs(){
-    var items=[];
-    try{
+  function findCTAs() {
+    var items = [];
+    try {
       var anchors = Array.from(document.querySelectorAll('a, button'));
-      anchors.forEach(function(a){
-        var txt=((a.textContent||'').trim().toLowerCase());
-        var href=(a.getAttribute&&a.getAttribute('href'))||'';
-        var lab=(a.getAttribute&&a.getAttribute('aria-label'))||'';
-        function push(type, route){ items.push({label:a.textContent.trim()||lab||href, type:type, route:route, href:href}); }
-        if (/consult/.test(txt)||/consult/.test(href)||/consult/.test(lab)) push('page','consultation');
-        else if (/assess/.test(txt)||/assessment/.test(href)||/assess/.test(lab)) push('page','assessment');
-        else if (/contact/.test(txt)||/contact/.test(href)||/contact/.test(lab)) push('page','contact');
-        else if (/quote|pricing|estimate/.test(txt)||/quote/.test(href)) items.push({label:a.textContent.trim()||lab||href, type:'link', href:href||'#'});
+      anchors.forEach(function (a) {
+        var txt = ((a.textContent || '').trim().toLowerCase());
+        var href = (a.getAttribute && a.getAttribute('href')) || '';
+        var lab = (a.getAttribute && a.getAttribute('aria-label')) || '';
+        function push(type, route) { items.push({ label: a.textContent.trim() || lab || href, type: type, route: route, href: href }); }
+        if (/consult/.test(txt) || /consult/.test(href) || /consult/.test(lab)) push('page', 'consultation');
+        else if (/assess/.test(txt) || /assessment/.test(href) || /assess/.test(lab)) push('page', 'assessment');
+        else if (/contact/.test(txt) || /contact/.test(href) || /contact/.test(lab)) push('page', 'contact');
+        else if (/quote|pricing|estimate/.test(txt) || /quote/.test(href)) items.push({ label: a.textContent.trim() || lab || href, type: 'link', href: href || '#' });
       });
-    }catch(_){ }
+    } catch (_) { }
     return items;
   }
 
-  function suggestContextualHint(){
-    try{
-      var page = (location.pathname||'').toLowerCase();
-      var sec = currentSectionId ? ('#'+currentSectionId) : '';
+  function suggestContextualHint() {
+    try {
+      var page = (location.pathname || '').toLowerCase();
+      var sec = currentSectionId ? ('#' + currentSectionId) : '';
       var ctas = findCTAs();
       // Prefer top-priority CTAs
-      var primary = ctas.find(function(x){return x.type==='page' && (x.route==='consultation'||x.route==='assessment'||x.route==='contact');});
-      if (primary){
+      var primary = ctas.find(function (x) { return x.type === 'page' && (x.route === 'consultation' || x.route === 'assessment' || x.route === 'contact'); });
+      if (primary) {
         lastSuggestion = primary;
         var routeName = primary.route;
-        return 'If you like, I can take you to ' + (routeName==='consultation'?'the Free Consultation':routeName==='assessment'?'the Security Assessment':'the Contact page') + '. Say "yes" to proceed.';
+        return 'If you like, I can take you to ' + (routeName === 'consultation' ? 'the Free Consultation' : routeName === 'assessment' ? 'the Security Assessment' : 'the Contact page') + '. Say "yes" to proceed.';
       }
       // Otherwise suggest a visible section
-      if (currentSectionId){
-        lastSuggestion = {type:'section', id:currentSectionId};
+      if (currentSectionId) {
+        lastSuggestion = { type: 'section', id: currentSectionId };
         return 'You are on section #' + currentSectionId + '. I can scroll or point you to actions nearby.';
       }
       // Fallback generic
       lastSuggestion = null;
       return '';
-    }catch(_){ return ''; }
+    } catch (_) { return ''; }
   }
-  function openWhatsApp(message){ var num=CONFIG.whatsapp.replace(/\D+/g,''); var url='https://wa.me/'+num+'?text='+encodeURIComponent(message||'Hi KypexTech!'); window.open(url,'_blank','noopener'); }
-  function openMail(subject, body){ var url='mailto:'+encodeURIComponent(CONFIG.email)+'?subject='+encodeURIComponent(subject||'Enquiry from website')+'&body='+encodeURIComponent(body||''); window.location.href=url; }
+  function openWhatsApp(message) { var num = CONFIG.whatsapp.replace(/\D+/g, ''); var url = 'https://wa.me/' + num + '?text=' + encodeURIComponent(message || 'Hi KypexTech!'); window.open(url, '_blank', 'noopener'); }
+  function openMail(subject, body) { var url = 'mailto:' + encodeURIComponent(CONFIG.email) + '?subject=' + encodeURIComponent(subject || 'Enquiry from website') + '&body=' + encodeURIComponent(body || ''); window.location.href = url; }
 
-  function setField(selectors, value){ for (var i=0;i<selectors.length;i++){ var el=document.querySelector(selectors[i]); if (el){ el.focus(); el.value=value; try{ el.dispatchEvent(new Event('input',{bubbles:true})); }catch(_){} el.blur(); return true; } } return false; }
-  function setSelect(selectors, value){ value=String(value||'').toLowerCase(); for (var i=0;i<selectors.length;i++){ var sel=document.querySelector(selectors[i]); if (sel && sel.tagName==='SELECT'){ for (var j=0;j<sel.options.length;j++){ var opt=sel.options[j]; if (String(opt.value).toLowerCase()===value || String(opt.text).toLowerCase()===value){ sel.value=opt.value; sel.dispatchEvent(new Event('change',{bubbles:true})); return true; } } } } return false; }
+  function setField(selectors, value) { for (var i = 0; i < selectors.length; i++) { var el = document.querySelector(selectors[i]); if (el) { el.focus(); el.value = value; try { el.dispatchEvent(new Event('input', { bubbles: true })); } catch (_) { } el.blur(); return true; } } return false; }
+  function setSelect(selectors, value) { value = String(value || '').toLowerCase(); for (var i = 0; i < selectors.length; i++) { var sel = document.querySelector(selectors[i]); if (sel && sel.tagName === 'SELECT') { for (var j = 0; j < sel.options.length; j++) { var opt = sel.options[j]; if (String(opt.value).toLowerCase() === value || String(opt.text).toLowerCase() === value) { sel.value = opt.value; sel.dispatchEvent(new Event('change', { bubbles: true })); return true; } } } } return false; }
 
-  function openWebsiteQuote(){ try { var geo=(sessionStorage.getItem('geo_name')||'').toLowerCase(); var map={ 'south africa':'rsawebsitequote.html', 'zimbabwe':'zwwebsitequote.html', 'zambia':'zawebsitequote.html', 'botswana':'bwwebsitequote.html' }; window.location.href = map[geo] || 'website-development.html'; return true; } catch(_) { window.location.href='website-development.html'; return true; } }
-  function routeToBestForm(text){ var t=(text||'').toLowerCase(); if (/(speak|talk) to (someone|a (person|human|rep)|team|agent)/.test(t)) return route('contact'); if (/contact (us|team)|reach (out|someone)|call you/.test(t)) return route('contact'); if (/(book|schedule|set up) (a )?(consult|meeting|call)/.test(t)) return route('consultation'); if (/assessment|security check|security audit/.test(t)) return route('assessment'); if (/(start|kick ?off|begin).*(project)/.test(t)) return route('start'); if (/(website|site).*(quote|pricing|estimate)|quote.*(website|site)/.test(t)) return openWebsiteQuote(); return false; }
+  function openWebsiteQuote() { try { var geo = (sessionStorage.getItem('geo_name') || '').toLowerCase(); var map = { 'south africa': 'rsawebsitequote.html', 'zimbabwe': 'zwwebsitequote.html', 'zambia': 'zawebsitequote.html', 'botswana': 'bwwebsitequote.html' }; window.location.href = map[geo] || 'website-development.html'; return true; } catch (_) { window.location.href = 'website-development.html'; return true; } }
+  function routeToBestForm(text) { var t = (text || '').toLowerCase(); if (/(speak|talk) to (someone|a (person|human|rep)|team|agent)/.test(t)) return route('contact'); if (/contact (us|team)|reach (out|someone)|call you/.test(t)) return route('contact'); if (/(book|schedule|set up) (a )?(consult|meeting|call)/.test(t)) return route('consultation'); if (/assessment|security check|security audit/.test(t)) return route('assessment'); if (/(start|kick ?off|begin).*(project)/.test(t)) return route('start'); if (/(website|site).*(quote|pricing|estimate)|quote.*(website|site)/.test(t)) return openWebsiteQuote(); return false; }
 
-  function handleLocalIntents(text){
-    var t=(text||'').toLowerCase();
+  function handleLocalIntents(text) {
+    var t = (text || '').toLowerCase();
     if (isCurrentPageQuery(text)) {
       addAgentMsg(describeCurrentPage());
       return true;
@@ -1401,16 +1415,16 @@
       }
     }
     // Section navigation by id: "go to services" or "scroll to #contact"
-    if (/^(go to|scroll to|show me)\s+#?([a-z0-9][\w-]{1,80})\b/.test(t)){
+    if (/^(go to|scroll to|show me)\s+#?([a-z0-9][\w-]{1,80})\b/.test(t)) {
       var secId = RegExp.$2;
       var dest = document.getElementById(secId);
-      if (dest){ dest.scrollIntoView({behavior:'smooth', block:'start'}); addAgentMsg('Scrolled to section #' + secId + '.'); currentSectionId = secId; return true; }
+      if (dest) { dest.scrollIntoView({ behavior: 'smooth', block: 'start' }); addAgentMsg('Scrolled to section #' + secId + '.'); currentSectionId = secId; return true; }
       addAgentMsg('I could not find section #' + secId + ' on this page.');
       return true;
     }
     // Accept last suggested action with consent words
-    if (/^(y|yes|ok|okay|sure|please|go ahead|do it|proceed|let's go|sounds good)\b/.test(t)){
-      if (lastSuggestion){
+    if (/^(y|yes|ok|okay|sure|please|go ahead|do it|proceed|let's go|sounds good)\b/.test(t)) {
+      if (lastSuggestion) {
         var done = executeSuggestion(lastSuggestion);
         if (!done && lastSuggestion && lastSuggestion.route) return route(lastSuggestion.route);
         return true;
@@ -1422,9 +1436,9 @@
     if (routeToBestForm(t)) return true;
     // Explicit navigation commands (support varied phrasing)
     var navMatch = /^(open|go to|take me to|navigate to|show( me)?)\s+(the\s+)?(.+)$/i.exec(t);
-    if (navMatch){
+    if (navMatch) {
       // Group 4 captures the destination phrase
-      var dest = (navMatch[4]||'').trim().replace(/\.$/,'');
+      var dest = (navMatch[4] || '').trim().replace(/\.$/, '');
       // Normalize common suffixes like "page" or "section"
       dest = dest.replace(/\b(page|section)\b/g, '').trim();
       var key = mapSpokenToRoute(dest) || inferRouteFromText(dest);
@@ -1438,23 +1452,23 @@
     if (/email|mail/.test(t)) { addAgentMsg('Opening an email draft...'); openMail('Enquiry from website'); return true; }
     if (/call\b|phone/.test(t)) { addAgentMsg('Starting a call...'); window.location.href = 'tel:' + CONFIG.whatsapp; return true; }
     // form fill
-    if (/^my name is\s+(.+)/i.test(text)) { setField(['input[name="name"]','input[name="contactName"]'], RegExp.$1.trim()); addAgentMsg('Added your name.'); return true; }
-    if (/^my email is\s+(.+)/i.test(text)) { setField(['input[type="email"]','input[name="email"]'], RegExp.$1.trim()); addAgentMsg('Added your email.'); return true; }
-    if (/^my (phone|number) is\s+(.+)/i.test(text)) { setField(['input[type="tel"]','input[name="phone"]'], RegExp.$2.trim()); addAgentMsg('Added your phone.'); return true; }
-    if (/^my (company|business|organisation|organization) is\s+(.+)/i.test(text)) { setField(['input[name="company"]','input[name="business"]','input[name="organisation"]','input[name="organization"]'], RegExp.$2.trim()); addAgentMsg('Added your company.'); return true; }
+    if (/^my name is\s+(.+)/i.test(text)) { setField(['input[name="name"]', 'input[name="contactName"]'], RegExp.$1.trim()); addAgentMsg('Added your name.'); return true; }
+    if (/^my email is\s+(.+)/i.test(text)) { setField(['input[type="email"]', 'input[name="email"]'], RegExp.$1.trim()); addAgentMsg('Added your email.'); return true; }
+    if (/^my (phone|number) is\s+(.+)/i.test(text)) { setField(['input[type="tel"]', 'input[name="phone"]'], RegExp.$2.trim()); addAgentMsg('Added your phone.'); return true; }
+    if (/^my (company|business|organisation|organization) is\s+(.+)/i.test(text)) { setField(['input[name="company"]', 'input[name="business"]', 'input[name="organisation"]', 'input[name="organization"]'], RegExp.$2.trim()); addAgentMsg('Added your company.'); return true; }
     if (/^my (budget|price) is\s+(.+)/i.test(text)) { var v = RegExp.$2.trim(); setField(['input[name="budget"]'], v) || setSelect(['select[name="budget"]'], v); addAgentMsg('Added your budget.'); return true; }
-    if (/^i am in\s+(.+)/i.test(text)) { var c = RegExp.$1.trim(); setField(['input[name="country"]'], c) || setSelect(['select[name="country"]','#country'], c.toLowerCase()); addAgentMsg('Noted your country.'); return true; }
-    if (/^preferred date\s+(.+)/i.test(text)) { setField(['input[name="preferred_date"]','input[type="date"]'], RegExp.$1.trim()); addAgentMsg('Added the date.'); return true; }
-    if (/^preferred time\s+(.+)/i.test(text)) { setField(['input[name="preferred_time"]','input[type="time"]'], RegExp.$1.trim()); addAgentMsg('Added the time.'); return true; }
+    if (/^i am in\s+(.+)/i.test(text)) { var c = RegExp.$1.trim(); setField(['input[name="country"]'], c) || setSelect(['select[name="country"]', '#country'], c.toLowerCase()); addAgentMsg('Noted your country.'); return true; }
+    if (/^preferred date\s+(.+)/i.test(text)) { setField(['input[name="preferred_date"]', 'input[type="date"]'], RegExp.$1.trim()); addAgentMsg('Added the date.'); return true; }
+    if (/^preferred time\s+(.+)/i.test(text)) { setField(['input[name="preferred_time"]', 'input[type="time"]'], RegExp.$1.trim()); addAgentMsg('Added the time.'); return true; }
     if (/^timezone\s+(.+)/i.test(text)) { setField(['input[name="timezone"]'], RegExp.$1.trim()); addAgentMsg('Added your timezone.'); return true; }
-    if (/^(my )?(message|note) is\s+(.+)/i.test(text)) { setField(['textarea[name="message"]','textarea'], RegExp.$3.trim()); addAgentMsg('Added your message.'); return true; }
-    if (/^submit( form)?$/i.test(text)) { var f=document.querySelector('form'); if (f){ if (f.requestSubmit) f.requestSubmit(); else f.submit(); addAgentMsg('Submitting the form...'); } else { addAgentMsg('I could not find a form here.'); } return true; }
+    if (/^(my )?(message|note) is\s+(.+)/i.test(text)) { setField(['textarea[name="message"]', 'textarea'], RegExp.$3.trim()); addAgentMsg('Added your message.'); return true; }
+    if (/^submit( form)?$/i.test(text)) { var f = document.querySelector('form'); if (f) { if (f.requestSubmit) f.requestSubmit(); else f.submit(); addAgentMsg('Submitting the form...'); } else { addAgentMsg('I could not find a form here.'); } return true; }
     return false;
   }
 
   // ---------- Chat logic ----------
-  function onSubmit(e){ e.preventDefault(); var text=(inputEl.value||'').trim(); if(!text) return; inputEl.value=''; if (commandMuteIfAny(text)) return; addUserMsg(text); processUserText(text); }
-  function processUserText(text){
+  function onSubmit(e) { e.preventDefault(); var text = (inputEl.value || '').trim(); if (!text) return; inputEl.value = ''; if (commandMuteIfAny(text)) return; addUserMsg(text); processUserText(text); }
+  function processUserText(text) {
     if (handleLocalIntents(text)) return;
     var a = answerQnA(text);
     if (a) { addAgentMsg(a); return; }
@@ -1466,111 +1480,114 @@
       addAgentMsg('I want to make sure you get the right help. If you need to talk to us directly, type "Open Contact Page", "contact page", "contact", or just "c" and I will open the Contact page for you.');
       return;
     }
-    (async function(){
+    (async function () {
       var intent = await askGeminiIntent(text);
-      if (intent){
-        try{
-          if (intent.intent==='affirmation' && lastSuggestion){ var done = executeSuggestion(lastSuggestion); if (done) return; }
-          if (intent.intent==='navigate' && intent.route && ROUTES[intent.route]){ route(intent.route); return; }
-          if (intent.intent==='book'){ route('consultation'); return; }
-          if (intent.intent==='contact'){ route('contact'); return; }
-          if (intent.intent==='quote'){ openWebsiteQuote(); return; }
-        }catch(_){ }
+      if (intent) {
+        try {
+          if (intent.intent === 'affirmation' && lastSuggestion) { var done = executeSuggestion(lastSuggestion); if (done) return; }
+          if (intent.intent === 'navigate' && intent.route && ROUTES[intent.route]) { route(intent.route); return; }
+          if (intent.intent === 'book') { route('consultation'); return; }
+          if (intent.intent === 'contact') { route('contact'); return; }
+          if (intent.intent === 'quote') { openWebsiteQuote(); return; }
+        } catch (_) { }
       }
-      askGemini(text).then(function(r){ addAgentMsg(r); track('gemini_answer'); }).catch(function(){ addAgentMsg('Network issue.'); });
+      askGemini(text).then(function (r) { addAgentMsg(r); track('gemini_answer'); }).catch(function () { addAgentMsg('Network issue.'); });
     })();
   }
-  function commandMuteIfAny(text){
-    var t=(text||'').toLowerCase().trim();
-    if (t==='mute'){
-      muted=true; try{sessionStorage.setItem('agent_muted','1');}catch(_){ }
+  function commandMuteIfAny(text) {
+    var t = (text || '').toLowerCase().trim();
+    if (t === 'mute') {
+      muted = true; try { sessionStorage.setItem('agent_muted', '1'); } catch (_) { }
       updateMuteUI(); addAgentMsg('Muted. I will stop speaking.'); return true;
     }
-    if (t==='unmute'){
+    if (t === 'unmute') {
       if (!isDesktop()) { addAgentMsg('Voice output is available on desktop only.'); return true; }
-      muted=false; try{sessionStorage.setItem('agent_muted','0');}catch(_){ }
+      muted = false; try { sessionStorage.setItem('agent_muted', '0'); } catch (_) { }
       updateMuteUI(); addAgentMsg('Unmuted. I will speak again.'); return true;
     }
     return false;
   }
 
   // ---------- Gemini ----------
-  function capturePageContext(max){ try{ var parts=[]; parts.push('Title: ' + (document.title||'')); var m=document.querySelector('meta[name="description"]'); if(m&&m.content) parts.push('Meta: ' + m.content); var hs=Array.from(document.querySelectorAll('h1, h2, h3')).map(function(h){return h.textContent.trim();}).filter(Boolean); if(hs.length) parts.push('Headings: ' + hs.join(' | ')); var ctx=parts.join('\n'); return ctx.slice(0,max||1000);}catch(_){return '';} }
-  async function askGeminiIntent(prompt){
-    try{
+  function capturePageContext(max) { try { var parts = []; parts.push('Title: ' + (document.title || '')); var m = document.querySelector('meta[name="description"]'); if (m && m.content) parts.push('Meta: ' + m.content); var hs = Array.from(document.querySelectorAll('h1, h2, h3')).map(function (h) { return h.textContent.trim(); }).filter(Boolean); if (hs.length) parts.push('Headings: ' + hs.join(' | ')); var ctx = parts.join('\n'); return ctx.slice(0, max || 1000); } catch (_) { return ''; } }
+  async function askGeminiIntent(prompt) {
+    try {
       var pageCtx = capturePageContext(400);
       var schema = 'Return compact JSON only with keys: intent (navigate|question|affirmation|negation|book|contact|quote|smalltalk), topic (ai|analytics|security|cloud|website|mobile|crm|portfolio|about|contact|assessment|consultation|start|storage|migration|optimization|security-cloud|newsletter|general), route (ai|analytics|cybersecurity|cloud|website|mobile|portfolio|about|contact|assessment|consultation|start|home|null).';
       var inst = 'Classify the user message. If it expresses a desire to open a page (e.g., "take me to contact", "lets go to the contact page", or a bare keyword like "contact"), set intent=navigate and choose the closest route from the allowed enum. If the text is simply yes/ok/sure, set intent=affirmation. Prefer contact for phrases like get in touch / talk to someone / reach out. Prefer consultation for book/schedule meeting/call/consultation.';
-      var body = { contents:[
-        {role:'user', parts:[{text: schema}]},
-        {role:'user', parts:[{text: inst}]},
-        {role:'user', parts:[{text: 'Page: '+pageCtx}]},
-        {role:'user', parts:[{text: 'Message: '+String(prompt||'')}]}
-      ]};
-      var res = await fetch(API_URL,{method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      var body = {
+        contents: [
+          { role: 'user', parts: [{ text: schema }] },
+          { role: 'user', parts: [{ text: inst }] },
+          { role: 'user', parts: [{ text: 'Page: ' + pageCtx }] },
+          { role: 'user', parts: [{ text: 'Message: ' + String(prompt || '') }] }
+        ]
+      };
+      var requestBody = { ...body, model: GEMINI_MODEL };
+      var res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody) });
       if (!res.ok) throw new Error('intent http');
       var data = await res.json();
-      var raw = (((data.candidates||[])[0]||{}).content||{}).parts && (((data.candidates||[])[0]||{}).content.parts.map(function(p){return p.text;}).join('\n')) || '';
-      var txt = String(raw||'').trim();
+      var raw = (((data.candidates || [])[0] || {}).content || {}).parts && (((data.candidates || [])[0] || {}).content.parts.map(function (p) { return p.text; }).join('\n')) || '';
+      var txt = String(raw || '').trim();
       var json = null;
-      try{ json = JSON.parse(txt); }catch(_){
-        try{ var start = txt.indexOf('{'); var end = txt.lastIndexOf('}'); if (start>=0&&end>=start){ json = JSON.parse(txt.slice(start,end+1)); } }catch(_2){ json = null; }
+      try { json = JSON.parse(txt); } catch (_) {
+        try { var start = txt.indexOf('{'); var end = txt.lastIndexOf('}'); if (start >= 0 && end >= start) { json = JSON.parse(txt.slice(start, end + 1)); } } catch (_2) { json = null; }
       }
-      if (json && typeof json==='object') return json; return null;
-    }catch(_){ return null; }
+      if (json && typeof json === 'object') return json; return null;
+    } catch (_) { return null; }
   }
-  async function askGemini(prompt){
+  async function askGemini(prompt) {
     var system = 'You are Agent-Kypex, the friendly website assistant for KypexTech. You know the product and service catalog below and speak as a helpful marketing guide. Never say you lack real-time access or cannot know; use the provided knowledge and page context. Answer in 1-3 short sentences with a helpful next step (open a page, book consultation, or suggest a form). If a question is off-topic, politely steer back to how you can help. Never discuss how to improve the client\'s site; do not give website improvement advice.';
     var pageCtx = capturePageContext(800);
-    var catalog = KB.map(function(it){ return it.name+': '+it.summary; }).join('\n');
+    var catalog = KB.map(function (it) { return it.name + ': ' + it.summary; }).join('\n');
     var contents = [];
-    if (history.length===0) contents.push({role:'user', parts:[{text: system}]});
-    for (var i=0;i<history.length;i++) contents.push(history[i]);
-    contents.push({role:'user', parts:[{text: 'Catalog:\n'+catalog}]});
-    contents.push({role:'user', parts:[{text: 'Page context:\n'+pageCtx}]});
-    contents.push({role:'user', parts:[{text: prompt}]});
-    var body = { contents: contents };
-    var res = await fetch(API_URL,{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    if (history.length === 0) contents.push({ role: 'user', parts: [{ text: system }] });
+    for (var i = 0; i < history.length; i++) contents.push(history[i]);
+    contents.push({ role: 'user', parts: [{ text: 'Catalog:\n' + catalog }] });
+    contents.push({ role: 'user', parts: [{ text: 'Page context:\n' + pageCtx }] });
+    contents.push({ role: 'user', parts: [{ text: prompt }] });
+    var body = { contents: contents, model: GEMINI_MODEL };
+    var res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     if (!res.ok) throw new Error('gemini http');
     var data = await res.json();
-    var text = (((data.candidates||[])[0]||{}).content||{}).parts && (((data.candidates||[])[0]||{}).content.parts.map(function(p){return p.text;}).join('\n')) || 'I can help with next steps. Would you like me to open a relevant page or book a consultation?';
-    history.push({role:'user', parts:[{text: prompt}]});
-    history.push({role:'model', parts:[{text: text}]});
-    while (history.length>12) history.shift();
+    var text = (((data.candidates || [])[0] || {}).content || {}).parts && (((data.candidates || [])[0] || {}).content.parts.map(function (p) { return p.text; }).join('\n')) || 'I can help with next steps. Would you like me to open a relevant page or book a consultation?';
+    history.push({ role: 'user', parts: [{ text: prompt }] });
+    history.push({ role: 'model', parts: [{ text: text }] });
+    while (history.length > 12) history.shift();
     return enforceClientPolicy(text);
   }
 
   // ---------- Persistence ----------
-  function persistHistory(role, text){ try{ var store=JSON.parse(sessionStorage.getItem('agent_history')||'[]'); store.push({role:role, text:text}); if(store.length>50) store=store.slice(store.length-50); sessionStorage.setItem('agent_history', JSON.stringify(store)); }catch(_){ } }
-  function restoreHistory(){ try{ var store=JSON.parse(sessionStorage.getItem('agent_history')||'[]'); for(var i=0;i<store.length;i++){ var m=store[i]; var row=document.createElement('div'); row.className='msg ' + (m.role==='user'?'user':'agent'); row.textContent=m.text; logEl.appendChild(row);} logEl.scrollTop=logEl.scrollHeight; }catch(_){ } }
+  function persistHistory(role, text) { try { var store = JSON.parse(sessionStorage.getItem('agent_history') || '[]'); store.push({ role: role, text: text }); if (store.length > 50) store = store.slice(store.length - 50); sessionStorage.setItem('agent_history', JSON.stringify(store)); } catch (_) { } }
+  function restoreHistory() { try { var store = JSON.parse(sessionStorage.getItem('agent_history') || '[]'); for (var i = 0; i < store.length; i++) { var m = store[i]; var row = document.createElement('div'); row.className = 'msg ' + (m.role === 'user' ? 'user' : 'agent'); row.textContent = m.text; logEl.appendChild(row); } logEl.scrollTop = logEl.scrollHeight; } catch (_) { } }
 
   // ---------- Hints + GA ----------
-  function speakHints(){ try{ var p=(location.pathname||'').toLowerCase(); if(p.indexOf('website-development.html')>=0){ addAgentMsg('Tip: Type your country and "website quote", or type "submit form" when done.'); return; } if(p.indexOf('consultation.html')>=0){ addAgentMsg('You can type preferred date, preferred time, timezone, then "submit form".'); return; } if(p.indexOf('contact.html')>=0){ addAgentMsg('You can type name, email, message, then "submit form".'); return; } if(p.indexOf('ai-solutioning.html')>=0){ addAgentMsg('Ask about assistants, RAG, vision, or type "book a consultation".'); return; } if(p.indexOf('index.html')>=0||p=='/'){ addAgentMsg('This is the Home page. Try: "website quote", "book consultation", or "open AI solutions", and remember you can subscribe via the footer for monthly updates.'); return; } }catch(_){}}
-  function speakHints(){
-    try{
+  function speakHints() { try { var p = (location.pathname || '').toLowerCase(); if (p.indexOf('website-development.html') >= 0) { addAgentMsg('Tip: Type your country and "website quote", or type "submit form" when done.'); return; } if (p.indexOf('consultation.html') >= 0) { addAgentMsg('You can type preferred date, preferred time, timezone, then "submit form".'); return; } if (p.indexOf('contact.html') >= 0) { addAgentMsg('You can type name, email, message, then "submit form".'); return; } if (p.indexOf('ai-solutioning.html') >= 0) { addAgentMsg('Ask about assistants, RAG, vision, or type "book a consultation".'); return; } if (p.indexOf('index.html') >= 0 || p == '/') { addAgentMsg('This is the Home page. Try: "website quote", "book consultation", or "open AI solutions", and remember you can subscribe via the footer for monthly updates.'); return; } } catch (_) { } }
+  function speakHints() {
+    try {
       // Dynamic contextual suggestion first
       var dyn = suggestContextualHint();
       if (dyn) { addAgentMsg(dyn); return; }
-      var p=(location.pathname||'').toLowerCase();
-      if(p.indexOf('website-development.html')>=0){ addAgentMsg('Tip: Type your country and "website quote", or type "submit form" when done.'); return; }
-      if(p.indexOf('consultation.html')>=0){ addAgentMsg('You can type preferred date, preferred time, timezone, then "submit form".'); return; }
-      if(p.indexOf('contact.html')>=0){ addAgentMsg('You can type name, email, message, then "submit form".'); return; }
-      if(p.indexOf('ai-solutioning.html')>=0){ addAgentMsg('Ask about assistants, RAG, vision, or type "book a consultation".'); return; }
-      if(p.indexOf('index.html')>=0||p=='/'){ addAgentMsg('This is the Home page. Try: "website quote", "book consultation", or "open AI solutions", and remember you can subscribe via the footer for monthly updates.'); return; }
-    }catch(_){}
+      var p = (location.pathname || '').toLowerCase();
+      if (p.indexOf('website-development.html') >= 0) { addAgentMsg('Tip: Type your country and "website quote", or type "submit form" when done.'); return; }
+      if (p.indexOf('consultation.html') >= 0) { addAgentMsg('You can type preferred date, preferred time, timezone, then "submit form".'); return; }
+      if (p.indexOf('contact.html') >= 0) { addAgentMsg('You can type name, email, message, then "submit form".'); return; }
+      if (p.indexOf('ai-solutioning.html') >= 0) { addAgentMsg('Ask about assistants, RAG, vision, or type "book a consultation".'); return; }
+      if (p.indexOf('index.html') >= 0 || p == '/') { addAgentMsg('This is the Home page. Try: "website quote", "book consultation", or "open AI solutions", and remember you can subscribe via the footer for monthly updates.'); return; }
+    } catch (_) { }
   }
-  function track(action){ try{ if(window.gtag) window.gtag('event','agent_action',{action:action,page:location.pathname}); }catch(_){ }}
+  function track(action) { try { if (window.gtag) window.gtag('event', 'agent_action', { action: action, page: location.pathname }); } catch (_) { } }
 
   // ---------- Boot ----------
-  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', onReady); else onReady();
-  function onReady(){
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady); else onReady();
+  function onReady() {
     // Load OpenAI TTS key from meta or localStorage
-    try{
+    try {
       var meta = document.querySelector('meta[name="openai-tts-key"]');
       var k = meta && meta.content ? meta.content.trim() : '';
-      if (!k) { try{ k = localStorage.getItem('openai_tts_key')||''; }catch(_){ } }
+      if (!k) { try { k = localStorage.getItem('openai_tts_key') || ''; } catch (_) { } }
       if (k) OPENAI_TTS.key = k;
-    }catch(_){ }
+    } catch (_) { }
     initUI();
     startClickTracking();
     startSectionObserver();

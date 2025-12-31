@@ -1,0 +1,15 @@
+{
+  "name": "kypextech-website",
+  "version": "1.0.0",
+  "description": "KypexTech Solutions Website",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build step required for static site'"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
